@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const dropdownButton = document.getElementById('nav-menu-small');
     const sidebar = document.getElementById('sidebar');
     const carrusel = document.getElementById('carrusel');
+    const menuItems = document.querySelectorAll('#nav-menu .group');
 
     if (dropdownButton && sidebar) {
         dropdownButton.addEventListener('click', function (event) {
@@ -90,4 +91,19 @@ document.addEventListener('DOMContentLoaded', function () {
             },
         });
     };
+
+    if (menuItems.length > 0) {
+        menuItems.forEach(item => {
+            const subMenu = item.querySelector('ul');
+            if (subMenu) {
+                item.addEventListener('mouseenter', () => {
+                    subMenu.classList.remove('hidden'); // Mostrar el submenú
+                });
+                item.addEventListener('mouseleave', () => {
+                    subMenu.classList.add('hidden'); // Ocultar el submenú cuando el mouse sale
+                });
+            }
+        });
+    }
+
 });

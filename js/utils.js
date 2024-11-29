@@ -14,3 +14,12 @@ export function insertHtml(html, nomId = null) {
             console.error('There was a problem with the fetch operation:', error);
         });
 }
+
+
+export function openModal() {
+    document.getElementById("modal").classList.remove("hidden");
+}
+
+export function closeModal() {
+    document.getElementById("modal").classList.add("hidden");
+}

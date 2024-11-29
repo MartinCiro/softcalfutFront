@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head id="head">
+    <script type="module">
+        import { insertHtml } from './js/utils.js';
+        insertHtml('head');
+    </script>
+</head>
+
+<body>
+    <div class="flex flex-col min-h-screen">
+        <nav class="bg-green-600">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center py-1">
+                    <div class="flex md:justify-between text-white">
+                        <span class="text-white font-bold text-lg">SOFTCALFUT</span>
+                    </div>
+
+                    <!-- Menú Hamburguesa (para móviles) -->
+                    <div class="md:hidden hover:cursor-pointer hover:bg-yellow-400 hover:shadow-lg px-2 py-1 rounded transition-all duration-200">
+                        <button class="text-white focus:outline-none hover:text-white" id="nav-menu-small">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+
+                    <!-- Menú en versión escritorio -->
+                    <div id="nav-menu" class="hidden md:flex items-center">
+                        <ul class="flex space-x-4">
+                            <!-- Ítem con submenú -->
+                            <li class="relative group">
+                                <a href="index.html" class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-white">
+                                    <i class="fa fa-home mr-2"></i> Inicio
+                                </a>
+                                <!-- Submenú desplegable -->
+                                <ul class="absolute left-0 hidden space-y-2 bg-white text-[#222831] shadow-lg group-hover:block">
+                                    <li><a href="#" class="block px-4 py-2 text-sm hover:bg-[#00ADB5] hover:text-white transition duration-200">Subitem 1</a></li>
+                                    <li><a href="#" class="block px-4 py-2 text-sm hover:bg-[#00ADB5] hover:text-white transition duration-200">Subitem 2</a></li>
+                                    <li><a href="#" class="block px-4 py-2 text-sm hover:bg-[#00ADB5] hover:text-white transition duration-200">Subitem 3</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#" class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-white">Objetivos</a></li>
+                            <li><a href="#" class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-white">Contacto</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Menú lateral para dispositivos móviles -->
+        <div id="sidebar" class="absolute top-0 left-0 w-64 h-full bg-black bg-opacity-60 z-50 hidden transition-all duration-300">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">Menú</h2>
+            <a href="index.html" class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white">Inicio</a>
+            <a href="usuarios.html" class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white">Usuarios</a>
+            <a href="facturas.html" class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white">Facturas</a>
+            <a href="productos.html" class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white">Productos</a>
+            <a href="clientes.html" class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white">Clientes</a>
+            <a href="permisos.html" class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white">Permisos</a>
+            <a href="roles.html" class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white">Roles</a>
+        </div>
+
+        <main class="flex-grow">
+            <div id="carrusel" class="container w-70 md:w-full mx-auto px-8 py-6 md:px-4 md:py-12 rounded">
+                <!-- Carrusel de imágenes aquí -->
+            </div>
+
+            <div class="container mx-auto rounded align-items-center justify-center text-center">
+                <div class="grid grid-cols-1">
+                    <div class="bg-white rounded-lg shadow-lg p-8">
+                        <h2 class="text-2xl font-semibold mb-4">Descripción</h2>
+                        <p class="text-gray-600">Carrusel en donde se expondrán las imágenes de los logros de los integrantes de la liga.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer id="footer" class="bg-gray-800 text-white py-4">
+            <div class="container mx-auto px-4">
+                <p class="text-center">© 2023 Mi Aplicación. Todos los derechos reservados.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Mostrar el submenú en la versión de escritorio cuando el mouse pasa sobre el li
+        const menuItems = document.querySelectorAll('#nav-menu .group');
+        menuItems.forEach(item => {
+            const subMenu = item.querySelector('ul');
+            if (subMenu) {
+                item.addEventListener('mouseenter', () => {
+                    subMenu.classList.remove('hidden'); // Mostrar el submenú
+                });
+                item.addEventListener('mouseleave', () => {
+                    subMenu.classList.add('hidden'); // Ocultar el submenú cuando el mouse sale
+                });
+            }
+        });
+
+        // Menú hamburguesa para móviles
+        const menuToggle = document.getElementById('nav-menu-small');
+        const sidebar = document.getElementById('sidebar');
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+        });
+    </script>
+
+    <!-- Librería para el carrusel (si la estás utilizando) -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+</body>

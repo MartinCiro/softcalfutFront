@@ -49,11 +49,24 @@
             </div>
         </main>
         <footer id="footer" class="bg-gray-800 text-white py-4">
-
         </footer>
     </div>
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        // Mostrar el submenú en la versión de escritorio cuando el mouse pasa sobre el li
+        const menuItems = document.querySelectorAll('#nav-menu .group');
+        menuItems.forEach(item => {
+            const subMenu = item.querySelector('ul');
+            if (subMenu) {
+                item.addEventListener('mouseenter', () => {
+                    subMenu.classList.remove('hidden'); // Mostrar el submenú
+                });
+                item.addEventListener('mouseleave', () => {
+                    subMenu.classList.add('hidden'); // Ocultar el submenú cuando el mouse sale
+                });
+            }
+        });
+    </script>
+    <script src="./js/swiper-bundle.min.js"></script>
     <script src="./js/script.js" type="module"></script>
 </body>
-
 </html>
