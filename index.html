@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head id="head">
+    <script type="module">
+        import { insertHtml } from './js/utils.js';
+        insertHtml('head');
+    </script>
+</head>
+
+<body>
+    <div class="flex flex-col min-h-screen">
+        <nav class="bg-green-600">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center py-1">
+                    <div class="flex md:justify-between text-white">
+                        <span class="text-white font-bold text-lg">SOFTCALFUT</span>
+                    </div>
+
+                    <div
+                        class="md:hidden hover:cursor-pointer hover:bg-yellow-400 hover:shadow-lg px-2 py-1 rounded transition-all duration-200">
+                        <button class="text-white focus:outline-none hover:text-white" id="nav-menu-small">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                    <!-- screen normal -->
+                    <div id="nav-menu" class="hidden md:flex items-center">
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div id="sidebar"
+            class="absolute top-0 left-0 w-64 h-full bg-black bg-opacity-60 z-50 hidden transition-all duration-300">
+        </div>
+        <main class="flex-grow">
+            <!-- carrusel -->
+            <div id="carrusel" class="container w-70 md:w-full mx-auto px-8 py-6 md:px-4 md:py-12 rounded">
+            </div>
+
+
+            <div class="container mx-auto rounded align-items-center justify-center text-center">
+                <div class="grid grid-cols-1">
+                    <div class="bg-white rounded-lg shadow-lg p-8">
+                        <h2 class="text-2xl font-semibold mb-4 justify-center">Descripcion</h2>
+                        <p class="text-gray-600">Carrusel en donde se expondran las imagenes de los logros de los
+                            integrantes de la liga.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer id="footer" class="bg-gray-800 text-white py-4">
+
+        </footer>
+    </div>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="./js/script.js" type="module"></script>
+</body>
+
+</html>
