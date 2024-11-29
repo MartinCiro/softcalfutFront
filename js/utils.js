@@ -1,7 +1,7 @@
 export function insertHtml(html, nomId = null) {
     if (nomId === null)  nomId = html
     
-    fetch(`/prototipoFrontSoftcalfut/components/${html}.html`)
+    fetch(`/components/${html}.html`)
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok ' + response.statusText);
             return response.text();
