@@ -19,54 +19,81 @@
 
                     <div
                         class="md:hidden hover:cursor-pointer hover:bg-yellow-400 hover:shadow-lg px-2 py-1 rounded transition-all duration-200">
-                        <button class="text-white focus:outline-none hover:text-white" id="nav-menu-small">
+                        <button class="text-white focus:outline-none hover:text-yellow-400" id="nav-menu-small">
                             <i class="fas fa-bars"></i>
                         </button>
                     </div>
                     <!-- screen normal -->
                     <div id="nav-menu" class="hidden md:flex items-center">
+                        <ul class="flex space-x-4">
+                            <!-- Ítem con submenú -->
+                            <li><a href="index.html"
+                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"><i
+                                        class="fa fa-home mr-2"></i> Inicio</a></li>
+                            <li class="relative group">
+                                <a href="#"
+                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400">
+                                    Objetivos
+                                </a>
+                                <!-- Submenú desplegable -->
+                                <ul
+                                    class="absolute left-0 hidden space-y-2 bg-white text-[#222831] shadow-lg group-hover:block z-10">
+                                    <li><a href="#" id="general-link"
+                                            class="block px-4 py-2 text-sm hover:bg-[#00ADB5] hover:text-yellow-400 transition duration-200">General</a>
+                                    </li>
+                                    <li><a href="#" id="especifico-link"
+                                            class="block px-4 py-2 text-sm hover:bg-[#00ADB5] hover:text-yellow-400 transition duration-200">Especifico</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><a href="#"
+                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400">Contacto</a>
+                            </li>
+                        </ul>
                     </div>
+
                 </div>
             </div>
         </nav>
+
+        <!-- Modal (emergente) -->
+        <!-- No es necesario usar `relative` aquí para el contenedor del modal -->
+        <div class="z-50">
+            <div id="modal-watch" class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+                <!-- Contenido del modal -->
+                <div class="bg-white p-6 rounded shadow-lg max-w-lg w-full">
+                    <h2 class="text-2xl font-semibold mb-4">$TITULO$</h2>
+                    <p class="text-gray-600">$TEXTO$</p>
+                    <button
+                        class="mt-4 bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 close-modal">$BTN$</button>
+                    
+                </div>
+            </div>
+            <div id="modal-watch-especifico" class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+                <!-- Contenido del modal -->
+                <div class="bg-white p-6 rounded shadow-lg max-w-lg w-full">
+                    <h2 class="text-2xl font-semibold mb-4">$TITULO$</h2>
+                    <p class="text-gray-600">$TEXTO$</p>
+                    <button
+                        class="mt-4 bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 close-modal">$BTN$</button>
+                </div>
+            </div>
+        </div>
+
         <div id="sidebar"
             class="absolute top-0 left-0 w-64 h-full bg-black bg-opacity-60 z-50 hidden transition-all duration-300">
         </div>
         <main class="flex-grow">
-            <!-- carrusel -->
             <div id="carrusel" class="container w-70 md:w-full mx-auto px-8 py-6 md:px-4 md:py-12 rounded">
-            </div>
-
-
-            <div class="container mx-auto rounded align-items-center justify-center text-center">
-                <div class="grid grid-cols-1">
-                    <div class="bg-white rounded-lg shadow-lg p-8">
-                        <h2 class="text-2xl font-semibold mb-4 justify-center">Descripcion</h2>
-                        <p class="text-gray-600">Carrusel en donde se expondran las imagenes de los logros de los
-                            integrantes de la liga.</p>
-                    </div>
-                </div>
             </div>
         </main>
         <footer id="footer" class="bg-gray-800 text-white py-4">
         </footer>
     </div>
-    <script>
-        // Mostrar el submenú en la versión de escritorio cuando el mouse pasa sobre el li
-        const menuItems = document.querySelectorAll('#nav-menu .group');
-        menuItems.forEach(item => {
-            const subMenu = item.querySelector('ul');
-            if (subMenu) {
-                item.addEventListener('mouseenter', () => {
-                    subMenu.classList.remove('hidden'); // Mostrar el submenú
-                });
-                item.addEventListener('mouseleave', () => {
-                    subMenu.classList.add('hidden'); // Ocultar el submenú cuando el mouse sale
-                });
-            }
-        });
-    </script>
     <script src="./js/swiper-bundle.min.js"></script>
     <script src="./js/script.js" type="module"></script>
+    
+    
 </body>
+
 </html>

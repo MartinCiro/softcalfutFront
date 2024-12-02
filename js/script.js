@@ -1,31 +1,37 @@
-import { insertHtml } from './utils.js';
-// document.addEventListener('DOMContentLoaded', () => {
-//     insertHtml('head');
-// });
+import { insertHtml, actualizarModal, openModal, closeModal } from './utils.js';
 
- // Función para mostrar u ocultar la contraseña
-// document.getElementById("togglePassword").addEventListener("click", function() {
-//     const passwordField = document.getElementById("password");
-//     const passwordType = passwordField.type === "password" ? "text" : "password";
-//     passwordField.type = passwordType;
-// });
-
-// document.querySelectorAll('#cerrarModal').forEach(button => {
-//     button.addEventListener('click', function () {
-//         document.getElementById('modal').classList.add('hidden');
-//     });
-// });
-
-insertHtml('sidebar'); 
-insertHtml('nav-menu');
+insertHtml('sidebar');
 insertHtml('footer');
-
 
 document.addEventListener('DOMContentLoaded', function () {
     const dropdownButton = document.getElementById('nav-menu-small');
     const sidebar = document.getElementById('sidebar');
     const carrusel = document.getElementById('carrusel');
     const menuItems = document.querySelectorAll('#nav-menu .group');
+    const generalLink = document.getElementById('general-link');
+    const especificoLink = document.getElementById('especifico-link');
+    const closeModalButtons = document.querySelectorAll('.close-modal');
+    const modal = document.getElementById('modal-watch');
+    const modal_especifico = document.getElementById('modal-watch-especifico');
+    //interporlacion dentro de string
+    const contentModal = {
+        0: {
+            "title": "Objetivo General",
+            "text": `Desarrollar un software integral que permita la organización y seguimiento de la Liga Caldense de Fútbol, con el fin de facilitar la administración de equipos, jugadores, partidos, estadísticas y comunicación, optimizando la experiencia de los organizadores como la de los participantes y seguidores de la Liga.`,
+            "btn": "Volver"
+        },
+        1: {
+            "title": "Objetivo Específico",
+            "text": `Gestionar equipos y jugadores.
+            Brindar programación actualizada.
+            Permitir el Registro y Seguimiento de Partidos.
+            Suministrar el acceso a estadísticas y clasificaciones.
+            Proveer acceso y Seguridad.
+            Facilitar una interfaz Intuitiva.
+            Conceder capacitación y soporte a los usuarios.`,
+            "btn": "Aceptar"
+        }
+    };
 
     if (dropdownButton && sidebar) {
         dropdownButton.addEventListener('click', function (event) {
@@ -97,13 +103,38 @@ document.addEventListener('DOMContentLoaded', function () {
             const subMenu = item.querySelector('ul');
             if (subMenu) {
                 item.addEventListener('mouseenter', () => {
-                    subMenu.classList.remove('hidden'); // Mostrar el submenú
+                    subMenu.classList.remove('hidden');
                 });
                 item.addEventListener('mouseleave', () => {
-                    subMenu.classList.add('hidden'); // Ocultar el submenú cuando el mouse sale
+                    subMenu.classList.add('hidden');
                 });
             }
         });
     }
+    if (generalLink && modal && closeModalButtons.length > 0) {
+        openModal(generalLink, modal);
+        closeModal(closeModalButtons, modal);
+        window.addEventListener('click', function (event) {
+           if (event.target == modal)  modal.classList.add('hidden')
+        });
+        setTimeout(() => {
+            if (modal) actualizarModal(modal, contentModal[0].title, contentModal[0].text, contentModal[0].btn);
+        }, 500);
 
+        window.addEventListener('click', function (event) { if (event.target == modal) modal.classList.add('hidden');; });
+        
+    }
+    if (especificoLink && modal_especifico && closeModalButtons.length > 0) {
+        openModal(especificoLink, modal_especifico);
+        closeModal(closeModalButtons, modal_especifico);
+        window.addEventListener('click', function (event) {
+           if (event.target == modal_especifico)  modal_especifico.classList.add('hidden')
+        });
+        setTimeout(() => {
+            if (modal_especifico) actualizarModal(modal_especifico, contentModal[1].title, contentModal[1].text, contentModal[1].btn);
+        }, 500);
+
+        window.addEventListener('click', function (event) { if (event.target == modal_especifico) modal_especifico.classList.add('hidden');; });
+        
+    }
 });
