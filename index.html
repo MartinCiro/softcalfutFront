@@ -23,7 +23,7 @@
                             <i class="fas fa-bars"></i>
                         </button>
                     </div>
-                    <!-- screen normal -->
+                    <!-- Menu para pantallas grandes -->
                     <div id="nav-menu" class="hidden md:flex items-center">
                         <ul class="flex space-x-4">
                             <!-- Ítem con submenú -->
@@ -32,12 +32,12 @@
                                         class="fa fa-home mr-2"></i> Inicio</a></li>
                             <li class="relative group">
                                 <a href="#"
-                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400">
-                                    Objetivos
-                                </a>
+                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
+                                    id="objetivos-link">Objetivos</a>
                                 <!-- Submenú desplegable -->
                                 <ul
-                                    class="absolute left-0 hidden space-y-2 bg-white text-[#222831] shadow-lg group-hover:block z-10">
+                                    class="absolute left-0 hidden space-y-2 bg-white text-[#222831] shadow-lg group-hover:block z-10"
+                                    id="submenu-objetivos">
                                     <li><a href="#" id="general-link"
                                             class="block px-4 py-2 text-sm hover:bg-[#00ADB5] hover:text-yellow-400 transition duration-200">General</a>
                                     </li>
@@ -51,49 +51,66 @@
                             </li>
                         </ul>
                     </div>
-
                 </div>
             </div>
         </nav>
 
         <!-- Modal (emergente) -->
-        <!-- No es necesario usar `relative` aquí para el contenedor del modal -->
         <div class="z-50">
             <div id="modal-watch" class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
                 <!-- Contenido del modal -->
-                <div class="bg-white p-6 rounded shadow-lg max-w-lg w-full">
+                <div class="bg-white p-6 m-4 md:m-5 rounded shadow-lg max-w-lg w-full">
                     <h2 class="text-2xl font-semibold mb-4">$TITULO$</h2>
                     <p class="text-gray-600">$TEXTO$</p>
                     <button
                         class="mt-4 bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 close-modal">$BTN$</button>
-                    
                 </div>
             </div>
             <div id="modal-watch-especifico" class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
                 <!-- Contenido del modal -->
-                <div class="bg-white p-6 rounded shadow-lg max-w-lg w-full">
+                <div class="bg-white p-6 m-4 md:m-5 rounded shadow-lg max-w-lg w-full">
                     <h2 class="text-2xl font-semibold mb-4">$TITULO$</h2>
                     <p class="text-gray-600">$TEXTO$</p>
                     <button
                         class="mt-4 bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 close-modal">$BTN$</button>
                 </div>
             </div>
+
+            <!-- Sidebar -->
+            <div id="sidebar" class="absolute top-0 left-0 w-64 h-full bg-black bg-opacity-60 z-50 hidden transition-all duration-300 md:hidden">
+                <h2 class="text-lg font-bold text-gray-800 mb-4">Menú</h2>
+                <a href="index.html" class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400">Inicio</a>
+                <li class="relative group">
+                    <a href="#"
+                       class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
+                       id="objetivos-sidebar-link">Objetivos</a>
+                    <!-- Submenú desplegable -->
+                    <ul class="absolute left-0 hidden space-y-2 bg-white text-[#222831] shadow-lg z-10"
+                        id="submenu-objetivos-sidebar">
+                        <li>
+                            <a href="#" id="general-link-sidebar"
+                               class="block px-4 py-2 text-sm hover:bg-[#00ADB5] hover:text-yellow-400 transition duration-200">General</a>
+                        </li>
+                        <li>
+                            <a href="#" id="especifico-link-sidebar"
+                               class="block px-4 py-2 text-sm hover:bg-[#00ADB5] hover:text-yellow-400 transition duration-200">Especifico</a>
+                        </li>
+                    </ul>
+                </li>
+            </div>
         </div>
 
-        <div id="sidebar"
-            class="absolute top-0 left-0 w-64 h-full bg-black bg-opacity-60 z-50 hidden transition-all duration-300">
-        </div>
         <main class="flex-grow">
             <div id="carrusel" class="container w-70 md:w-full mx-auto px-8 py-6 md:px-4 md:py-12 rounded">
             </div>
         </main>
+
         <footer id="footer" class="bg-gray-800 text-white py-4">
         </footer>
     </div>
+
     <script src="./js/swiper-bundle.min.js"></script>
     <script src="./js/script.js" type="module"></script>
-    
-    
 </body>
 
 </html>

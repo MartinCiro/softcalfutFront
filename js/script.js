@@ -1,6 +1,6 @@
 import { insertHtml, actualizarModal, openModal, closeModal } from './utils.js';
 
-insertHtml('sidebar');
+
 insertHtml('footer');
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const menuItems = document.querySelectorAll('#nav-menu .group');
     const generalLink = document.getElementById('general-link');
     const especificoLink = document.getElementById('especifico-link');
+    const generalLinkSidebar = document.getElementById('general-link-sidebar');
+    const especificoLinkSidebar = document.getElementById('especifico-link-sidebar');
     const closeModalButtons = document.querySelectorAll('.close-modal');
     const modal = document.getElementById('modal-watch');
     const modal_especifico = document.getElementById('modal-watch-especifico');
@@ -137,4 +139,48 @@ document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('click', function (event) { if (event.target == modal_especifico) modal_especifico.classList.add('hidden');; });
         
     }
+    if (especificoLinkSidebar && modal_especifico && closeModalButtons.length > 0) {
+        openModal(especificoLinkSidebar, modal_especifico);
+        especificoLinkSidebar.addEventListener('click', function (event) {
+            event.stopPropagation();
+            sidebar.classList.toggle('hidden');
+            sidebar.classList.toggle('active');
+        })
+        closeModal(closeModalButtons, modal_especifico);
+        window.addEventListener('click', function (event) {
+           if (event.target == modal_especifico)  modal_especifico.classList.add('hidden')
+        });
+        setTimeout(() => {
+            if (modal_especifico) actualizarModal(modal_especifico, contentModal[1].title, contentModal[1].text, contentModal[1].btn);
+        }, 500);
+
+        window.addEventListener('click', function (event) { if (event.target == modal_especifico) modal_especifico.classList.add('hidden');; });
+        
+    }
+    if (generalLinkSidebar && modal && closeModalButtons.length > 0) {
+        openModal(generalLinkSidebar, modal);
+        generalLinkSidebar.addEventListener('click', function (event) {
+            event.stopPropagation();
+            sidebar.classList.toggle('hidden');
+            sidebar.classList.toggle('active');
+        })
+        closeModal(closeModalButtons, modal);
+        window.addEventListener('click', function (event) {
+           if (event.target == modal)  modal.classList.add('hidden')
+        });
+        setTimeout(() => {
+            if (modal) actualizarModal(modal, contentModal[1].title, contentModal[1].text, contentModal[1].btn);
+        }, 500);
+
+        window.addEventListener('click', function (event) { if (event.target == modal) modal.classList.add('hidden');; });
+        
+    }
+
+    // Manejador de clic en "Objetivos" en el sidebar
+    document.getElementById('objetivos-sidebar-link').addEventListener('click', function(event) {
+        event.preventDefault(); 
+        const submenuSidebar = document.getElementById('submenu-objetivos-sidebar');
+        submenuSidebar.classList.toggle('hidden');  
+    });
+
 });
