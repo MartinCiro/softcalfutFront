@@ -1,6 +1,6 @@
 export function insertHtml(html, nomId = null) {
-    if (nomId === null)  nomId = html
-    
+    if (nomId === null) nomId = html
+
     fetch(`/components/${html}.html`)
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok ' + response.statusText);
@@ -29,13 +29,13 @@ export function actualizarModal(modal, titulo, texto, btnTexto) {
 
     // Obtener el contenido actual del modal y reemplazar los placeholders
     let modalContent = modal.innerHTML;
-    
+
     formattedText = typeof text === 'string' && text.includes('\n') ? `<ul class="list-disc pl-5">${text.split('\n').map(line => `<li>${line}</li>`).join('')}</ul>` : `<p>${text}</p>`;
 
+    formattedText = formattedText.replace(/<strong>(.*?)<\/strong>/g, (match) => match);
     modalContent = modalContent.replace('$TITULO$', title)
-                                .replace('$TEXTO$', formattedText)
-                                .replace('$BTN$', btnText);
-
+        .replace('$TEXTO$', formattedText)
+        .replace('$BTN$', btnText);
     // Actualizar el contenido del modal
     modal.innerHTML = modalContent;
 
@@ -67,5 +67,27 @@ export function closeModal(trigger, modal) {
         trigger.addEventListener('click', function () {
             modal.classList.add('hidden');
         });
+    }
+}
+
+export function handleModal({
+    link, modal, closeModalButtons, contentIndex, contentModal
+}) {
+    if (link && modal && closeModalButtons.length > 0) {
+        // Abrir el modal
+        openModal(link, modal);
+
+        // Control de cierre con botones
+        closeModal(closeModalButtons, modal);
+
+        // Cerrar modal si se hace clic fuera de él
+        window.addEventListener('click', function (event) {
+            if (event.target == modal) modal.classList.add('hidden'); 
+        });
+
+        // Actualizar el contenido del modal después de 500 ms
+        setTimeout(() => {
+            if (modal)   actualizarModal(modal, contentModal[contentIndex].title, contentModal[contentIndex].text, contentModal[contentIndex].btn); 
+        }, 500);
     }
 }
