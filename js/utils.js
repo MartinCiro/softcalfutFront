@@ -74,6 +74,9 @@ export function handleModal({
     link, modal, closeModalButtons, contentIndex, contentModal, link2 = null
 }) {
     if (link && modal && closeModalButtons.length > 0) {
+        // Verificar si el modal ya está abierto
+        if (!modal.classList.contains('hidden')) return;
+
         // Abrir el modal
         openModal(link, modal);
         if (link2) openModal(link2, modal);
@@ -81,14 +84,15 @@ export function handleModal({
         // Control de cierre con botones
         closeModal(closeModalButtons, modal);
 
-        // Cerrar modal si se hace clic fuera de él
-        window.addEventListener('click', function (event) {
-            if (event.target == modal) modal.classList.add('hidden'); 
-        });
+        const closeOnClickOutside = (event) => {
+            if (event.target === modal) {
+                modal.classList.add('hidden');
+                window.removeEventListener('click', closeOnClickOutside);
+            }
+        };
+        window.addEventListener('click', closeOnClickOutside);
 
-        // Actualizar el contenido del modal después de 500 ms
-        setTimeout(() => {
-            if (modal)   actualizarModal(modal, contentModal[contentIndex].title, contentModal[contentIndex].text, contentModal[contentIndex].btn); 
-        }, 500);
+        if (contentModal && contentModal[contentIndex]) actualizarModal(modal, contentModal[contentIndex].title, contentModal[contentIndex].text, contentModal[contentIndex].btn);
     }
 }
+

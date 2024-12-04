@@ -1,4 +1,4 @@
-import { insertHtml, actualizarModal, openModal, closeModal, handleModal } from './utils.js';
+import { insertHtml, handleModal } from './utils.js';
 
 
 insertHtml('footer');
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     
-    const listaContent = ["general", "especifico", "situacion_problema", "introduccion", "abstract", "descripcion", "caracteristicas_principales", "principal-aplicativo", "justificacion", "antecedentes", "alcance", "impacto", "recomendaciones-adicionales"];
+    const listaContent = ["general", "especifico", "situacion_problema", "introduccion", "abstract", "descripcion", "caracteristicas_principales", "principal-aplicativo", "justificacion", "antecedentes", "alcance", "impacto", "beneficios","recomendaciones-adicionales"];
 
 
     listaContent.forEach((item, index) => {
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('objetivos-sidebar-link').addEventListener('click', function(event) {
         event.preventDefault(); 
         const submenuSidebar = document.getElementById('submenu-objetivos-sidebar');
-        submenuSidebar.classList.toggle('hidden');  
+        submenuSidebar.classList.toggle('hidden');
     });
 
 });
