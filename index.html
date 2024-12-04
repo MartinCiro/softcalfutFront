@@ -80,7 +80,7 @@
 
                     <div
                         class="md:hidden hover:cursor-pointer hover:bg-yellow-400 hover:shadow-lg px-2 py-1 rounded transition-all duration-200">
-                        <button class="text-white focus:outline-none hover:text-yellow-400" id="nav-menu-small">
+                        <button class="text-white focus:outline-none hover:bg-green-500" id="nav-menu-small">
                             <i class="fas fa-bars"></i>
                         </button>
                     </div>
@@ -89,94 +89,83 @@
                         <ul class="flex space-x-4">
                             <!-- Ítem con submenú -->
                             <li><a href="index.html"
-                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"><i
+                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"><i
                                         class="fa fa-home mr-2"></i> Inicio</a></li>
+                    
+                            <!-- Submenú: Nuestro Proyecto -->
                             <li class="relative group">
                                 <a href="#"
-                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
-                                    id="objetivos-link">Objetivos</a>
+                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
+                                    id="nuestro-proyecto-link">Nuestro Proyecto</a>
                                 <!-- Submenú desplegable -->
-                                <ul class="absolute left-0 hidden space-y-2 bg-white text-[#222831] shadow-lg group-hover:block z-10"
-                                    id="submenu-objetivos">
-                                    <li><a href="#" id="general-link"
-                                            class="block px-4 py-2 text-sm hover:bg-[#00ADB5] hover:text-yellow-400 transition duration-200">General</a>
+                                <ul class="absolute left-0 hidden space-y-2 bg-white text-[#222831] shadow-lg group-hover:block z-10">
+                                    
+                                    <li class="relative group">
+                                        <ul class="absolute left-[-100px] hidden space-y-2 bg-white text-[#222831] shadow-lg group-hover:block z-10" id="submenu-objetivos">
+                                            <li><a href="#" id="general-link"
+                                                    class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">General</a>
+                                            </li>
+                                            <li><a href="#" id="especifico-link"
+                                                    class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Especifico</a>
+                                            </li>
+                                        </ul>
+                                        <a href="#"
+                                            class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500" 
+                                            id="objetivos-link">Objetivos</a>
+                                        
                                     </li>
-                                    <li><a href="#" id="especifico-link"
-                                            class="block px-4 py-2 text-sm hover:bg-[#00ADB5] hover:text-yellow-400 transition duration-200">Especifico</a>
+                                    
+                                    
+                                    <li><a href="#" id="situacion_problema-link" class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Situacion Problema</a></li>
+                                    <li><a href="#" id="introduccion-link" class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Introducción</a></li>
+                                    <li><a href="#" id="abstract-link" class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Abstract</a></li>
+                                    <li><a href="#" id="descripcion-link" class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Descripción</a></li>
+                                    <li><a href="#" id="caracteristicas_principales-link" class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Características principales</a></li>
+                                    <li><a href="#" id="principal-aplicativo-link" class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Objetivo principal del aplicativo</a></li>
+                                    <li><a href="#" id="justificacion-link" class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Justificación</a></li>
+                                    <li><a href="#" id="antecedentes-link" class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Antecedentes</a></li>
+                                    <li><a href="#" id="alcance-link" class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Alcance</a></li>
+                                    <li><a href="#" id="impacto-link" class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Impacto</a></li>
+                                    <li class="relative group">
+                                        <ul class="absolute left-[-125px] hidden space-y-2 bg-white text-[#222831] shadow-lg group-hover:block z-10" id="submenu-beneficios">
+                                            <li>
+                                                <a href="#" id="organizadores-link" class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Organizadores</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" id="jugadores-link"
+                                                    class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Jugadores</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" id="seguidores-link"
+                                                    class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Seguidores</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" id="liga-link"
+                                                    class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">La liga</a>
+                                            </li>
+                                        </ul>
+                                        <a href="#" class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
+                                            id="beneficios-link">Beneficios</a>
+                                        
                                     </li>
+                                    <li><a href="#" id="recomendaciones-adicionales-link" class="flex items-center my-2 px-4 py-2 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Recomendaciones adicionales</a></li>
+                                    
                                 </ul>
                             </li>
+                            
                             <li><a href="#"
-                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
-                                    id="situacion-problema-link">Situacion Problema</a>
-                            </li>
-                            <li><a href="#"
-                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
-                                    id="introduccion-link">Introducción</a></li>
-                            <li><a href="#"
-                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
-                                    id="abstract-link">Abstract</a></li>
-                            <li><a href="#"
-                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
-                                    id="descripcion-link">Descripción</a></li>
-                            <li><a href="#"
-                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
-                                    id="características-principales-link">Características principales</a></li>
-                            <li><a href="#"
-                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
-                                    id="principal-aplicativo-link">Objetivo principal del aplicativo</a></li>
-                            <li><a href="#"
-                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
-                                    id="justificacion-link">Justificación</a></li>
-                            <li><a href="#"
-                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
-                                    id="antecedentes-link">Antecedentes</a></li>
-                            <li><a href="#"
-                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
-                                    id="alcance-link">Alcance</a></li>
-                            <li><a href="#"
-                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
-                                    id="impacto-link">Impacto</a></li>
-                            <li class="relative group">
-                                <a href="#"
-                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
-                                    id="beneficios-link">Beneficios</a>
-                                <!-- Submenú desplegable -->
-                                <ul class="absolute left-0 hidden space-y-2 bg-white text-[#222831] shadow-lg z-50"
-                                    id="submenu-beneficios">
-                                    <li>
-                                        <a href="#" id="organizadores-link"
-                                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:text-yellow-400 transition duration-200">Organizadores</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" id="jugadores-link"
-                                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:text-yellow-400 transition duration-200">Jugadores</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" id="seguidores-link"
-                                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:text-yellow-400 transition duration-200">Seguidores</a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#" id="liga-link"
-                                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:text-yellow-400 transition duration-200">La
-                                            liga</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a href="#"
-                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
+                                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
                                     id="recomendaciones-adicionales-link">Recomendaciones adicionales</a></li>
-
                         </ul>
                     </div>
+                    
                 </div>
             </div>
         </nav>
 
         <!-- Modal (emergente) -->
         <div class="z-50">
-            <div id="modal-watch"
+            <div id="modal-general"
                 class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden transition-all duration-300">
                 <!-- Contenido del modal -->
                 <div class="bg-white p-6 m-4 md:m-5 rounded shadow-lg max-w-lg w-ful transition-all duration-300">
@@ -186,7 +175,7 @@
                         class="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 close-modal">$BTN$</button>
                 </div>
             </div>
-            <div id="modal-watch-especifico"
+            <div id="modal-especifico"
                 class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
                 <!-- Contenido del modal -->
                 <div class="bg-white p-6 m-4 md:m-5 rounded shadow-lg max-w-lg w-full">
@@ -197,7 +186,7 @@
                 </div>
             </div>
 
-            <div id="modal-sitacion-problema"
+            <div id="modal-situacion_problema"
                 class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
                 <!-- Contenido del modal -->
                 <div class="bg-white p-6 m-4 md:m-5 rounded shadow-lg max-w-lg w-full">
@@ -238,7 +227,7 @@
                         class="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 close-modal">$BTN$</button>
                 </div>
             </div>
-            <div id="modal-características-principales"
+            <div id="modal-caracteristicas_principales"
                 class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden transition-all duration-300">
                 <!-- Contenido del modal -->
                 <div class="bg-white p-6 m-4 md:m-5 rounded shadow-lg max-w-lg w-ful transition-all duration-300">
@@ -328,84 +317,84 @@
             class="absolute top-0 left-0 w-64 h-full bg-black bg-opacity-60 z-10 hidden transition-all duration-300 md:hidden overflow-y-auto">
             <h2 class="text-lg font-bold text-gray-800 mb-4">Menú</h2>
             <a href="index.html"
-                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400">Inicio</a>
+                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500">Inicio</a>
             <li class="relative group">
                 <a href="#"
-                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
+                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
                     id="objetivos-sidebar-link">Objetivos</a>
                 <!-- Submenú desplegable -->
                 <ul class="absolute left-0 hidden space-y-2 bg-white text-[#222831] shadow-lg z-50"
                     id="submenu-objetivos-sidebar">
                     <li>
                         <a href="#" id="general-link-sidebar"
-                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:text-yellow-400 transition duration-200">General</a>
+                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:bg-green-500 transition duration-200">General</a>
                     </li>
                     <li>
                         <a href="#" id="especifico-link-sidebar"
-                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:text-yellow-400 transition duration-200">Especifico</a>
+                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:bg-green-500 transition duration-200">Especifico</a>
                     </li>
                 </ul>
             </li>
             <a href="#"
-                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
-                id="situacion-problema-link-sidebar">Situacion Problema</a>
+                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
+                id="situacion_problema-link-sidebar">Situacion Problema</a>
 
             <a href="#"
-                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
+                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
                 id="introduccion-link-sidebar">Introducción</a>
             <a href="#"
-                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
+                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
                 id="abstract-link-sidebar">Abstract</a>
             <a href="#"
-                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
+                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
                 id="descripcion-link-sidebar">Descripción</a>
             <a href="#"
-                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
-                id="características-principales-link-sidebar">Características principales</a>
+                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
+                id="caracteristicas_principales-link-sidebar">Características principales</a>
             <a href="#"
-                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
+                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
                 id="principal-aplicativo-link-sidebar">Objetivo principal del aplicativo</a>
             <a href="#"
-                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
+                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
                 id="justificacion-link-sidebar">Justificación</a>
             <a href="#"
-                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
+                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
                 id="antecedentes-link-sidebar">Antecedentes</a>
             <a href="#"
-                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
+                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
                 id="alcance-link-sidebar">Alcance</a>
             <a href="#"
-                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
+                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
                 id="impacto-link-sidebar">Impacto</a>
             <li class="relative group">
                 <a href="#"
-                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
+                    class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
                     id="beneficios-sidebar-link">Beneficios</a>
                 <!-- Submenú desplegable -->
                 <ul class="absolute left-0 hidden space-y-2 bg-white text-[#222831] shadow-lg z-50"
                     id="submenu-beneficios-sidebar">
                     <li>
                         <a href="#" id="organizadores-link-sidebar"
-                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:text-yellow-400 transition duration-200">Organizadores</a>
+                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:bg-green-500 transition duration-200">Organizadores</a>
                     </li>
                     <li>
                         <a href="#" id="jugadores-link-sidebar"
-                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:text-yellow-400 transition duration-200">Jugadores</a>
+                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:bg-green-500 transition duration-200">Jugadores</a>
                     </li>
                     <li>
                         <a href="#" id="seguidores-link-sidebar"
-                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:text-yellow-400 transition duration-200">Seguidores</a>
+                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:bg-green-500 transition duration-200">Seguidores</a>
                     </li>
 
                     <li>
                         <a href="#" id="liga-link-sidebar"
-                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:text-yellow-400 transition duration-200">La
+                            class="block px-4 py-2 text-sm hover:bg-green-500 hover:bg-green-500 transition duration-200">La
                             liga</a>
                     </li>
                 </ul>
             </li>
             <a href="#"
-                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:text-yellow-400"
+                class="flex items-center my-2 text-white px-4 transition-all duration-300 transform hover:scale-110 hover:bg-green-500 hover:bg-green-500"
                 id="recomendaciones-adicionales-link-sidebar">Recomendaciones adicionales</a>
         </div>
 

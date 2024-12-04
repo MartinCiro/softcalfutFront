@@ -71,11 +71,12 @@ export function closeModal(trigger, modal) {
 }
 
 export function handleModal({
-    link, modal, closeModalButtons, contentIndex, contentModal
+    link, modal, closeModalButtons, contentIndex, contentModal, link2 = null
 }) {
     if (link && modal && closeModalButtons.length > 0) {
         // Abrir el modal
         openModal(link, modal);
+        if (link2) openModal(link2, modal);
 
         // Control de cierre con botones
         closeModal(closeModalButtons, modal);
