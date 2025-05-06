@@ -1,0 +1,75 @@
+.usuario-table {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.usuario-table th:last-child,
+.usuario-table td:last-child {
+  min-width: 280px;
+  width: 280px;
+}
+
+.usuario-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.usuario-actions button {
+  transition: all 0.2s ease;
+  margin-bottom: 0;
+}
+
+.usuario-actions button:hover {
+  transform: scale(1.05);
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-container .form-control {
+  padding-left: 40px;
+  border-radius: 20px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 10px;
+  color: #6c757d;
+}
+
+.pagination-container {
+  margin-top: 20px;
+}
+
+.badge {
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+/* Asegurar que el texto en los formularios modales sea visible */
+.modal-body .form-control,
+.modal-body .form-select,
+.modal-body .form-label,
+.modal-body .form-text,
+.modal-title {
+  color: #000000;
+}
+
+.modal-body {
+  color: #000000;
+}
+
+/* Asegurar que el texto en los campos de entrada sea negro */
+input, 
+textarea, 
+select,
+.form-control {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000;
+}

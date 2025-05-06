@@ -1,0 +1,13 @@
+services:
+  frontend_scrapping:
+    container_name: softcalfut_frontend
+    build: ./
+    restart: always
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./:/usr/src/app/
+      - /usr/src/app/node_modules/
+    command: npm run dev -- --host
+    environment:
+      - VITE_BASE_URL=localhost:8000
