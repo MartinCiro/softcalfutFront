@@ -15,7 +15,7 @@ const AuthService = {
   login: async () => {
     try {
       const dataF = {
-        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJkb2MiOiI0MTIzIiwibm9tYnJlIjoibWFydGluIGNpcm8iLCJpZF9yb2wiOjIsInBlcm1pc29zIjpbIkxlZSIsIkFjdHVhbGl6YSIsIkNyZWEiLCJFbGltaW5hIiwiSW5oYWJpbGl0YSJdfSwiaWF0IjoxNzQ2NTU5NzE4LCJleHAiOjE3NDY1NjMzMTh9.I3C6QjREYOgBkjRruTBB8znOjaEDLanAov6iXreFPD4",
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJkb2MiOiI0MTIzIiwibm9tYnJlIjoibWFydGluIGNpcm8iLCJpZF9yb2wiOjJ9LCJpYXQiOjE3NDY1Njc5ODEsImV4cCI6MTc0NjU3MTU4MX0.yIDl72GLYUKDCm6SAyBotbViT8I46S1ccil2DbomNtg",
         usuario: {
           doc: "4123",
           nombre: "martin ciro",

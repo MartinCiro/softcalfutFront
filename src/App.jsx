@@ -13,14 +13,17 @@ import Layout from '@components/layout/Layout';
 import Dashboard from '@components/dashboard/Dashboard';
 import Facturas from '@components/facturas/Facturas';
 import Clientes from '@components/clientes/Clientes';
+import NavBar from '@components/NavBar/NavBar';
 
 // Componentes de administración
 import Usuarios from '@components/administracion/usuarios/Usuarios';
 import Configuracion from '@components/administracion/configuracion/Configuracion';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
   return (
     <Router>
+      <NavBar />
       <Routes>
         {/* Ruta pública para login */}
         <Route path="/login" element={ < Login />} />
