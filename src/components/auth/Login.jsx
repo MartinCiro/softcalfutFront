@@ -77,10 +77,10 @@ const Login = () => {
                     <form onSubmit={handleSubmit}>
                       <MDBInput
                         wrapperClass='mb-4'
-                        label='Correo electrónico'
+                        label='Documento de identidad'
                         id='correo'
                         name='correo'
-                        type='email'
+                        type='text'
                         value={formData.correo}
                         onChange={handleChange}
                         required
