@@ -5,30 +5,26 @@ import {
   extractResponseData,
   getFriendlyErrorMessage,
   getStatusConnection,
-  getByEndpoint
+  getByEndpoint,
+  clearSession
 } from "@utils/Utils";
 
-const API_URL = import.meta.env.VITE_API_URL;
-axios.defaults.timeout = 10000; // 10 segundos
-
 const AuthService = {
-  login: async () => {
+  login: async (correo, password) => {
     try {
-      const dataF = {
-        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJkb2MiOiI0MTIzIiwibm9tYnJlIjoibWFydGluIGNpcm8iLCJpZF9yb2wiOjJ9LCJpYXQiOjE3NDY1Njc5ODEsImV4cCI6MTc0NjU3MTU4MX0.yIDl72GLYUKDCm6SAyBotbViT8I46S1ccil2DbomNtg",
-        usuario: {
-          doc: "4123",
-          nombre: "martin ciro",
-          rol: "Admin",
-          estado: "Activo"
-        }
-      };
+      const data = await getByEndpoint(`auth/login`, {
+        documento:   correo,
+        enpass: password,
+      }, "post");
 
-      const { token, usuario } = dataF;
-      if (!token) throw new Error("Estructura de respuesta inválida");
+      const { token, usuario } = extractResponseData(data);
 
-      sessionStorage.setItem("accessToken", token);
-      sessionStorage.setItem("userData", JSON.stringify(usuario));
+      if (!token) throw new Error("No se recibió un token de acceso.");
+
+      saveSession({
+        access: token,
+        usuario
+      });
       return { token, usuario };
     } catch (error) {
       console.error("Error en login:", error);
@@ -37,8 +33,7 @@ const AuthService = {
   },
 
   logout: () => {
-    sessionStorage.removeItem("accessToken");
-    sessionStorage.removeItem("userData");
+    clearSession();
   },
 
   getCurrentUser: () => {

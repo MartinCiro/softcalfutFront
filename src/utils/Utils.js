@@ -1,10 +1,14 @@
 import AuthService from "@services/AuthService";
 import axios from 'axios';
 
-export const saveSession = ({ access, refresh, correo, permisos }) => {
-  localStorage.setItem("accessToken", access);
-  localStorage.setItem("refreshToken", refresh);
-  localStorage.setItem("userData", JSON.stringify({ correo, permisos }));
+export const saveSession = ({ access, usuario }) => {
+  sessionStorage.setItem("accessToken", access);
+  sessionStorage.setItem("userData", JSON.stringify({ usuario }));
+};
+
+export const clearSession = () => {
+  sessionStorage.removeItem("accessToken");
+  sessionStorage.removeItem("userData");
 };
 
 export const extractResponseData = (data) => data?.result || data?.data || data || {};
