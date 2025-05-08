@@ -7,19 +7,12 @@ import {
   MDBCardTitle,
   MDBCardText,
   MDBCardHeader,
-  MDBListGroup,
-  MDBListGroupItem,
   MDBBadge,
-  MDBProgress,
-  MDBProgressBar,
   MDBTable,
   MDBTableHead,
   MDBTableBody,
   MDBBtn
 } from 'mdb-react-ui-kit';
-// Remove unused axios import since it's not being used in the code
-import AuthService from '@services/AuthService';
-import FacturaService from '@services/FacturaService';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -28,7 +21,6 @@ const Dashboard = () => {
     facturasPendientes: 0,
     facturasCompletadas: 0,
     ultimasFacturas: [],
-    facturacionMensual: [],
     clientesDestacados: [],
     distribucionEstados: { completadas: 0, pendientes: 0, canceladas: 0 }
   });
@@ -36,12 +28,6 @@ const Dashboard = () => {
   const [error, setError] = useState('');
 
   // Datos para el gráfico de barras
-  const chartData = stats.facturacionMensual.map(item => ({
-    label: item.mes,
-    value: item.valor,
-    color: '#243E6E'
-  }));
-
   if (loading) {
     return (
       <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>

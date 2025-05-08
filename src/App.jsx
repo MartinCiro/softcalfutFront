@@ -14,6 +14,7 @@ import Dashboard from '@components/dashboard/Dashboard';
 import Facturas from '@components/facturas/Facturas';
 import Clientes from '@components/clientes/Clientes';
 import NavBar from '@components/NavBar/NavBar';
+import Footer from '@components/Footer/Footer';
 
 // Componentes de administración
 import Usuarios from '@components/administracion/usuarios/Usuarios';
@@ -44,6 +45,7 @@ function App() {
           </Route>
         </Route>
       </Routes>
+      <Footer />
     </Router>
   )
 }

@@ -1,33 +1,34 @@
 import React from 'react';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { MDBIcon } from 'mdb-react-ui-kit';
-import { Link } from 'react-router-dom';
+import { NavLink  } from 'react-router-dom';
+import './NavBar.css';
 
 const NavBar = () => {
   return (
-    <Navbar expand="lg" className="bg-primary" data-bs-theme="dark">
+    <Navbar expand="lg" className="navbar-custom" data-bs-theme="dark">
       <Container className="justify-content-center">
         <Nav className="d-flex gap-4 align-items-center ">
-          <Link to="/" className="nav-link text-black">
-            <MDBIcon fas icon="home" className="me-1" color="green" />
+          <NavLink to="/" className="nav-link">
+            <MDBIcon fas icon="home" className="me-1" />
             Inicio
-          </Link>
-          <Link to="/lcf" className="nav-link text-black">
+          </NavLink>
+          <NavLink to="/lcf" className="nav-link">
             <MDBIcon fas icon="building" className="me-1" />
             LCF
-          </Link>
-          <Link to="/torneos" className="nav-link text-black">
+          </NavLink>
+          <NavLink to="/torneos" className="nav-link">
             <MDBIcon fas icon="trophy" className="me-1" />
             Torneos
-          </Link>
-          <Link to="/escuela" className="nav-link text-black">
+          </NavLink>
+          <NavLink to="/escuela" className="nav-link">
             <MDBIcon fas icon="book" className="me-1" />
             Escuela LCF
-          </Link>
-          <Link to="/club" className="nav-link text-black">
+          </NavLink>
+          <NavLink to="/club" className="nav-link">
             <MDBIcon fas icon="futbol" className="me-1" />
             Mi Club
-          </Link>
+          </NavLink>
         </Nav>
       </Container>
     </Navbar>

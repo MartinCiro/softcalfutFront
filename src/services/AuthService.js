@@ -1,4 +1,3 @@
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import {
   saveSession,
@@ -32,9 +31,7 @@ const AuthService = {
     }
   },
 
-  logout: () => {
-    clearSession();
-  },
+  logout: () => clearSession(),
 
   getCurrentUser: () => {
     const userData = sessionStorage.getItem("userData");

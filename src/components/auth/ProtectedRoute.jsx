@@ -42,7 +42,10 @@ const ProtectedRoute = () => {
     );
   }
 
-  if (!authState.isAuthenticated) return <Navigate to="/login" replace />;
+  if (!authState.isAuthenticated) {
+    AuthService.logout();
+    return <Navigate to="/login" replace />;
+  }
 
   return <Outlet />;
 };
