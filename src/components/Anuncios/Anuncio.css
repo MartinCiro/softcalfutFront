@@ -1,0 +1,44 @@
+.card-custom {
+  background-color: var(--color-secundario) !important;
+
+  .clamp-tittle {
+    color: var(--color-claro);
+    white-space: nowrap;     
+    overflow: hidden;        
+    text-overflow: ellipsis; 
+    max-width: 100%;         
+  }
+
+  .clamp-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--color-claro);
+  }
+
+  .clamp-image {
+    cursor: pointer;
+    transition: transform 0.3s ease, border 0.3s ease;
+    border: 2px solid transparent;
+    border-radius: 5px;
+  }
+
+  .clamp-image:hover {
+    transform: scale(1.05);
+    border-color: var(--color-primario);
+  }
+
+  .edit {
+    color: var(--color-primario);
+  }
+
+  .edit:hover {
+    color: var(--color-claro);
+  }
+
+  .edit:focus:not(.active) {
+    color: var(--color-primario);
+  }
+}

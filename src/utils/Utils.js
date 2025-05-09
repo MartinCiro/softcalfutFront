@@ -34,30 +34,37 @@ export const getStatusConnection = () => {
 
 export const getByEndpoint = async (endpoint, body = null, method = "get") => {
   const API_URL = import.meta.env.VITE_API_URL;
+
   try {
     getStatusConnection();
 
+    const lowerMethod = method.toLowerCase();
+    const isBodyMethod = ["post", "put", "patch"].includes(lowerMethod);
+
     const config = {
-      method: method.toLowerCase(),
+      method: lowerMethod,
       url: `${API_URL}/${endpoint}/`,
-      headers: AuthService.getAuthHeader(),
+      headers: {
+        ...AuthService.getAuthHeader(),
+        ...(isBodyMethod && { "Content-Type": "application/json" }),
+      },
       timeout: 90000,
+      ...(isBodyMethod && body ? { data: body } : {}),
     };
 
-    
-    if (body && ["post", "put", "patch"].includes(method.toLowerCase())) config.data = body;
     const response = await axios(config);
-    
+
     if (response.data && response.data.result) {
       return response.data.result;
     } else {
-      throw new Error('No se pudo obtener la información solicitada.');
+      throw new Error("No se pudo obtener la información solicitada.");
     }
   } catch (error) {
-    console.error('Error al obtener datos para el endpoint:', endpoint, "\nError:", error);
+    console.error("Error al obtener datos para el endpoint:", endpoint, "\nError:", error);
     throw error;
   }
 };
+
 
 // Función para formatear fecha desde cualquier formato
 export const dateFormatter = (fechaInput) => {
@@ -94,4 +101,25 @@ export const dateFormatter = (fechaInput) => {
   }
 
   return fechaStr;
+};
+
+// Guarda un objeto en sessionStorage con un timestamp
+export const cacheSession = (key, payload, ttl = 1000 * 60 * 5) => sessionStorage.setItem(key, JSON.stringify({ payload, ts: Date.now(), ttl }));
+
+// Carga un objeto del sessionStorage, validando su TTL
+export const loadSessionCache = (key) => {
+  const raw = sessionStorage.getItem(key);
+  if (!raw) return null;
+
+  try {
+    const { payload, ts, ttl } = JSON.parse(raw);
+    if (Date.now() - ts > ttl) {
+      sessionStorage.removeItem(key); // Expirado
+      return null;
+    }
+    return payload;
+  } catch {
+    sessionStorage.removeItem(key); // Formato inválido
+    return null;
+  }
 };
