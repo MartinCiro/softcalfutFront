@@ -1,49 +1,28 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import AnuncioService from "@services/AnuncioService";
+import useFetchData from "@hooks/useFetchData";
 import LoadingSpinner from "@components/Loading/Loading";
 import ErrorMessage from "@components/Error/ErrorMessage";
 import ModalFormulario from "@components/FormModal/EditModalFormulario";
 import ModalVerGenerico from "@components/FormModal/WhatchModalForm";
 import "./Anuncio.css";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { Container, Row, Col, Card } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
 import { Link } from "react-router-dom";
 
 const AnunciosList = () => {
-  const [anuncios, setAnuncios] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data: anuncios, loading, error, reload: cargarAnuncios } = useFetchData(AnuncioService.anuncios);
 
   const [modalShow, setModalShow] = useState(false);
-  const [anuncioSeleccionado, setAnuncioSeleccionado] = useState(null);
-  const [guardando, setGuardando] = useState(false);
-  const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
-
   const [modalVer, setModalVer] = useState(false);
+  const [anuncioSeleccionado, setAnuncioSeleccionado] = useState(null);
   const [anuncioVer, setAnuncioVer] = useState(null);
-
 
   const camposAnuncio = [
     { nombre: "titulo", label: "Título", tipo: "text" },
     { nombre: "contenido", label: "Contenido", tipo: "textarea" },
     { nombre: "imagenUrl", label: "URL de Imagen", tipo: "text" },
   ];
-
-  const cargarAnuncios = async () => {
-    try {
-      setLoading(true);
-      const { result } = await AnuncioService.anuncios();
-      setAnuncios(result);
-    } catch (err) {
-      setError(err.message || "Error al cargar los anuncios.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    cargarAnuncios();
-  }, []);
 
   const handleEditar = (anuncio) => {
     setAnuncioSeleccionado(anuncio);
@@ -56,35 +35,9 @@ const AnunciosList = () => {
   };
 
   const handleGuardar = async (datosForm) => {
-    try {
-      setGuardando(true);
-      await AnuncioService.upAnuncio(anuncioSeleccionado.id, datosForm);
-
-      setAnuncios((prev) =>
-        prev.map((a) =>
-          a.id === anuncioSeleccionado.id
-            ? { ...a, ...datosForm, nombre: datosForm.titulo }
-            : a
-        )
-      );
-
-      setErrorGuardar({ message: "Anuncio actualizado", variant: "success" });
-
-      setTimeout(() => {
-        setErrorGuardar({ message: null, variant: "danger" });
-      }, 3000);
-    } catch (err) {
-      console.error("Error al guardar el anuncio:", err);
-      setErrorGuardar({ message: "Error al guardar el anuncio.", variant: "danger" });
-
-      setTimeout(() => {
-        setErrorGuardar({ message: null, variant: "danger" });
-      }, 3000);
-    } finally {
-      setGuardando(false);
-    }
+    await AnuncioService.upAnuncio(anuncioSeleccionado.id, datosForm);
+    await cargarAnuncios();
   };
-
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
@@ -128,7 +81,6 @@ const AnunciosList = () => {
         ))}
       </Row>
 
-      {/* Modal común para editar anuncios */}
       {modalShow && (
         <ModalFormulario
           show={modalShow}
@@ -137,13 +89,9 @@ const AnunciosList = () => {
           campos={camposAnuncio}
           datos={anuncioSeleccionado}
           onSubmit={handleGuardar}
-          loading={guardando}
-          error={errorGuardar}
-          animation={false}
         />
       )}
 
-      {/* Modal común para ver anuncios */}
       {modalVer && (
         <ModalVerGenerico
           show={modalVer}

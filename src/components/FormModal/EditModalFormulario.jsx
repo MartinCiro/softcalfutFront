@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import ErrorMessage from "@components/Error/ErrorMessage"; // Asegúrate de tener esta ruta
+import ErrorMessage from "@components/Error/ErrorMessage";
+import useFormSubmitter from "@hooks/useFormSubmitter";
 
 const ModalFormulario = ({
   show,
@@ -10,9 +11,11 @@ const ModalFormulario = ({
   datos = {},
   onSubmit,
   loading = false,
-  error = null,
+  redirectPath = null, // opcional: para navegar si el submit fue exitoso
+  cerrarAlEnviar = true, // opcional: para cerrar el modal al enviar
 }) => {
   const [formState, setFormState] = useState({});
+  const { submitForm, error } = useFormSubmitter();
 
   useEffect(() => {
     setFormState(datos || {});
@@ -24,19 +27,24 @@ const ModalFormulario = ({
   };
 
   const handleSubmit = () => {
-    if (onSubmit) onSubmit(formState);
+    if (!onSubmit) return;
+
+    submitForm(
+      async () => {
+        await onSubmit(formState);
+        if (cerrarAlEnviar) onClose();
+      },
+      redirectPath
+    );
   };
 
   return (
-    <Modal show={show} onHide={onClose} centered animation={false}> {/* Aquí agregamos animation={false} */}
+    <Modal show={show} onHide={onClose} centered animation={false}>
       <Modal.Header closeButton>
         <Modal.Title>{titulo}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {/* Usa tu componente personalizado aquí */}
-        {error?.message && (
-          <ErrorMessage message={error.message} variant={error.variant || "danger"} />
-        )}
+        {error && <ErrorMessage message={error} />}
         <Form>
           {campos.map((campo) => (
             <Form.Group key={campo.nombre} className="mb-3">
