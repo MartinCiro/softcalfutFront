@@ -1,49 +1,32 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import AnuncioService from "@services/AnuncioService";
+import useFetchData from "@hooks/useFetchData"; // ✅ Hook personalizado para obtener y recargar datos
+import useErrorHandler from "@hooks/useErrorHandler"; // ✅ Hook personalizado para manejar errores
 import LoadingSpinner from "@components/Loading/Loading";
 import ErrorMessage from "@components/Error/ErrorMessage";
 import ModalFormulario from "@components/FormModal/EditModalFormulario";
 import ModalVerGenerico from "@components/FormModal/WhatchModalForm";
 import "./Anuncio.css";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { Container, Row, Col, Card } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
 import { Link } from "react-router-dom";
 
 const AnunciosList = () => {
-  const [anuncios, setAnuncios] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data: anuncios, loading, error, reload: cargarAnuncios } = useFetchData(AnuncioService.anuncios);
+  const { error: errorGlobal, handleError } = useErrorHandler();
 
   const [modalShow, setModalShow] = useState(false);
-  const [anuncioSeleccionado, setAnuncioSeleccionado] = useState(null);
-  const [guardando, setGuardando] = useState(false);
-  const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
-
   const [modalVer, setModalVer] = useState(false);
+  const [anuncioSeleccionado, setAnuncioSeleccionado] = useState(null);
   const [anuncioVer, setAnuncioVer] = useState(null);
-
+  const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
+  const [guardando, setGuardando] = useState(false);
 
   const camposAnuncio = [
     { nombre: "titulo", label: "Título", tipo: "text" },
     { nombre: "contenido", label: "Contenido", tipo: "textarea" },
-    { nombre: "imagenUrl", label: "URL de Imagen", tipo: "text" },
+    { nombre: "imagenUrl", label: "URL de Imagen", tipo: "img" },
   ];
-
-  const cargarAnuncios = async () => {
-    try {
-      setLoading(true);
-      const { result } = await AnuncioService.anuncios();
-      setAnuncios(result);
-    } catch (err) {
-      setError(err.message || "Error al cargar los anuncios.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    cargarAnuncios();
-  }, []);
 
   const handleEditar = (anuncio) => {
     setAnuncioSeleccionado(anuncio);
@@ -59,28 +42,15 @@ const AnunciosList = () => {
     try {
       setGuardando(true);
       await AnuncioService.upAnuncio(anuncioSeleccionado.id, datosForm);
-
-      setAnuncios((prev) =>
-        prev.map((a) =>
-          a.id === anuncioSeleccionado.id
-            ? { ...a, ...datosForm, nombre: datosForm.titulo }
-            : a
-        )
-      );
-
-      setErrorGuardar({ message: "Anuncio actualizado", variant: "success" });
-
-      setTimeout(() => {
-        setErrorGuardar({ message: null, variant: "danger" });
-      }, 3000);
+      await cargarAnuncios();
+      
+      setErrorGuardar({ message: "Anuncio actualizado correctamente", variant: "success" });
+      sessionStorage.removeItem("anuncios");
     } catch (err) {
-      console.error("Error al guardar el anuncio:", err);
-      setErrorGuardar({ message: "Error al guardar el anuncio.", variant: "danger" });
-
-      setTimeout(() => {
-        setErrorGuardar({ message: null, variant: "danger" });
-      }, 3000);
+      const mensaje = handleError(err); 
+      setErrorGuardar({ message: mensaje, variant: "danger" });
     } finally {
+      setTimeout(() => setErrorGuardar({ message: null, variant: "danger" }), 3000);
       setGuardando(false);
     }
   };
@@ -92,14 +62,21 @@ const AnunciosList = () => {
   return (
     <Container className="py-4">
       <h2 className="mb-4 text-center fw-bold">Anuncios</h2>
+
+      {errorGuardar.message && (
+        <div className={`alert alert-${errorGuardar.variant} text-center`}>
+          {errorGuardar.message}
+        </div>
+      )}
+
       <Row>
-        {anuncios.map((anuncio, index) => (
-          <Col key={index} md={7} lg={4} className="mb-4">
+        {anuncios.map((anuncio) => (
+          <Col key={anuncio.id} md={7} lg={4} className="mb-4">
             <Card className="h-100 shadow-sm position-relative card-custom">
               <div className="position-relative clamp-image">
                 <Card.Img
                   variant="top"
-                  src={anuncio.imagenUrl}
+                  src={`${anuncio.imagenUrl}`}
                   alt={anuncio.titulo}
                   style={{ height: "200px", objectFit: "cover" }}
                 />
@@ -128,7 +105,7 @@ const AnunciosList = () => {
         ))}
       </Row>
 
-      {/* Modal común para editar anuncios */}
+      {/* Modal para editar */}
       {modalShow && (
         <ModalFormulario
           show={modalShow}
@@ -137,13 +114,11 @@ const AnunciosList = () => {
           campos={camposAnuncio}
           datos={anuncioSeleccionado}
           onSubmit={handleGuardar}
-          loading={guardando}
-          error={errorGuardar}
-          animation={false}
+          guardando={guardando}
         />
       )}
 
-      {/* Modal común para ver anuncios */}
+      {/* Modal para ver */}
       {modalVer && (
         <ModalVerGenerico
           show={modalVer}
