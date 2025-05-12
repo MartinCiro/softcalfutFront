@@ -30,7 +30,8 @@ const AnuncioService = {
   upAnuncio: async (id, data) => {
     try {
       id = String(id);
-      const dataFilter = { ...data, id, nombre: data.titulo };
+      const estado = data.estado === 'Activo' ? true : false;
+      const dataFilter = { ...data, id, nombre: data.titulo, estado };
       const response = await getByEndpoint('anuncios', dataFilter, 'put');
       return response;
     } catch (error) {

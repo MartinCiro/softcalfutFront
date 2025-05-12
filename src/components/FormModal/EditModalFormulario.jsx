@@ -19,7 +19,7 @@ const ModalFormulario = ({
   useEffect(() => {
     setFormState(datos || {});
     setMensajeExito(null);
-    resetError(); // limpia errores previos al abrir
+    resetError(); 
   }, [datos, show]);
 
   const handleChange = (e) => {
@@ -34,7 +34,7 @@ const ModalFormulario = ({
       await onSubmit(formState);
       setMensajeExito("Actualizado correctamente");
     } catch (err) {
-      handleError(err); // usa el hook
+      handleError(err); 
     } finally {
       setGuardando(false);
     }

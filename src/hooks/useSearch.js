@@ -1,15 +1,13 @@
-import { useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 
-const useSearch = (data = [], key = "titulo") => {
+const useSearch = (data, campo) => {
   const [query, setQuery] = useState("");
-  const [filtered, setFiltered] = useState(data);
 
-  useEffect(() => {
-    const q = query.toLowerCase();
-    setFiltered(
-      data.filter((item) => item[key]?.toLowerCase().includes(q))
+  const filtered = useMemo(() => {
+    return data.filter(item =>
+      item[campo]?.toLowerCase().includes(query.toLowerCase())
     );
-  }, [query, data, key]);
+  }, [data, query]);
 
   return { query, setQuery, filtered };
 };
