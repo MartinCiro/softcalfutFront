@@ -1,11 +1,14 @@
 import { useState } from "react";
 import AnuncioService from "@services/AnuncioService";
-import useFetchData from "@hooks/useFetchData"; // ✅ Hook personalizado para obtener y recargar datos
-import useErrorHandler from "@hooks/useErrorHandler"; // ✅ Hook personalizado para manejar errores
+import useFetchData from "@hooks/useFetchData"; 
+import useErrorHandler from "@hooks/useErrorHandler"; 
 import LoadingSpinner from "@components/Loading/Loading";
 import ErrorMessage from "@components/Error/ErrorMessage";
 import ModalFormulario from "@components/FormModal/EditModalFormulario";
 import ModalVerGenerico from "@components/FormModal/WhatchModalForm";
+import useSearch from "@hooks/useSearch";
+import SearchInput from "@components/Search/SearchInput";
+
 import "./Anuncio.css";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
@@ -21,6 +24,7 @@ const AnunciosList = () => {
   const [anuncioVer, setAnuncioVer] = useState(null);
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const [guardando, setGuardando] = useState(false);
+  const { query, setQuery, filtered } = useSearch(anuncios, "titulo");
 
   const camposAnuncio = [
     { nombre: "titulo", label: "Título", tipo: "text" },
@@ -61,7 +65,11 @@ const AnunciosList = () => {
 
   return (
     <Container className="py-4">
-      <h2 className="mb-4 text-center fw-bold">Anuncios</h2>
+      {/* <h2 className="mb-4 text-center fw-bold">Anuncios</h2> */}
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="fw-bold mb-0">Anuncios</h2>
+        <SearchInput value={query} onChange={setQuery} />
+      </div>
 
       {errorGuardar.message && (
         <div className={`alert alert-${errorGuardar.variant} text-center`}>
@@ -70,7 +78,7 @@ const AnunciosList = () => {
       )}
 
       <Row>
-        {anuncios.map((anuncio) => (
+        {filtered.map((anuncio) => (
           <Col key={anuncio.id} md={7} lg={4} className="mb-4">
             <Card className="h-100 shadow-sm position-relative card-custom">
               <div className="position-relative clamp-image">
