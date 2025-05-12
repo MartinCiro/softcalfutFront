@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
-import ErrorMessage from "@components/Error/ErrorMessage";
-import useFormSubmitter from "@hooks/useFormSubmitter";
+import { Modal, Button, Form, Alert } from "react-bootstrap";
+import useErrorHandler from "@hooks/useErrorHandler";
 
 const ModalFormulario = ({
   show,
@@ -10,32 +9,35 @@ const ModalFormulario = ({
   campos = [],
   datos = {},
   onSubmit,
-  loading = false,
-  redirectPath = null, // opcional: para navegar si el submit fue exitoso
-  cerrarAlEnviar = true, // opcional: para cerrar el modal al enviar
+  loading: externalLoading = false,
 }) => {
   const [formState, setFormState] = useState({});
-  const { submitForm, error } = useFormSubmitter();
+  const [mensajeExito, setMensajeExito] = useState(null);
+  const [guardando, setGuardando] = useState(false);
+  const { error, handleError, resetError } = useErrorHandler();
 
   useEffect(() => {
     setFormState(datos || {});
-  }, [datos]);
+    setMensajeExito(null);
+    resetError(); // limpia errores previos al abrir
+  }, [datos, show]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!onSubmit) return;
-
-    submitForm(
-      async () => {
-        await onSubmit(formState);
-        if (cerrarAlEnviar) onClose();
-      },
-      redirectPath
-    );
+    try {
+      setGuardando(true);
+      await onSubmit(formState);
+      setMensajeExito("Actualizado correctamente");
+    } catch (err) {
+      handleError(err); // usa el hook
+    } finally {
+      setGuardando(false);
+    }
   };
 
   return (
@@ -44,21 +46,55 @@ const ModalFormulario = ({
         <Modal.Title>{titulo}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {error && <ErrorMessage message={error} />}
+        {mensajeExito && (
+          <Alert variant="success" className="text-center">
+            {mensajeExito}
+          </Alert>
+        )}
+        {error && (
+          <Alert variant="danger" className="text-center">
+            {error}
+          </Alert>
+        )}
+
         <Form>
           {campos.map((campo) => (
             <Form.Group key={campo.nombre} className="mb-3">
               <Form.Label>{campo.label || campo.nombre}</Form.Label>
-              <Form.Control
-                as={campo.tipo === "textarea" ? "textarea" : "input"}
-                type={campo.tipo === "textarea" ? undefined : campo.tipo}
-                rows={campo.tipo === "textarea" ? 4 : undefined}
-                name={campo.nombre}
-                value={formState[campo.nombre] || ""}
-                onChange={handleChange}
-                placeholder={campo.placeholder || ""}
-              />
+
+              {campo.tipo === "img" ? (
+                <>
+                  {formState[campo.nombre] ? (
+                    <img
+                      src={formState[campo.nombre]}
+                      alt={campo.label || campo.nombre}
+                      style={{ maxWidth: "100%", maxHeight: "300px", display: "block", marginBottom: "10px" }}
+                    />
+                  ) : (
+                    <p className="text-muted">No hay imagen cargada</p>
+                  )}
+                  <Form.Control
+                    type="text"
+                    name={campo.nombre}
+                    value={formState[campo.nombre] || ""}
+                    onChange={handleChange}
+                    placeholder="URL de la imagen"
+                  />
+                </>
+              ) : (
+                <Form.Control
+                  as={campo.tipo === "textarea" ? "textarea" : "input"}
+                  type={campo.tipo === "textarea" ? undefined : campo.tipo}
+                  rows={campo.tipo === "textarea" ? 6 : undefined}
+                  style={campo.tipo === "textarea" ? { minHeight: "120px", resize: "vertical" } : {}}
+                  name={campo.nombre}
+                  value={formState[campo.nombre] || ""}
+                  onChange={handleChange}
+                  placeholder={campo.placeholder || ""}
+                />
+              )}
             </Form.Group>
+
           ))}
         </Form>
       </Modal.Body>
@@ -66,8 +102,12 @@ const ModalFormulario = ({
         <Button variant="secondary" onClick={onClose}>
           Cancelar
         </Button>
-        <Button variant="primary" onClick={handleSubmit} disabled={loading}>
-          {loading ? "Guardando..." : "Guardar"}
+        <Button
+          variant="primary"
+          onClick={handleSubmit}
+          disabled={guardando || externalLoading}
+        >
+          {(guardando || externalLoading) ? "Guardando..." : "Guardar"}
         </Button>
       </Modal.Footer>
     </Modal>

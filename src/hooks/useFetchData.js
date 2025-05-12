@@ -8,7 +8,9 @@ const useFetchData = (fetchFunction, deps = []) => {
     setLoading(true);
     try {
       const { result } = await fetchFunction();
-      setData(result);
+      setData(result.map(item => ({ ...item })));
+      setLoading(false);
+      setError(null);
     } catch (err) {
       setError(err.message || "Error al cargar datos.");
     } finally {
