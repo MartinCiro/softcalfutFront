@@ -1,0 +1,15 @@
+/* Estilos globales */
+:root {
+  --color-primario: #F4D609;
+  --color-secundario: #07852E;
+  --color-oscuro: #141414;
+  --color-claro: #F5F5F5;
+}
+
+/* Estilos para los mensajes de error */
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+

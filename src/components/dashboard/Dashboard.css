@@ -1,0 +1,134 @@
+/* Estilos para el Dashboard utilizando la paleta de colores de Inteligencia de Datos */
+
+/* Variables de colores */
+:root {
+  --primary-blue: #243E6E;
+  --primary-red: #FF5043;
+  --dark-blue: #0D1828;
+  --gray: #BEC2C6;
+  --light-gray: #EFF1F4;
+}
+
+/* Estilos para el contenedor principal del dashboard */
+.dashboard-container {
+  width: 100%;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* Estilos para las tarjetas del dashboard */
+.dashboard-card {
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 15px rgba(13, 24, 40, 0.08) !important;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(13, 24, 40, 0.12) !important;
+}
+
+/* Estilos para las tarjetas de estadísticas */
+.stat-card {
+  border-radius: 12px !important;
+  border: none !important;
+}
+
+.stat-card.primary {
+  background-color: var(--primary-blue) !important;
+}
+
+.stat-card.warning {
+  background-color: #FFC107 !important;
+}
+
+.stat-card.success {
+  background-color: #28A745 !important;
+}
+
+.stat-card .card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.stat-card .display-4 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+/* Estilos para la tabla de facturas recientes */
+.recent-table {
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+.recent-table .table-header {
+  background-color: var(--light-gray);
+  color: var(--dark-blue);
+  font-weight: 600;
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Estilos para los gráficos */
+.chart-container {
+  height: 300px;
+  margin-bottom: 20px;
+}
+
+/* Estilos para los widgets */
+.widget {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 15px rgba(13, 24, 40, 0.08);
+}
+
+.widget-title {
+  color: var(--dark-blue);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+/* Estilos para los badges */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.8rem;
+}
+
+.status-badge.completed {
+  background-color: #D4EDDA;
+  color: #155724;
+}
+
+.status-badge.pending {
+  background-color: #FFF3CD;
+  color: #856404;
+}
+
+/* Estilos para los iconos */
+.dashboard-icon {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+/* Estilos para las secciones */
+.dashboard-section {
+  margin-bottom: 30px;
+}
+
+.section-title {
+  color: var(--dark-blue);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--light-gray);
+}

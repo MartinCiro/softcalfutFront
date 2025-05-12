@@ -1,0 +1,41 @@
+.config-card {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.config-card .card-header {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.config-card .form-control {
+  border-radius: 6px;
+}
+
+.config-card .form-control:focus {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  border-color: #86b7fe;
+}
+
+.config-card .form-text {
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+.config-card .form-switch {
+  padding-left: 2.5em;
+}
+
+.config-card .form-check-input:checked {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.config-card .form-control[type="color"] {
+  width: 50px;
+  padding: 2px;
+  height: 38px;
+}

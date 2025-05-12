@@ -1,0 +1,45 @@
+/* Estilos para el componente SimpleBarChart */
+
+.simple-chart {
+  width: 100%;
+  padding: 10px 0;
+  max-width: 100%;
+}
+
+.chart-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.chart-label {
+  width: 80px;
+  font-size: 0.9rem;
+  color: #0D1828;
+  font-weight: 500;
+  text-align: right;
+  padding-right: 15px;
+}
+
+.chart-bar-container {
+  flex-grow: 1;
+  height: 25px;
+  background-color: #EFF1F4;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0 15px;
+}
+
+.chart-bar {
+  height: 100%;
+  background-color: #243E6E;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.chart-value {
+  width: 60px;
+  font-size: 0.9rem;
+  color: #0D1828;
+  font-weight: 600;
+}

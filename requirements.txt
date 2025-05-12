@@ -1,0 +1,20 @@
+# Dependencias para el proyecto scrapping_front
+
+# Entorno de desarrollo
+node>=14.0.0
+npm>=6.0.0
+
+# Dependencias principales
+react>=17.0.0
+vite>=2.0.0
+axios>=0.21.1
+react-router-dom>=6.0.0
+jwt-decode>=3.1.2
+
+# Dependencias de desarrollo
+eslint>=8.0.0
+prettier>=2.0.0
+
+# Nota: Este archivo es informativo. Para instalar las dependencias, use:
+# npm install
+# Las versiones exactas se encuentran en package.json

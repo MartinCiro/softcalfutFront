@@ -1,0 +1,26 @@
+.footer-custom {
+  background-color: var(--color-oscuro);
+
+  a {
+    color: var(--color-claro);
+    &:hover {
+      color: var(--color-primario);
+    }
+  }
+  .navbar-toggler {
+    background-color: var(--color-secundario);
+  }
+  a.active {
+    color: var(--color-primario); 
+  }
+  a:focus:not(.active) {
+    color: var(--color-primario); 
+  }
+  /* Nuevos */
+  a:focus {
+    color: var(--color-primario); 
+  }
+  .nav-link.active {
+    color: var(--color-primario) !important; 
+  }
+}
