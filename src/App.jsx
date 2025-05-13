@@ -11,14 +11,9 @@ import Layout from '@components/layout/Layout';
 
 // Componentes de páginas
 import Dashboard from '@components/dashboard/Dashboard';
-import Facturas from '@components/facturas/Facturas';
-import Clientes from '@components/clientes/Clientes';
 import NavBar from '@components/NavBar/NavBar';
 import Footer from '@components/Footer/Footer';
 
-// Componentes de administración
-import Usuarios from '@components/administracion/usuarios/Usuarios';
-import Configuracion from '@components/administracion/configuracion/Configuracion';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
@@ -36,12 +31,6 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
             <Route path="/dashboard" element={< Dashboard />} />
-            <Route path="/facturas"  element={< Facturas />} />
-            <Route path="/clientes"  element={< Clientes />} />
-            
-            {/* Rutas de administración */}
-            <Route path="/usuarios" element={< Usuarios />} />
-            <Route path="/configuracion" element={< Configuracion />} />
           </Route>
         </Route>
       </Routes>

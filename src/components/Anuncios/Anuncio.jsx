@@ -12,6 +12,7 @@ import useModalConfirm from "@hooks/useModalConfirm";
 import ModalConfirmacion from "@components/ModalConfirm/ModalConfirmacion";
 import ToggleSelection from "@components/Toggle/ToggleSelection";
 import useToggleEstado from "@hooks/useToggleEstado";
+import ScrollTopButton from "@components/Toggle/ScrollTopButton";
 
 import "./Anuncio.css";
 import { Container, Row, Col, Card } from "react-bootstrap";
@@ -86,6 +87,7 @@ const AnunciosList = () => {
   if (error) return <ErrorMessage message={error} />;
 
   return (
+    
     <Container className="py-4">
       {/* <h2 className="mb-4 text-center fw-bold">Anuncios</h2> */}
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -170,7 +172,7 @@ const AnunciosList = () => {
         onConfirm={confirmModal.onConfirm}
         onClose={confirmModal.close}
       />
-
+    <ScrollTopButton />
     </Container>
   );
 };

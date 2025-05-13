@@ -1,0 +1,22 @@
+.btnUp, .btnUp:visited, .btnUp:active, .btnUp:hover {
+    position: fixed;
+    bottom: 40px;
+    right: 30px;
+    z-index: 999;
+    background-color: var(--color-claro);
+    color: var(--color-secundario);
+    border: 2px solid var(--color-secundario);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px var(--color-oscuro);
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.btnUp:focus {
+    outline: none;
+}
