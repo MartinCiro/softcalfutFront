@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import useErrorHandler from "@hooks/useErrorHandler";
+import "./Forms.css"; 
 
 const CreateModalFormulario = ({
   show,
@@ -61,7 +62,7 @@ const CreateModalFormulario = ({
 
         <Form>
           {campos.map((campo) => (
-            <Form.Group key={campo.nombre} className="mb-3">
+            <Form.Group key={campo.nombre} className="mb-3 create-form">
               <Form.Label>{campo.label || campo.nombre}</Form.Label>
 
               {campo.tipo === "img" ? (

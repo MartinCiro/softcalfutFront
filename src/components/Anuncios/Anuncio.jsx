@@ -9,7 +9,8 @@ import usePagination from "@hooks/usePagination";
 import useErrorHandler from "@hooks/useErrorHandler";
 import useModalConfirm from "@hooks/useModalConfirm";
 import useToggleEstado from "@hooks/useToggleEstado";
-import Paginator from "@components/Paginator/Paginator"; // Components
+import CardGeneric from "@components/CardGeneric/CardGeneric"; // Components
+import Paginator from "@components/Paginator/Paginator";
 import LoadingSpinner from "@components/Loading/Loading";
 import SearchInput from "@components/Search/SearchInput";
 import ErrorMessage from "@components/Error/ErrorMessage";
@@ -112,7 +113,6 @@ const AnunciosList = () => {
         </div>
       </div>
 
-
       {errorGuardar.message && (
         <div className={`alert alert-${errorGuardar.variant} text-center`}>
           {errorGuardar.message}
@@ -120,44 +120,12 @@ const AnunciosList = () => {
       )}
 
       <Row>
-        {paginatedData.map((anuncio) => (
-          <Col key={`${anuncio.id}-${anuncio.estado}`} md={7} lg={4} className="mb-4">
-            <Card className="h-100 shadow-sm position-relative card-custom">
-              <div className="position-relative clamp-image">
-                <Card.Img
-                  variant="top"
-                  src={`${anuncio.imagenUrl}`}
-                  alt={anuncio.titulo}
-                  style={{ height: "200px", objectFit: "cover" }}
-                />
-                <div className="clamp-tittle position-absolute bottom-0 w-100 text-center text-white bg-dark bg-opacity-75 py-2" style={{ fontWeight: "bold" }}>
-                  {anuncio.titulo || "Sin título"}
-                </div>
-              </div>
-              <Card.Body>
-                <Card.Text className="clamp-text">
-                  {anuncio.contenido || "Sin descripción"}
-                </Card.Text>
-                <div className="d-flex justify-content-between px-5 pb-3">
-                  <Link
-                    to="#"
-                    className={`nav-link ${anuncio.estado === "Activo" ? "text-danger" : "text-success"}`}
-                    onClick={() => handleToggleActivo(anuncio)}
-                    title={anuncio.estado === "Activo" ? "Desactivar" : "Activar"}
-                  >
-                    <MDBIcon fas icon={anuncio.estado === "Activo" ? "trash" : "undo"} className="me-1" />
-                  </Link>
-                  <Link to="#" className="nav-link text-white" onClick={() => handleVer(anuncio)}>
-                    <MDBIcon fas icon="eye" className="me-1" />
-                  </Link>
-                  <Link to="#" className="nav-link edit" onClick={() => handleEditar(anuncio)}>
-                    <MDBIcon fas icon="pencil" className="me-1" />
-                  </Link>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
+        <CardGeneric
+          data={paginatedData}
+          onToggle={handleToggleActivo}
+          onView={handleVer}
+          onEdit={handleEditar}
+        />
       </Row>
 
       {/* Modal para editar */}

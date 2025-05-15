@@ -1,0 +1,11 @@
+.create-form {
+  input:focus:not(.active) {
+    color: var(--color-oscuro) !important;
+  }
+
+  input:-webkit-autofill {
+    -webkit-text-fill-color: var(--color-oscuro) !important;
+    transition: background-color 9999s ease-in-out 0s !important;
+    background-color: var(--color-secundario) !important;
+  }
+}
