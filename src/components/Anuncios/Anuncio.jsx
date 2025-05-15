@@ -13,7 +13,6 @@ import useModalConfirm from "@hooks/useModalConfirm";
 import ModalConfirmacion from "@components/ModalConfirm/ModalConfirmacion";
 import useToggleEstado from "@hooks/useToggleEstado";
 import ScrollTopButton from "@components/Toggle/ScrollTopButton";
-import useFilterEstado from "@hooks/useFilterEstado";
 import FilterDropdown from "@components/Toggle/FilterDropdown";
 
 import "./Anuncio.css";
@@ -69,13 +68,15 @@ const AnunciosList = () => {
     setModalVer(true);
   };
 
-  const handleGuardar = async (datosForm) => {
+  const guardarOActualizarAnuncio = async (datosForm) => {
+    const esEdicion = !!anuncioSeleccionado?.id;
     try {
       setGuardando(true);
-      await AnuncioService.upAnuncio(anuncioSeleccionado.id, datosForm);
+      esEdicion ? await AnuncioService.upAnuncio(anuncioSeleccionado.id, datosForm) : await AnuncioService.crAnuncio(datosForm);
       sessionStorage.removeItem("anuncios");
       await cargarAnuncios();
-      setErrorGuardar({ message: "Anuncio actualizado correctamente", variant: "success" });
+
+      setErrorGuardar({ message: esEdicion ? "Anuncio actualizado correctamente" : "Anuncio creado correctamente", variant: "success" });
     } catch (err) {
       const mensaje = handleError(err);
       setErrorGuardar({ message: mensaje, variant: "danger" });
@@ -84,23 +85,6 @@ const AnunciosList = () => {
       setGuardando(false);
     }
   };
-
-  const crearAnuncio = async (datosForm) => {
-    try {
-      setGuardando(true);
-      await AnuncioService.crAnuncio(datosForm);
-      sessionStorage.removeItem("anuncios");
-      await cargarAnuncios();
-      setErrorGuardar({ message: "Anuncio creado correctamente", variant: "success" });
-    } catch (err) {
-      const mensaje = handleError(err);
-      setErrorGuardar({ message: mensaje, variant: "danger" });
-    } finally {
-      setTimeout(() => setErrorGuardar({ message: null, variant: "danger" }), 3000);
-      setGuardando(false);
-    }
-  };
-
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
@@ -182,7 +166,7 @@ const AnunciosList = () => {
           titulo="Editar Anuncio"
           campos={camposAnuncio}
           datos={anuncioSeleccionado}
-          onSubmit={handleGuardar}
+          onSubmit={guardarOActualizarAnuncio}
           guardando={guardando}
         />
       )}
@@ -210,7 +194,7 @@ const AnunciosList = () => {
           onClose={() => setModalCrearShow(false)}
           titulo="Crear Anuncio"
           campos={camposAnuncio}
-          onSubmit={crearAnuncio}
+          onSubmit={guardarOActualizarAnuncio}
           guardando={guardando}
         />
       )}
