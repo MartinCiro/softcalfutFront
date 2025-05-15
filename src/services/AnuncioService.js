@@ -38,6 +38,17 @@ const AnuncioService = {
       console.error("Error al actualizar anuncio:", error);
       throw new Error(getFriendlyErrorMessage(error));
     }
+  },
+
+  crAnuncio: async (data) => {
+    try {
+      data = { ...data, nombre: data.titulo };
+      const response = await getByEndpoint('anuncios', data, 'post');
+      return response;
+    } catch (error) {
+      console.error("Error al crear anuncio:", error);
+      throw new Error(getFriendlyErrorMessage(error));
+    }
   }
 };
 

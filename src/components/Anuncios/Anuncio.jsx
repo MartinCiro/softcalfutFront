@@ -6,16 +6,18 @@ import LoadingSpinner from "@components/Loading/Loading";
 import ErrorMessage from "@components/Error/ErrorMessage";
 import ModalFormulario from "@components/FormModal/EditModalFormulario";
 import ModalVerGenerico from "@components/FormModal/WhatchModalForm";
+import CreateModalFormulario from "@components/FormModal/CreateModalFormulario";
 import useSearch from "@hooks/useSearch";
 import SearchInput from "@components/Search/SearchInput";
 import useModalConfirm from "@hooks/useModalConfirm";
 import ModalConfirmacion from "@components/ModalConfirm/ModalConfirmacion";
-import ToggleSelection from "@components/Toggle/ToggleSelection";
 import useToggleEstado from "@hooks/useToggleEstado";
 import ScrollTopButton from "@components/Toggle/ScrollTopButton";
+import useFilterEstado from "@hooks/useFilterEstado";
+import FilterDropdown from "@components/Toggle/FilterDropdown";
 
 import "./Anuncio.css";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
 import { Link } from "react-router-dom";
 
@@ -31,6 +33,7 @@ const AnunciosList = () => {
   const [guardando, setGuardando] = useState(false);
   const { query, setQuery, filtered } = useSearch(anuncios, "titulo");
   const { estadoFiltro, toggleEstado, filtrarPorEstado } = useToggleEstado();
+  const [modalCrearShow, setModalCrearShow] = useState(false);
   const confirmModal = useModalConfirm();
 
   const camposAnuncio = [
@@ -82,19 +85,47 @@ const AnunciosList = () => {
     }
   };
 
+  const crearAnuncio = async (datosForm) => {
+    try {
+      setGuardando(true);
+      await AnuncioService.crAnuncio(datosForm);
+      sessionStorage.removeItem("anuncios");
+      await cargarAnuncios();
+      setErrorGuardar({ message: "Anuncio creado correctamente", variant: "success" });
+    } catch (err) {
+      const mensaje = handleError(err);
+      setErrorGuardar({ message: mensaje, variant: "danger" });
+    } finally {
+      setTimeout(() => setErrorGuardar({ message: null, variant: "danger" }), 3000);
+      setGuardando(false);
+    }
+  };
+
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
 
   return (
-    
+
     <Container className="py-4">
       {/* <h2 className="mb-4 text-center fw-bold">Anuncios</h2> */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold mb-0">Anuncios</h2>
-        <SearchInput value={query} onChange={setQuery} />
+        <div className="d-flex align-items-center gap-2">
+          <Button
+            variant="success"
+            onClick={() => setModalCrearShow(true)}
+            className="rounded-circle d-flex justify-content-center align-items-center"
+            style={{ width: "45px", height: "45px" }}
+            title="Crear Anuncio"
+          >
+            <MDBIcon fas icon="plus" />
+          </Button>
+          <FilterDropdown estadoActual={estadoFiltro} onChange={toggleEstado} />
+          <SearchInput value={query} onChange={setQuery} />
+        </div>
       </div>
-      <ToggleSelection estadoActual={estadoFiltro} onChange={toggleEstado} />
+
 
       {errorGuardar.message && (
         <div className={`alert alert-${errorGuardar.variant} text-center`}>
@@ -172,7 +203,18 @@ const AnunciosList = () => {
         onConfirm={confirmModal.onConfirm}
         onClose={confirmModal.close}
       />
-    <ScrollTopButton />
+
+      {modalCrearShow && (
+        <CreateModalFormulario
+          show={modalCrearShow}
+          onClose={() => setModalCrearShow(false)}
+          titulo="Crear Anuncio"
+          campos={camposAnuncio}
+          onSubmit={crearAnuncio}
+          guardando={guardando}
+        />
+      )}
+      <ScrollTopButton />
     </Container>
   );
 };

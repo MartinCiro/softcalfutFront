@@ -20,3 +20,11 @@
 .btnUp:focus {
     outline: none;
 }
+
+.fa-dropdown {
+    font-size: 1.5rem;
+    color: var(--color-oscuro);
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}

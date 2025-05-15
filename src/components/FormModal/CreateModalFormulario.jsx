@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import useErrorHandler from "@hooks/useErrorHandler";
 
-const ModalFormulario = ({
+const CreateModalFormulario = ({
   show,
   onClose,
-  titulo = "Formulario",
+  titulo = "Crear nuevo",
   campos = [],
-  datos = {},
   onSubmit,
   loading: externalLoading = false,
 }) => {
@@ -15,15 +14,6 @@ const ModalFormulario = ({
   const [mensajeExito, setMensajeExito] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const { error, handleError, resetError } = useErrorHandler();
-
-  useEffect(() => {
-    if (JSON.stringify(formState) !== JSON.stringify(datos)) {
-      setFormState(datos || {});
-      setMensajeExito(null);
-      resetError();
-    }
-  }, [datos, show]);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,8 +24,10 @@ const ModalFormulario = ({
     if (!onSubmit) return;
     try {
       setGuardando(true);
+      resetError();
       await onSubmit(formState);
-      setMensajeExito("Actualizado correctamente");
+      setMensajeExito("Creado correctamente");
+      setFormState({}); 
     } catch (err) {
       handleError(err);
     } finally {
@@ -43,8 +35,15 @@ const ModalFormulario = ({
     }
   };
 
+  const handleClose = () => {
+    onClose();
+    setFormState({});
+    setMensajeExito(null);
+    resetError();
+  };
+
   return (
-    <Modal show={show} onHide={onClose} centered animation={false}>
+    <Modal show={show} onHide={handleClose} centered animation={false}>
       <Modal.Header closeButton>
         <Modal.Title>{titulo}</Modal.Title>
       </Modal.Header>
@@ -67,15 +66,6 @@ const ModalFormulario = ({
 
               {campo.tipo === "img" ? (
                 <>
-                  {formState[campo.nombre] ? (
-                    <img
-                      src={formState[campo.nombre]}
-                      alt={campo.label || campo.nombre}
-                      style={{ maxWidth: "100%", maxHeight: "300px", display: "block", marginBottom: "10px" }}
-                    />
-                  ) : (
-                    <p className="text-muted">No hay imagen cargada</p>
-                  )}
                   <Form.Control
                     type="text"
                     name={campo.nombre}
@@ -97,12 +87,11 @@ const ModalFormulario = ({
                 />
               )}
             </Form.Group>
-
           ))}
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
+        <Button variant="secondary" onClick={handleClose}>
           Cancelar
         </Button>
         <Button
@@ -117,4 +106,4 @@ const ModalFormulario = ({
   );
 };
 
-export default ModalFormulario;
+export default CreateModalFormulario;

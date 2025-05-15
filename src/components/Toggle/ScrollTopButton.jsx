@@ -1,6 +1,6 @@
 import { MDBIcon } from "mdb-react-ui-kit";
 import useScrollTopButton from "@hooks/useScrollTopButton";
-import "./ScrollButton.css";
+import "./Toggle.css";
 
 const ScrollTopButton = () => {
   const { showButton, scrollToTop } = useScrollTopButton();
