@@ -1,38 +1,42 @@
 import { useState } from "react";
-import AnuncioService from "@services/AnuncioService";
-import useFetchData from "@hooks/useFetchData";
-import useErrorHandler from "@hooks/useErrorHandler";
-import LoadingSpinner from "@components/Loading/Loading";
-import ErrorMessage from "@components/Error/ErrorMessage";
-import ModalFormulario from "@components/FormModal/EditModalFormulario";
-import ModalVerGenerico from "@components/FormModal/WhatchModalForm";
-import CreateModalFormulario from "@components/FormModal/CreateModalFormulario";
-import useSearch from "@hooks/useSearch";
-import SearchInput from "@components/Search/SearchInput";
-import useModalConfirm from "@hooks/useModalConfirm";
-import ModalConfirmacion from "@components/ModalConfirm/ModalConfirmacion";
-import useToggleEstado from "@hooks/useToggleEstado";
-import ScrollTopButton from "@components/Toggle/ScrollTopButton";
-import FilterDropdown from "@components/Toggle/FilterDropdown";
-
-import "./Anuncio.css";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
 import { Link } from "react-router-dom";
+import AnuncioService from "@services/AnuncioService"; // Services
+import useSearch from "@hooks/useSearch"; // Hooks
+import useFetchData from "@hooks/useFetchData";
+import usePagination from "@hooks/usePagination";
+import useErrorHandler from "@hooks/useErrorHandler";
+import useModalConfirm from "@hooks/useModalConfirm";
+import useToggleEstado from "@hooks/useToggleEstado";
+import Paginator from "@components/Paginator/Paginator"; // Components
+import LoadingSpinner from "@components/Loading/Loading";
+import SearchInput from "@components/Search/SearchInput";
+import ErrorMessage from "@components/Error/ErrorMessage";
+import FilterDropdown from "@components/Toggle/FilterDropdown";
+import ScrollTopButton from "@components/Toggle/ScrollTopButton";
+import ModalVerGenerico from "@components/FormModal/WhatchModalForm";
+import ModalFormulario from "@components/FormModal/EditModalFormulario";
+import ModalConfirmacion from "@components/ModalConfirm/ModalConfirmacion";
+import CreateModalFormulario from "@components/FormModal/CreateModalFormulario";
+import "./Anuncio.css"; // Styles
 
 const AnunciosList = () => {
   const { data: anuncios, loading, error, reload: cargarAnuncios } = useFetchData(AnuncioService.anuncios);
   const { error: errorGlobal, handleError } = useErrorHandler();
 
-  const [modalShow, setModalShow] = useState(false);
   const [modalVer, setModalVer] = useState(false);
+  const [guardando, setGuardando] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const [modalCrearShow, setModalCrearShow] = useState(false);
   const [anuncioSeleccionado, setAnuncioSeleccionado] = useState(null);
   const [anuncioVer, setAnuncioVer] = useState(null);
-  const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
-  const [guardando, setGuardando] = useState(false);
   const { query, setQuery, filtered } = useSearch(anuncios, "titulo");
   const { estadoFiltro, toggleEstado, filtrarPorEstado } = useToggleEstado();
-  const [modalCrearShow, setModalCrearShow] = useState(false);
+  const anunciosFiltrados = filtrarPorEstado(filtered);
+  const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
+  const { paginatedData, currentPage, maxPage, nextPage, prevPage, } = usePagination(anunciosFiltrados, 6);
+
   const confirmModal = useModalConfirm();
 
   const camposAnuncio = [
@@ -62,7 +66,6 @@ const AnunciosList = () => {
     });
   };
 
-
   const handleVer = (anuncio) => {
     setAnuncioVer(anuncio);
     setModalVer(true);
@@ -75,7 +78,6 @@ const AnunciosList = () => {
       esEdicion ? await AnuncioService.upAnuncio(anuncioSeleccionado.id, datosForm) : await AnuncioService.crAnuncio(datosForm);
       sessionStorage.removeItem("anuncios");
       await cargarAnuncios();
-
       setErrorGuardar({ message: esEdicion ? "Anuncio actualizado correctamente" : "Anuncio creado correctamente", variant: "success" });
     } catch (err) {
       const mensaje = handleError(err);
@@ -118,7 +120,7 @@ const AnunciosList = () => {
       )}
 
       <Row>
-        {filtrarPorEstado(filtered).map((anuncio) => (
+        {paginatedData.map((anuncio) => (
           <Col key={`${anuncio.id}-${anuncio.estado}`} md={7} lg={4} className="mb-4">
             <Card className="h-100 shadow-sm position-relative card-custom">
               <div className="position-relative clamp-image">
@@ -198,6 +200,13 @@ const AnunciosList = () => {
           guardando={guardando}
         />
       )}
+
+      <Paginator
+        currentPage={currentPage}
+        maxPage={maxPage}
+        nextPage={nextPage}
+        prevPage={prevPage}
+      />
       <ScrollTopButton />
     </Container>
   );
