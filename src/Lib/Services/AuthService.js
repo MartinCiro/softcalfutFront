@@ -6,7 +6,7 @@ import {
   getStatusConnection,
   getByEndpoint,
   clearSession
-} from "@utils/Utils";
+} from "@utils/helpers";
 
 const AuthService = {
   login: async (correo, password) => {

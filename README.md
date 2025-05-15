@@ -37,16 +37,6 @@ VITE_API_URL=http://192.168.0.20:8000
 npm run dev
 ```
 
-## Estructura del proyecto
-- `src/components`: Componentes React reutilizables
-- `src/services`: Servicios para comunicación con la API
-- `src/assets`: Recursos estáticos (imágenes, estilos, etc.)
-
-## Servicios principales
-- `AuthService.js`: Gestión de autenticación y tokens
-- `FacturaService.js`: Operaciones relacionadas con facturas
-- `ClienteService.js`: Operaciones relacionadas con clientes
-
 ## Tecnologías utilizadas
 - React
 - Vite
@@ -54,7 +44,7 @@ npm run dev
 - React Router para navegación
 
 ## Conexión con el backend
-Esta aplicación se conecta a un backend desarrollado en Django. Asegúrate de que el servidor backend esté en funcionamiento antes de iniciar la aplicación frontend.
+Esta aplicación se conecta a un backend desarrollado en nestjs. Asegúrate de que el servidor backend esté en funcionamiento antes de iniciar la aplicación frontend.
 
 ## Crea un Pull Request:
 Desde: tu rama -> feature/login
@@ -63,6 +53,17 @@ Hacia: la rama destino -> dev
 ## Licencia
 Este proyecto está bajo la licencia [MIT](https://opensource.org/licenses/MIT).
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Estructura de carpetas
+/src
+├── /Utils                    # Funciones auxiliares reutilizables
+│   ├── helpers.js            # Funciones de apoyo generales
+│
+├── /Lib                      # Librerías del proyecto (núcleo funcional)
+│   ├── /Hooks                # Custom hooks reutilizables (useAuth, useFetch, etc.)
+│   ├── /Services             # Lógica de conexión a APIs o servicios externos
+│   ├── /Layouts              # Componentes de layout general (Sidebar, Header)
+│
+├── /UI                       # Todo lo relacionado con la interfaz visual
+│   ├── /screen-components    # Componentes que se usan en una pantalla específica
+│   ├── /useable-components   # Componentes reutilizables (Button, Modal, Card)
+│   ├── /screens              # Vistas o páginas principales (Login, Dashboard, etc.)

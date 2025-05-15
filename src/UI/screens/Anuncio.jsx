@@ -9,18 +9,18 @@ import usePagination from "@hooks/usePagination";
 import useErrorHandler from "@hooks/useErrorHandler";
 import useModalConfirm from "@hooks/useModalConfirm";
 import useToggleEstado from "@hooks/useToggleEstado";
-import CardGeneric from "@components/CardGeneric/CardGeneric"; // Components
-import Paginator from "@components/Paginator/Paginator";
-import LoadingSpinner from "@components/Loading/Loading";
-import SearchInput from "@components/Search/SearchInput";
-import ErrorMessage from "@components/Error/ErrorMessage";
-import FilterDropdown from "@components/Toggle/FilterDropdown";
-import ScrollTopButton from "@components/Toggle/ScrollTopButton";
-import ModalVerGenerico from "@components/FormModal/WhatchModalForm";
-import ModalFormulario from "@components/FormModal/EditModalFormulario";
-import ModalConfirmacion from "@components/ModalConfirm/ModalConfirmacion";
-import CreateModalFormulario from "@components/FormModal/CreateModalFormulario";
-import "./Anuncio.css"; // Styles
+import Paginator from "@componentsUseable/Paginator"; // Components
+import CardGeneric from "@componentsUseable/CardGeneric"; 
+import LoadingSpinner from "@componentsUseable/Loading";
+import SearchInput from "@componentsUseable/SearchInput";
+import ErrorMessage from "@componentsUseable/ErrorMessage";
+import FilterDropdown from "@componentsUseable/Toggle/FilterDropdown";
+import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
+import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
+import ModalFormulario from "@componentsUseable/FormModal/EditModalFormulario";
+import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
+import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
+import "@styles/Anuncio.css"; // Styles
 
 const AnunciosList = () => {
   const { data: anuncios, loading, error, reload: cargarAnuncios } = useFetchData(AnuncioService.anuncios);

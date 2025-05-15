@@ -4,7 +4,7 @@ import {
   getByEndpoint,
   cacheSession,
   loadSessionCache
-} from "@utils/Utils";
+} from "@utils/helpers";
 
 
 const AnuncioService = {

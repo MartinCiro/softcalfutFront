@@ -3,39 +3,37 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '@src/App.css';
 
 // Componentes de autenticación
-import Login from '@components/auth/Login';
-import ProtectedRoute from '@components/auth/ProtectedRoute';
+import Login from '@screens/Login';
+import ProtectedRoute from '@routes/common/ProtectedRoute';
 
 // Componentes de layout
-import Layout from '@components/layout/Layout';
+import Layout from '@layouts/Layout';
 
 // Componentes de páginas
-import Dashboard from '@components/dashboard/Dashboard';
-import NavBar from '@components/NavBar/NavBar';
-import Footer from '@components/Footer/Footer';
+import Dashboard from '@screens/Dashboard';
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
   return (
     <Router>
-      <NavBar />
       <Routes>
         {/* Ruta pública para login */}
-        <Route path="/login" element={ < Login />} />
+        <Route path="/login" element={<Login />} />
         
-        {/* Ruta por defecto redirige a dashboard si está autenticado, o a login si no */}
-        <Route path="/" element={ <Navigate to="/dashboard" replace />} />
-        
-        {/* Rutas protegidas que requieren autenticación */}
+        {/* Rutas protegidas */}
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
-            <Route path="/dashboard" element={< Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            {/* Más rutas protegidas aquí */}
           </Route>
         </Route>
+        
+        {/* Redirigir cualquier ruta desconocida a login o dashboard según auth */}
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
-      <Footer />
     </Router>
-  )
+  );
 }
-export default App
+
+export default App;

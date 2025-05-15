@@ -9,7 +9,7 @@ import {
   MDBRow,
   MDBCol
 } from 'mdb-react-ui-kit';
-import './Login.css';
+import '@styles/Login.css';
 import mainLogo from '@assets/logos/main_logo.png';
 import logoPositiva from '@assets/logos/Positiva.png';
 import backgroundImage from '@assets/img/background.svg';

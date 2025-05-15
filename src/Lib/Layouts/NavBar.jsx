@@ -2,7 +2,7 @@ import React from 'react';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { MDBIcon } from 'mdb-react-ui-kit';
 import { NavLink  } from 'react-router-dom';
-import './NavBar.css';
+import '@styles/NavBar.css';
 
 const NavBar = () => {
   return (

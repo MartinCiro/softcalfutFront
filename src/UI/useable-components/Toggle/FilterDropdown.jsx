@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { MDBIcon } from "mdb-react-ui-kit";
-import "./Toggle.css";
+import "@styles/Toggle.css";
 
 const opciones = ["Todos", "Activo", "Inactivo"];
 

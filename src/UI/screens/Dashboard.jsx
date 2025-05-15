@@ -1,8 +1,7 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
-import AnunciosList from '@components/Anuncios/Anuncio';
+import AnunciosList from '@screens/Anuncio';
 import { MDBIcon } from 'mdb-react-ui-kit';
-import './Dashboard.css';
+import '@styles/Dashboard.css';
 
 const Dashboard = () => {
   return (

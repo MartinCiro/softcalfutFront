@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import useErrorHandler from "@hooks/useErrorHandler";
-import "./Forms.css"; 
+import "@styles/Forms.css"; 
 
 const CreateModalFormulario = ({
   show,
