@@ -1,5 +1,6 @@
 import React from 'react';
 import AnunciosList from '@screens/Anuncio';
+import RolesList from '@screens/Roles';
 import { MDBIcon } from 'mdb-react-ui-kit';
 import '@styles/Dashboard.css';
 

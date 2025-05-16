@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
-import { Link } from "react-router-dom";
-import AnuncioService from "@services/AnuncioService"; // Services
+import RolService from "@services/RolService"; // Services
 import useSearch from "@hooks/useSearch"; // Hooks
 import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
@@ -22,70 +21,64 @@ import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormu
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Anuncio.css"; // Styles
 
-const AnunciosList = () => {
-  const { data: anuncios, loading, error, reload: cargarAnuncios } = useFetchData(AnuncioService.anuncios);
+const RolesList = () => {
+  const { data: roles, loading, error, reload: cargarRoles } = useFetchData(RolService.roles);
   const { error: errorGlobal, handleError } = useErrorHandler();
 
   const [modalVer, setModalVer] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [modalCrearShow, setModalCrearShow] = useState(false);
-  const [anuncioSeleccionado, setAnuncioSeleccionado] = useState(null);
-  const [anuncioVer, setAnuncioVer] = useState(null);
-  const { query, setQuery, filtered } = useSearch(anuncios, "titulo");
+  const [rolSeleccionado, setRolSeleccionado] = useState(null);
+  const [rolVer, setRolVer] = useState(null);
+  const { query, setQuery, filtered } = useSearch(roles, "nombre");
   const { estadoFiltro, toggleEstado, filtrarPorEstado } = useToggleEstado();
-  const anunciosFiltrados = filtrarPorEstado(filtered);
+  const rolesFiltrados = filtrarPorEstado(filtered);
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
-  const { paginatedData, currentPage, maxPage, nextPage, prevPage, } = usePagination(anunciosFiltrados, 6);
-  const clavesAnuncio = {
-    id: "id",
-    title: "titulo",
-    content: "contenido",
-    image: "imagenUrl",
-    status: "estado",
-  };
+  const { paginatedData, currentPage, maxPage, nextPage, prevPage, } = usePagination(rolesFiltrados, 6);
+
   const confirmModal = useModalConfirm();
 
-  const camposAnuncio = [
-    { nombre: "titulo", label: "Título", tipo: "text" },
-    { nombre: "contenido", label: "Contenido", tipo: "textarea" },
-    { nombre: "imagenUrl", label: "URL de Imagen", tipo: "img" },
+  const camposRol = [
+    { nombre: "nombre", label: "Nombre del rol", tipo: "text" },
+    { nombre: "descripcion", label: "Descripcion", tipo: "textarea" },
+    { nombre: "permisos", label: "Permisos", tipo: "text" },
   ];
 
-  const handleEditar = (anuncio) => {
-    setAnuncioSeleccionado(anuncio);
+  const handleEditar = (rol) => {
+    setRolSeleccionado(rol);
     setModalShow(true);
   };
 
-  const handleToggleActivo = (anuncio) => {
-    const nuevoEstado = anuncio.estado === "Activo" ? "Inactivo" : "Activo";
+  const handleToggleActivo = (rol) => {
+    const nuevoEstado = rol.estado === "Activo" ? "Inactivo" : "Activo";
     const accion = nuevoEstado === "Activo" ? "activar" : "desactivar";
-    const mensaje = `¿Deseas ${accion} el anuncio "${anuncio.titulo}"?`;
+    const mensaje = `¿Deseas ${accion} el rol "${rol.nombre}"?`;
 
     confirmModal.open(mensaje, async () => {
       try {
-        await AnuncioService.upAnuncio(anuncio.id, { estado: nuevoEstado });
-        sessionStorage.removeItem("anuncios");
-        await cargarAnuncios();
+        await RolService.upRol(rol.id, { estado: nuevoEstado });
+        sessionStorage.removeItem("roles");
+        await cargarRoles();
       } catch (err) {
         handleError(err);
       }
     });
   };
 
-  const handleVer = (anuncio) => {
-    setAnuncioVer(anuncio);
+  const handleVer = (rol) => {
+    setRolVer(rol);
     setModalVer(true);
   };
 
-  const guardarOActualizarAnuncio = async (datosForm) => {
-    const esEdicion = !!anuncioSeleccionado?.id;
+  const guardarOActualizarRol = async (datosForm) => {
+    const esEdicion = !!rolSeleccionado?.id;
     try {
       setGuardando(true);
-      esEdicion ? await AnuncioService.upAnuncio(anuncioSeleccionado.id, datosForm) : await AnuncioService.crAnuncio(datosForm);
-      sessionStorage.removeItem("anuncios");
-      await cargarAnuncios();
-      setErrorGuardar({ message: esEdicion ? "Anuncio actualizado correctamente" : "Anuncio creado correctamente", variant: "success" });
+      esEdicion ? await RolService.upRol(rolSeleccionado.id, datosForm) : await RolService.crRol(datosForm);
+      sessionStorage.removeItem("roles");
+      await cargarRoles();
+      setErrorGuardar({ message: esEdicion ? "Rol actualizado correctamente" : "Rol creado correctamente", variant: "success" });
     } catch (err) {
       const mensaje = handleError(err);
       setErrorGuardar({ message: mensaje, variant: "danger" });
@@ -101,16 +94,16 @@ const AnunciosList = () => {
   return (
 
     <Container className="py-4">
-      {/* <h2 className="mb-4 text-center fw-bold">Anuncios</h2> */}
+      {/* <h2 className="mb-4 text-center fw-bold">Roles</h2> */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold mb-0">Anuncios</h2>
+        <h2 className="fw-bold mb-0">Roles</h2>
         <div className="d-flex align-items-center gap-2">
           <Button
             variant="success"
             onClick={() => setModalCrearShow(true)}
             className="rounded-circle d-flex justify-content-center align-items-center"
             style={{ width: "45px", height: "45px" }}
-            title="Crear Anuncio"
+            title="Crear Rol"
           >
             <MDBIcon fas icon="plus" />
           </Button>
@@ -128,7 +121,6 @@ const AnunciosList = () => {
       <Row>
         <CardGeneric
           data={paginatedData}
-          keys={clavesAnuncio}
           onToggle={handleToggleActivo}
           onView={handleVer}
           onEdit={handleEditar}
@@ -140,10 +132,10 @@ const AnunciosList = () => {
         <ModalFormulario
           show={modalShow}
           onClose={() => setModalShow(false)}
-          titulo="Editar Anuncio"
-          campos={camposAnuncio}
-          datos={anuncioSeleccionado}
-          onSubmit={guardarOActualizarAnuncio}
+          nombre="Editar Rol"
+          campos={camposRol}
+          datos={rolSeleccionado}
+          onSubmit={guardarOActualizarRol}
           guardando={guardando}
         />
       )}
@@ -153,8 +145,8 @@ const AnunciosList = () => {
         <ModalVerGenerico
           show={modalVer}
           onClose={() => setModalVer(false)}
-          campos={camposAnuncio}
-          datos={anuncioVer}
+          campos={camposRol}
+          datos={rolVer}
         />
       )}
 
@@ -169,9 +161,9 @@ const AnunciosList = () => {
         <CreateModalFormulario
           show={modalCrearShow}
           onClose={() => setModalCrearShow(false)}
-          titulo="Crear Anuncio"
-          campos={camposAnuncio}
-          onSubmit={guardarOActualizarAnuncio}
+          nombre="Crear Rol"
+          campos={camposRol}
+          onSubmit={guardarOActualizarRol}
           guardando={guardando}
         />
       )}
@@ -187,4 +179,4 @@ const AnunciosList = () => {
   );
 };
 
-export default AnunciosList;
+export default RolesList;
