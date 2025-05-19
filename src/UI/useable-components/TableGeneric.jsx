@@ -12,12 +12,14 @@ const TableGeneric = ({
     showEdit = true,
     showDelete = false,
     showCreate = false,
+    title = "",
 }) => {
     // Verifica si se debe mostrar la columna de acciones
     const mostrarAcciones = showView || showEdit || showDelete || showCreate;
 
     return (
         <div className="table-responsive mb-4">
+            {title && <h5 className="mb-3 fw-bold justify-content-center align-items-center d-flex">{title}</h5>}
             <Table bordered hover responsive className="align-middle">
                 <thead className="table-dark">
                     <tr>

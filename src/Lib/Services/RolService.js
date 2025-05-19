@@ -26,12 +26,21 @@ const RolService = {
     }
   },
 
-  upRol: async (id, data) => {
+  upRol: async (data, id) => {
     try {
-      id = String(id);
-      const estado = data.estado === 'Activo' ? true : false;
-      const dataFilter = { ...data, id, nombre: data.titulo, estado };
-      const response = await getByEndpoint(RolService.endpoint, dataFilter, 'put');
+      const permisosPlanos = (data.permisos.permisos || []).flatMap(
+        ({ entidad, permisos }) =>
+          permisos.map((accion) => `${entidad}:${accion}`)
+      );
+      const nombre = data.permisos.nombre;
+      const descripcion = data.permisos.descripcion;
+      const id_permiso = parseInt(id);
+      const dataFilter = { nombre, descripcion, permisos: permisosPlanos, id: id_permiso };
+      const response = await getByEndpoint(
+        RolService.endpoint,
+        dataFilter,
+        "put"
+      );
       return response;
     } catch (error) {
       console.error("Error al actualizar rol:", error);
@@ -42,13 +51,13 @@ const RolService = {
   crRol: async (data) => {
     try {
       data = { ...data, nombre: data.titulo };
-      const response = await getByEndpoint(RolService.endpoint, data, 'post');
+      const response = await getByEndpoint(RolService.endpoint, data, "post");
       return response;
     } catch (error) {
       console.error("Error al crear rol:", error);
       throw new Error(getFriendlyErrorMessage(error));
     }
-  }
+  },
 };
 
 export default RolService;

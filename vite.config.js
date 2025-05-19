@@ -16,6 +16,7 @@ export default defineConfig({
       '@screens'   : path.resolve(__dirname, 'src/UI/screens'),
       '@layouts'   : path.resolve(__dirname, 'src/Lib/Layouts'),
       '@services'  : path.resolve(__dirname, 'src/Lib/Services'),
+      '@constants' : path.resolve(__dirname, 'src/Utils/constants'),
       '@componentsUseable': path.resolve(__dirname, 'src/UI/useable-components'),
     },
   }

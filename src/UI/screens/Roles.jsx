@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
 import RolService from "@services/RolService"; // Services
@@ -13,11 +13,11 @@ import LoadingSpinner from "@componentsUseable/Loading";
 import SearchInput from "@componentsUseable/SearchInput";
 import ErrorMessage from "@componentsUseable/ErrorMessage";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
-import ModalVerPermisos from "@componentsUseable/ModalVerPermisos";
-import ModalFormulario from "@componentsUseable/FormModal/EditModalFormulario";
+import ModalVerPermisos from "@componentsUseable/permisos/ModalVerPermisos";
+import ModalEditarPermisos from "@componentsUseable/permisos/ModalEditarPermisos";
 import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
-import "@styles/Anuncio.css"; 
+import "@styles/Anuncio.css";
 
 const RolesList = () => {
   const { data: roles, loading, error, reload: cargarRoles } = useFetchData(RolService.roles);
@@ -41,7 +41,6 @@ const RolesList = () => {
     { nombre: "descripcion", label: "Descripcion", tipo: "textarea" },
     { nombre: "permisos", label: "Permisos", tipo: "text" },
   ];
-
   const handleEditar = (rol) => {
     setRolSeleccionado(rol);
     setModalShow(true);
@@ -56,10 +55,21 @@ const RolesList = () => {
     const esEdicion = !!rolSeleccionado?.id;
     try {
       setGuardando(true);
-      esEdicion ? await RolService.upRol(rolSeleccionado.id, datosForm) : await RolService.crRol(datosForm);
+      const dataConPermisos = {
+        ...datosForm,
+        permisos: datosForm.permisos ?? [],
+      };
+
+      esEdicion
+        ? await RolService.upRol(dataConPermisos, rolSeleccionado.id)
+        : await RolService.crRol(dataConPermisos);
+
       sessionStorage.removeItem("roles");
       await cargarRoles();
-      setErrorGuardar({ message: esEdicion ? "Rol actualizado correctamente" : "Rol creado correctamente", variant: "success" });
+      setErrorGuardar({
+        message: esEdicion ? "Rol actualizado correctamente" : "Rol creado correctamente",
+        variant: "success"
+      });
     } catch (err) {
       const mensaje = handleError(err);
       setErrorGuardar({ message: mensaje, variant: "danger" });
@@ -68,6 +78,8 @@ const RolesList = () => {
       setGuardando(false);
     }
   };
+
+
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
@@ -112,14 +124,15 @@ const RolesList = () => {
 
       {/* Modal para editar */}
       {modalShow && (
-        <ModalFormulario
+        <ModalEditarPermisos
           show={modalShow}
           onClose={() => setModalShow(false)}
-          nombre="Editar Rol"
           campos={camposRol}
           datos={rolSeleccionado}
-          onSubmit={guardarOActualizarRol}
-          guardando={guardando}
+          onSubmit={async (permisos) => {
+            await guardarOActualizarRol({ ...rolSeleccionado, permisos });
+            setModalShow(false);
+          }}
         />
       )}
 

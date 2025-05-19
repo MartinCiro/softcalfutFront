@@ -7,7 +7,7 @@ const LoadingSpinner = () => {
     <Container className="d-flex justify-content-center align-items-center py-5 text-center" style={{ minHeight: '80vh' }}>
       <div className="spinner-border text-primary" role="status">
         <Spinner animation="border" role="status" />
-            <div>Cargando anuncios...</div>
+            <div>Cargando datos...</div>
       </div>
     </Container>
   );

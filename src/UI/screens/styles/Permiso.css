@@ -1,0 +1,31 @@
+.modal-editar-permisos {
+  .permiso-item .form-check {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
+  .permiso-item {
+    /* Centra mejor el checkbox si quieres */
+    text-align: center;
+  }
+
+  .permiso-item:hover {
+    color: var(--color-primario);
+  }
+
+  .permiso-item:focus:not(.active) {
+    color: var(--color-primario);
+  }
+
+  .permiso-item .form-check-input {
+    float: none !important;
+    margin: 0 auto;
+  }
+
+  .form-check-input:checked {
+    background-color: var(--color-secundario) !important;
+    border-color: var(--color-oscuro) !important;
+  }
+}

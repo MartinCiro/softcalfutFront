@@ -11,6 +11,7 @@
       "@screens/*": ["src/UI/screens/*"],
       "@layouts/*": ["src/Lib/Layouts/*"],
       "@services/*": ["src/Lib/Services/*"],
+      "@constants/*": ["src/Utils/constants/*"],
       "@componentsUseable/*": ["src/UI/useable-components/*"]
     }
   },

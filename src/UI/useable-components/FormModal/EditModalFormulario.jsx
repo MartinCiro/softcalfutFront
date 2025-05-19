@@ -10,6 +10,8 @@ const ModalFormulario = ({
   datos = {},
   onSubmit,
   loading: externalLoading = false,
+  children,
+  onChange = () => {},
 }) => {
   const [formState, setFormState] = useState({});
   const [mensajeExito, setMensajeExito] = useState(null);
@@ -27,6 +29,7 @@ const ModalFormulario = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if(onChange) onChange(name, value); 
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -84,6 +87,23 @@ const ModalFormulario = ({
                     placeholder="URL de la imagen"
                   />
                 </>
+              ) : campo.tipo === "multi-select" ? (
+                <Form.Control
+                  as="select"
+                  name={campo.nombre}
+                  multiple
+                  value={formState[campo.nombre] || []}
+                  onChange={(e) => {
+                    const selected = Array.from(e.target.selectedOptions, opt => opt.value);
+                    setFormState(prev => ({ ...prev, [campo.nombre]: selected }));
+                  }}
+                >
+                  {campo.opciones?.map(opcion => (
+                    <option key={opcion.id || opcion} value={opcion.id || opcion}>
+                      {opcion.nombre || opcion}
+                    </option>
+                  ))}
+                </Form.Control>
               ) : (
                 <Form.Control
                   as={campo.tipo === "textarea" ? "textarea" : "input"}
@@ -100,6 +120,11 @@ const ModalFormulario = ({
 
           ))}
         </Form>
+        {children && (
+          <div className="mt-4">
+            {children}
+          </div>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose}>
