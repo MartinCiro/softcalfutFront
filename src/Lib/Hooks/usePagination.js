@@ -1,9 +1,17 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 const usePagination = (data = [], itemsPerPage = 6) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const shouldShowPaginator = data.length > itemsPerPage;
 
   const maxPage = Math.ceil(data.length / itemsPerPage);
+
+  // Reiniciar la página si la data cambia o si la página actual supera maxPage
+  useEffect(() => {
+    if (currentPage > maxPage) {
+      setCurrentPage(1);
+    }
+  }, [data, currentPage, maxPage]);
 
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
@@ -24,6 +32,7 @@ const usePagination = (data = [], itemsPerPage = 6) => {
     prevPage,
     goToPage,
     dataRestante,
+    shouldShowPaginator,
   };
 };
 

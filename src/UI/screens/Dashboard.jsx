@@ -15,7 +15,7 @@ const Dashboard = () => {
       </div>
 
       {/* Componente de anuncios maneja su propio estado */}
-      <AnunciosList />
+      <RolesList />
     </div>
   );
 };

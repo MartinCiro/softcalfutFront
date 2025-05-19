@@ -123,3 +123,12 @@ export const loadSessionCache = (key) => {
     return null;
   }
 };
+
+// Formatear el objeto de permisos a una lista para la tabla
+export const dataFormated = (permisosObj) => {
+    if (!permisosObj || typeof permisosObj !== "object") return [];
+    return Object.entries(permisosObj).map(([entidad, acciones]) => ({
+        entidad,
+        permisos: acciones,
+    }));
+};

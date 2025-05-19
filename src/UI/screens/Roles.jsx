@@ -7,23 +7,21 @@ import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
 import useErrorHandler from "@hooks/useErrorHandler";
 import useModalConfirm from "@hooks/useModalConfirm";
-import useToggleEstado from "@hooks/useToggleEstado";
 import Paginator from "@componentsUseable/Paginator"; // Components
-import CardGeneric from "@componentsUseable/CardGeneric"; 
+import TableGeneric from "@componentsUseable/TableGeneric";
 import LoadingSpinner from "@componentsUseable/Loading";
 import SearchInput from "@componentsUseable/SearchInput";
 import ErrorMessage from "@componentsUseable/ErrorMessage";
-import FilterDropdown from "@componentsUseable/Toggle/FilterDropdown";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
-import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
+import ModalVerPermisos from "@componentsUseable/ModalVerPermisos";
 import ModalFormulario from "@componentsUseable/FormModal/EditModalFormulario";
 import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
-import "@styles/Anuncio.css"; // Styles
+import "@styles/Anuncio.css"; 
 
 const RolesList = () => {
   const { data: roles, loading, error, reload: cargarRoles } = useFetchData(RolService.roles);
-  const { error: errorGlobal, handleError } = useErrorHandler();
+  const { handleError } = useErrorHandler();
 
   const [modalVer, setModalVer] = useState(false);
   const [guardando, setGuardando] = useState(false);
@@ -32,10 +30,9 @@ const RolesList = () => {
   const [rolSeleccionado, setRolSeleccionado] = useState(null);
   const [rolVer, setRolVer] = useState(null);
   const { query, setQuery, filtered } = useSearch(roles, "nombre");
-  const { estadoFiltro, toggleEstado, filtrarPorEstado } = useToggleEstado();
-  const rolesFiltrados = filtrarPorEstado(filtered);
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
-  const { paginatedData, currentPage, maxPage, nextPage, prevPage, } = usePagination(rolesFiltrados, 6);
+  const { paginatedData, currentPage, maxPage, nextPage, prevPage, } = usePagination(filtered, 6);
+  const [shouldShowPaginator] = useState(false);
 
   const confirmModal = useModalConfirm();
 
@@ -48,22 +45,6 @@ const RolesList = () => {
   const handleEditar = (rol) => {
     setRolSeleccionado(rol);
     setModalShow(true);
-  };
-
-  const handleToggleActivo = (rol) => {
-    const nuevoEstado = rol.estado === "Activo" ? "Inactivo" : "Activo";
-    const accion = nuevoEstado === "Activo" ? "activar" : "desactivar";
-    const mensaje = `¿Deseas ${accion} el rol "${rol.nombre}"?`;
-
-    confirmModal.open(mensaje, async () => {
-      try {
-        await RolService.upRol(rol.id, { estado: nuevoEstado });
-        sessionStorage.removeItem("roles");
-        await cargarRoles();
-      } catch (err) {
-        handleError(err);
-      }
-    });
   };
 
   const handleVer = (rol) => {
@@ -107,7 +88,6 @@ const RolesList = () => {
           >
             <MDBIcon fas icon="plus" />
           </Button>
-          <FilterDropdown estadoActual={estadoFiltro} onChange={toggleEstado} />
           <SearchInput value={query} onChange={setQuery} />
         </div>
       </div>
@@ -118,14 +98,17 @@ const RolesList = () => {
         </div>
       )}
 
-      <Row>
-        <CardGeneric
-          data={paginatedData}
-          onToggle={handleToggleActivo}
-          onView={handleVer}
-          onEdit={handleEditar}
-        />
-      </Row>
+      <TableGeneric
+        data={paginatedData}
+        columns={[
+          { key: "id", label: "ID" },
+          { key: "nombre", label: "Nombre" },
+          { key: "descripcion", label: "Descripción" }
+        ]}
+        onView={handleVer}
+        onEdit={handleEditar}
+      />
+
 
       {/* Modal para editar */}
       {modalShow && (
@@ -142,7 +125,7 @@ const RolesList = () => {
 
       {/* Modal para ver */}
       {modalVer && (
-        <ModalVerGenerico
+        <ModalVerPermisos
           show={modalVer}
           onClose={() => setModalVer(false)}
           campos={camposRol}
@@ -168,12 +151,14 @@ const RolesList = () => {
         />
       )}
 
-      <Paginator
-        currentPage={currentPage}
-        maxPage={maxPage}
-        nextPage={nextPage}
-        prevPage={prevPage}
-      />
+      {shouldShowPaginator && (
+        <Paginator
+          currentPage={currentPage}
+          maxPage={maxPage}
+          nextPage={nextPage}
+          prevPage={prevPage}
+        />
+      )}
       <ScrollTopButton />
     </Container>
   );

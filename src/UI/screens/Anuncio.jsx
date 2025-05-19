@@ -24,7 +24,7 @@ import "@styles/Anuncio.css"; // Styles
 
 const AnunciosList = () => {
   const { data: anuncios, loading, error, reload: cargarAnuncios } = useFetchData(AnuncioService.anuncios);
-  const { error: errorGlobal, handleError } = useErrorHandler();
+  const { handleError } = useErrorHandler();
 
   const [modalVer, setModalVer] = useState(false);
   const [guardando, setGuardando] = useState(false);

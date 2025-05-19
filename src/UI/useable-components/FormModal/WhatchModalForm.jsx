@@ -1,14 +1,14 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
-
 const ModalVerGenerico = ({
   show,
   onClose,
   titulo = "Detalle",
   campos = [],
   datos = {},
+  children,
 }) => {
-  if (!datos) return null;
+  if (!datos && !children) return null;
 
   return (
     <Modal show={show} onHide={onClose} centered size="lg">
@@ -33,14 +33,19 @@ const ModalVerGenerico = ({
           }
 
           return (
-            <div key={campo.nombre} className="mb-3">
-              <strong>{campo.label || campo.nombre}:</strong>
-              <p style={{ whiteSpace: "pre-wrap", marginBottom: 0 }}>
-                {valor || "Sin información"}
-              </p>
-            </div>
-          );
-        })}
+                <div key={campo.nombre} className="mb-3">
+                  <strong>{campo.label || campo.nombre}:</strong>
+                  <p style={{ whiteSpace: "pre-wrap", marginBottom: 0 }}>
+                    {valor === null || valor === undefined
+                      ? "Sin información"
+                      : typeof valor === "object"
+                      ? JSON.stringify(valor)
+                      : valor}
+                  </p>
+                </div>
+              );
+            })}
+            {children}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose}>

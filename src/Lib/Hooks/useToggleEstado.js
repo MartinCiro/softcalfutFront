@@ -3,9 +3,7 @@ import { useState } from "react";
 const useToggleEstado = () => {
   const [estadoFiltro, setEstadoFiltro] = useState("Todos");
 
-  const toggleEstado = (nuevoEstado) => {
-    setEstadoFiltro(nuevoEstado);
-  };
+  const toggleEstado = (nuevoEstado) => setEstadoFiltro(nuevoEstado);
 
   const filtrarPorEstado = (lista) => {
     if (estadoFiltro === "Todos") return lista;
