@@ -141,6 +141,22 @@ const RolesList = () => {
         />
       )}
 
+      {/* Modal para crear */}
+      {modalCrearShow && (
+        <ModalCreateRol
+          show={modalCrearShow}
+          onClose={() => setModalCrearShow(false)}
+          nombre="Crear Rol"
+          campos={camposRol}
+          permisosActuales={permisosActuales}
+          onSubmit={async (datos) => {
+            await guardarOActualizarRol(datos);
+            setModalCrearShow(false);
+          }}
+          guardando={guardando}
+        />
+      )}
+
       {/* Modal para ver */}
       {modalVer && (
         <ModalVerRol
@@ -150,26 +166,6 @@ const RolesList = () => {
           datos={rolVer}
         />
       )}
-
-      <ModalConfirmacion
-        show={confirmModal.show}
-        mensaje={confirmModal.mensaje}
-        onConfirm={confirmModal.onConfirm}
-        onClose={confirmModal.close}
-      />
-
-      {modalCrearShow && (
-        <ModalCreateRol
-          show={modalCrearShow}
-          onClose={() => setModalCrearShow(false)}
-          nombre="Crear Rol"
-          campos={camposRol}
-          permisosActuales={permisosActuales}
-          onSubmit={guardarOActualizarRol}
-          guardando={guardando}
-        />
-      )}
-
       {shouldShowPaginator && (
         <Paginator
           currentPage={currentPage}
@@ -178,6 +174,12 @@ const RolesList = () => {
           prevPage={prevPage}
         />
       )}
+      <ModalConfirmacion
+        show={confirmModal.show}
+        mensaje={confirmModal.mensaje}
+        onConfirm={confirmModal.onConfirm}
+        onClose={confirmModal.close}
+      />
       <ScrollTopButton />
     </Container>
   );
