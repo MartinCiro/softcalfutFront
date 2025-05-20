@@ -1,27 +1,32 @@
 import { Form } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import useSearch from "@hooks/useSearch";
-import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
 
 import Paginator from "@componentsUseable/Paginator";
 import SearchInput from "@componentsUseable/SearchInput";
 import TableGeneric from "@componentsUseable/TableGeneric";
-import LoadingSpinner from "@componentsUseable/Loading";
-import PermisoService from "@services/PermisoService";
+
 import ModalEditarGenerico from "@componentsUseable/FormModal/EditModalFormulario";
 
 import { iconosPermiso, ordenPermisos } from "@constants/permissionConfig";
 import "@styles/Permiso.css";
 
-const ModalEditarRol = ({ show, onClose, campos, titulo = "Editar Rol", datos = {}, onSubmit }) => {
-    const { data: permisosActuales = [], loading } = useFetchData(PermisoService.permisos);
+const ModalEditarRol = ({
+    show,
+    onClose,
+    campos,
+    titulo = "Editar Rol",
+    permisosActuales = [],
+    datos = {},
+    onSubmit
+}) => {
+    const [permisosEditados, setPermisosEditados] = useState([]);
     const sinPermisos = campos.filter(campo => campo.nombre !== "permisos");
     const [formValues, setFormValues] = useState({
         nombre: datos.nombre || "",
         descripcion: datos.descripcion || "",
     });
-    const [permisosEditados, setPermisosEditados] = useState([]);
     const generarPermisosCompletos = () => {
         return permisosActuales.map(actual => {
             const permisosEncontrados = datos.permisos?.[actual.entidad] || [];
@@ -77,23 +82,34 @@ const ModalEditarRol = ({ show, onClose, campos, titulo = "Editar Rol", datos = 
         {
             key: "permisos",
             label: "Permisos",
-            render: (_, row) => (
-                <div className="d-flex flex-wrap gap-2 justify-content-center modal-editar-permisos">
-                    {ordenPermisos.map((permiso) => (
-                        <div key={permiso} className="d-flex flex-column align-items-center permiso-item" title={permiso}>
-                            {iconosPermiso[permiso] || permiso}
-                            <Form.Check
-                                type="checkbox"
-                                id={`perm-${row.entidad}-${permiso}`}
-                                checked={row.permisos.includes(permiso)}
-                                label=""
-                                onChange={() => togglePermiso(row.entidad, permiso)}
-                            />
-                        </div>
-                    ))}
-                </div>
-            ),
-        },
+            render: (_, row) => {
+                const permisosDisponibles = permisosActuales.find(p => p.entidad === row.entidad)?.permisos || [];
+
+                return (
+                    <div className="d-flex flex-wrap gap-2 justify-content-center modal-editar-permisos">
+                        {ordenPermisos
+                            .filter((permiso) => permisosDisponibles.includes(permiso))
+                            .map((permiso) => (
+                                <div
+                                    key={permiso}
+                                    className="d-flex flex-column align-items-center permiso-item"
+                                    title={permiso}
+                                >
+                                    {iconosPermiso[permiso] || permiso}
+                                    <Form.Check
+                                        type="checkbox"
+                                        id={`perm-${row.entidad}-${permiso}`}
+                                        checked={row.permisos.includes(permiso)}
+                                        label=""
+                                        onChange={() => togglePermiso(row.entidad, permiso)}
+                                    />
+                                </div>
+                            ))}
+                    </div>
+                );
+            },
+        }
+        ,
     ];
 
     const handleFormChange = (campo, valor) => {
@@ -108,7 +124,6 @@ const ModalEditarRol = ({ show, onClose, campos, titulo = "Editar Rol", datos = 
         });
     };
 
-    if (loading) return <LoadingSpinner />;
     return (
         <ModalEditarGenerico
             campos={sinPermisos}

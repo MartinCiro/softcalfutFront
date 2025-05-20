@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
 import RolService from "@services/RolService"; // Services
+import PermisoService from "@services/PermisoService";
 import useSearch from "@hooks/useSearch"; // Hooks
 import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
@@ -13,9 +14,10 @@ import LoadingSpinner from "@componentsUseable/Loading";
 import SearchInput from "@componentsUseable/SearchInput";
 import ErrorMessage from "@componentsUseable/ErrorMessage";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
-import ModalVerRol from "@src/UI/useable-components/permisos/ModalVerRol";
-import ModalEditarRol from "@src/UI/useable-components/permisos/ModalEditarRol";
-import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
+import ModalVerRol from "@src/UI/useable-components/roles/ModalVerRol";
+import ModalEditarRol from "@src/UI/useable-components/roles/ModalEditarRol";
+import ModalCreateRol from "@componentsUseable/roles/ModalCreateRol";
+
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Anuncio.css";
 
@@ -33,6 +35,8 @@ const RolesList = () => {
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, } = usePagination(filtered, 6);
   const [shouldShowPaginator] = useState(false);
+
+  const { data: permisosActuales } = useFetchData(PermisoService.permisos);
 
   const confirmModal = useModalConfirm();
 
@@ -129,6 +133,7 @@ const RolesList = () => {
           onClose={() => setModalShow(false)}
           campos={camposRol}
           datos={rolSeleccionado}
+          permisosActuales={permisosActuales}
           onSubmit={async (permisos) => {
             await guardarOActualizarRol({ ...rolSeleccionado, permisos });
             setModalShow(false);
@@ -154,11 +159,12 @@ const RolesList = () => {
       />
 
       {modalCrearShow && (
-        <CreateModalFormulario
+        <ModalCreateRol
           show={modalCrearShow}
           onClose={() => setModalCrearShow(false)}
           nombre="Crear Rol"
           campos={camposRol}
+          permisosActuales={permisosActuales}
           onSubmit={guardarOActualizarRol}
           guardando={guardando}
         />

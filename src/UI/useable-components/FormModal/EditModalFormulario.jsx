@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import useErrorHandler from "@hooks/useErrorHandler";
+import { useAutoResizeTextarea } from "@hooks/useAutoResizeTextarea";
 
 const ModalEditForm = ({
   show,
@@ -11,7 +12,7 @@ const ModalEditForm = ({
   onSubmit,
   loading: externalLoading = false,
   children,
-  onChange = () => {},
+  onChange = () => { },
 }) => {
   const [formState, setFormState] = useState({});
   const [mensajeExito, setMensajeExito] = useState(null);
@@ -29,7 +30,7 @@ const ModalEditForm = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if(onChange) onChange(name, value); 
+    if (onChange) onChange(name, value);
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -64,61 +65,72 @@ const ModalEditForm = ({
         )}
 
         <Form>
-          {campos.map((campo) => (
-            <Form.Group key={campo.nombre} className="mb-3">
-              <Form.Label>{campo.label || campo.nombre}</Form.Label>
+          {campos.map((campo) => {
+            const isTextarea = campo.tipo === "textarea";
+            const value = formState[campo.nombre] || "";
+            const textareaRef = isTextarea ? useAutoResizeTextarea(value) : null;
 
-              {campo.tipo === "img" ? (
-                <>
-                  {formState[campo.nombre] ? (
-                    <img
-                      src={formState[campo.nombre]}
-                      alt={campo.label || campo.nombre}
-                      style={{ maxWidth: "100%", maxHeight: "300px", display: "block", marginBottom: "10px" }}
+            return (
+              <Form.Group key={campo.nombre} className="mb-3">
+                <Form.Label>{campo.label || campo.nombre}</Form.Label>
+
+                {campo.tipo === "img" ? (
+                  <>
+                    {value ? (
+                      <img
+                        src={value}
+                        alt={campo.label || campo.nombre}
+                        style={{ maxWidth: "100%", maxHeight: "300px", display: "block", marginBottom: "10px" }}
+                      />
+                    ) : (
+                      <p className="text-muted">No hay imagen cargada</p>
+                    )}
+                    <Form.Control
+                      type="text"
+                      name={campo.nombre}
+                      value={value}
+                      onChange={handleChange}
+                      placeholder="URL de la imagen"
                     />
-                  ) : (
-                    <p className="text-muted">No hay imagen cargada</p>
-                  )}
+                  </>
+                ) : campo.tipo === "multi-select" ? (
                   <Form.Control
-                    type="text"
+                    as="select"
                     name={campo.nombre}
-                    value={formState[campo.nombre] || ""}
+                    multiple
+                    value={value}
+                    onChange={(e) => {
+                      const selected = Array.from(e.target.selectedOptions, opt => opt.value);
+                      setFormState(prev => ({ ...prev, [campo.nombre]: selected }));
+                    }}
+                  >
+                    {campo.opciones?.map(opcion => (
+                      <option key={opcion.id || opcion} value={opcion.id || opcion}>
+                        {opcion.nombre || opcion}
+                      </option>
+                    ))}
+                  </Form.Control>
+                ) : (
+                  <Form.Control
+                    as={isTextarea ? "textarea" : "input"}
+                    type={isTextarea ? undefined : campo.tipo}
+                    rows={isTextarea ? 1 : undefined}
+                    style={
+                      isTextarea
+                        ? { minHeight: "70px", resize: "none", overflow: "hidden" }
+                        : {}
+                    }
+                    name={campo.nombre}
+                    value={value}
                     onChange={handleChange}
-                    placeholder="URL de la imagen"
+                    placeholder={campo.placeholder || ""}
+                    ref={textareaRef}
                   />
-                </>
-              ) : campo.tipo === "multi-select" ? (
-                <Form.Control
-                  as="select"
-                  name={campo.nombre}
-                  multiple
-                  value={formState[campo.nombre] || []}
-                  onChange={(e) => {
-                    const selected = Array.from(e.target.selectedOptions, opt => opt.value);
-                    setFormState(prev => ({ ...prev, [campo.nombre]: selected }));
-                  }}
-                >
-                  {campo.opciones?.map(opcion => (
-                    <option key={opcion.id || opcion} value={opcion.id || opcion}>
-                      {opcion.nombre || opcion}
-                    </option>
-                  ))}
-                </Form.Control>
-              ) : (
-                <Form.Control
-                  as={campo.tipo === "textarea" ? "textarea" : "input"}
-                  type={campo.tipo === "textarea" ? undefined : campo.tipo}
-                  rows={campo.tipo === "textarea" ? 6 : undefined}
-                  style={campo.tipo === "textarea" ? { minHeight: "120px", resize: "vertical" } : {}}
-                  name={campo.nombre}
-                  value={formState[campo.nombre] || ""}
-                  onChange={handleChange}
-                  placeholder={campo.placeholder || ""}
-                />
-              )}
-            </Form.Group>
+                )}
+              </Form.Group>
+            );
+          })}
 
-          ))}
         </Form>
         {children && (
           <div className="mt-4">

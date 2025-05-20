@@ -35,7 +35,13 @@ const RolService = {
       const nombre = data.permisos.nombre;
       const descripcion = data.permisos.descripcion;
       const id_permiso = parseInt(id);
-      const dataFilter = { nombre, descripcion, permisos: permisosPlanos, id: id_permiso };
+
+      const dataFilter = {
+        nombre,
+        descripcion,
+        permisos: permisosPlanos,
+        id: id_permiso,
+      };
       const response = await getByEndpoint(
         RolService.endpoint,
         dataFilter,
@@ -50,8 +56,21 @@ const RolService = {
 
   crRol: async (data) => {
     try {
-      data = { ...data, nombre: data.titulo };
-      const response = await getByEndpoint(RolService.endpoint, data, "post");
+    
+      const permisosPlanos = data.permisos.flatMap(({ entidad, permisos }) =>
+        permisos.map((permiso) => `${entidad}:${permiso}`)
+      );
+      const dataFilter = {
+        nombre: data.nombre,
+        descripcion: data.descripcion,
+        permisos: permisosPlanos,
+      };
+
+      const response = await getByEndpoint(
+        RolService.endpoint,
+        dataFilter,
+        "post"
+      );
       return response;
     } catch (error) {
       console.error("Error al crear rol:", error);
