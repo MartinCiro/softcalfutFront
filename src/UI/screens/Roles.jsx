@@ -13,7 +13,7 @@ import LoadingSpinner from "@componentsUseable/Loading";
 import SearchInput from "@componentsUseable/SearchInput";
 import ErrorMessage from "@componentsUseable/ErrorMessage";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
-import ModalVerPermisos from "@componentsUseable/permisos/ModalVerPermisos";
+import ModalVerRol from "@src/UI/useable-components/permisos/ModalVerRol";
 import ModalEditarRol from "@src/UI/useable-components/permisos/ModalEditarRol";
 import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
@@ -138,7 +138,7 @@ const RolesList = () => {
 
       {/* Modal para ver */}
       {modalVer && (
-        <ModalVerPermisos
+        <ModalVerRol
           show={modalVer}
           onClose={() => setModalVer(false)}
           campos={camposRol}

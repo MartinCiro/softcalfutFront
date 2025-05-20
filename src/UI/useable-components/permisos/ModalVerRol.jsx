@@ -9,7 +9,7 @@ import { dataFormated } from "@utils/helpers";
 import { columnasPermisosGenericas } from "@constants/permissionConfig";
 
 // Componente principal del modal
-const ModalVerPermisos = ({ show, onClose, campos = [], titulo = "Ver rol", datos = {} }) => {
+const ModalVerRol = ({ show, onClose, campos = [], titulo = "Ver rol", datos = {} }) => {
   const dataPermisos = dataFormated(datos.permisos);
   const sinPermisos = campos.filter(campo => campo.nombre !== "permisos");
   
@@ -62,4 +62,4 @@ const ModalVerPermisos = ({ show, onClose, campos = [], titulo = "Ver rol", dato
   );
 };
 
-export default ModalVerPermisos;
+export default ModalVerRol;
