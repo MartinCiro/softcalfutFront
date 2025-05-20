@@ -7,6 +7,19 @@
     &:hover {
       color: var(--color-primario);
     }
+    &:active {
+      color: var(--color-primario);
+    }
+    &:focus {
+      color: var(--color-primario);
+    }
+    &:focus:not(.active) {
+      color: var(--color-primario);
+    }
+  }
+
+  .nav-link.active {
+    color: var(--color-primario) !important;
   }
 
   .navbar-toggler {
@@ -16,6 +29,12 @@
       background-color: var(--color-claro);
     }
 
+    
+    &.navbar-toggler:not(.collapsed) .navbar-toggler-icon::before {
+      content: "\f00d";
+      transform: rotate(180deg);
+    }
+    
     .navbar-toggler-icon {
       display: flex;
       align-items: center;
@@ -32,28 +51,5 @@
       }
 
     }
-
-    &.navbar-toggler:not(.collapsed) .navbar-toggler-icon::before {
-      content: "\f00d";
-      transform: rotate(180deg);
-    }
-
-  }
-
-  a.active {
-    color: var(--color-primario);
-  }
-
-  a:focus:not(.active) {
-    color: var(--color-primario);
-  }
-
-  /* Nuevos */
-  a:focus {
-    color: var(--color-primario);
-  }
-
-  .nav-link.active {
-    color: var(--color-primario) !important;
   }
 }

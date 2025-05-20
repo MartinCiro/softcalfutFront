@@ -1,18 +1,20 @@
+import { Form } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import useSearch from "@hooks/useSearch";
+import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
+
 import Paginator from "@componentsUseable/Paginator";
 import SearchInput from "@componentsUseable/SearchInput";
 import TableGeneric from "@componentsUseable/TableGeneric";
+import LoadingSpinner from "@componentsUseable/Loading";
+import PermisoService from "@services/PermisoService";
 import ModalEditarGenerico from "@componentsUseable/FormModal/EditModalFormulario";
-import { Form } from "react-bootstrap";
+
 import { iconosPermiso, ordenPermisos } from "@constants/permissionConfig";
 import "@styles/Permiso.css";
-import useFetchData from "@hooks/useFetchData";
-import PermisoService from "@services/PermisoService";
-import LoadingSpinner from "@componentsUseable/Loading";
 
-const ModalEditarPermisos = ({ show, onClose, campos, titulo = "Editar Rol", datos = {}, onSubmit }) => {
+const ModalEditarRol = ({ show, onClose, campos, titulo = "Editar Rol", datos = {}, onSubmit }) => {
     const { data: permisosActuales = [], loading } = useFetchData(PermisoService.permisos);
     const sinPermisos = campos.filter(campo => campo.nombre !== "permisos");
     const [formValues, setFormValues] = useState({
@@ -153,4 +155,4 @@ const ModalEditarPermisos = ({ show, onClose, campos, titulo = "Editar Rol", dat
     );
 };
 
-export default ModalEditarPermisos;
+export default ModalEditarRol;

@@ -1,5 +1,6 @@
 import { Table, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
+import "@styles/TableGeneric.css";
 
 const TableGeneric = ({
     data = [],
@@ -18,7 +19,7 @@ const TableGeneric = ({
     const mostrarAcciones = showView || showEdit || showDelete || showCreate;
 
     return (
-        <div className="table-responsive mb-4">
+        <div className="table-responsive mb-4 table-generic">
             {title && <h5 className="mb-3 fw-bold justify-content-center align-items-center d-flex">{title}</h5>}
             <Table bordered hover responsive className="align-middle">
                 <thead className="table-dark">
@@ -56,7 +57,7 @@ const TableGeneric = ({
                                     ))}
 
                                 {mostrarAcciones && (
-                                    <td className="text-center">
+                                    <td className="text-center table-actions">
                                         {showView && (
                                             <Button
                                                 variant="outline-info"

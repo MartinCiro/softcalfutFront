@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import useErrorHandler from "@hooks/useErrorHandler";
 
-const ModalFormulario = ({
+const ModalEditForm = ({
   show,
   onClose,
   titulo = "Formulario",
@@ -142,4 +142,4 @@ const ModalFormulario = ({
   );
 };
 
-export default ModalFormulario;
+export default ModalEditForm;

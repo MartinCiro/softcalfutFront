@@ -17,7 +17,7 @@ import ErrorMessage from "@componentsUseable/ErrorMessage";
 import FilterDropdown from "@componentsUseable/Toggle/FilterDropdown";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
 import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
-import ModalFormulario from "@componentsUseable/FormModal/EditModalFormulario";
+import ModalEditForm from "@componentsUseable/FormModal/EditModalFormulario";
 import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Anuncio.css"; // Styles
@@ -137,7 +137,7 @@ const AnunciosList = () => {
 
       {/* Modal para editar */}
       {modalShow && (
-        <ModalFormulario
+        <ModalEditForm
           show={modalShow}
           onClose={() => setModalShow(false)}
           titulo="Editar Anuncio"

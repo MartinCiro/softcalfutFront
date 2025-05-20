@@ -1,0 +1,19 @@
+.table-generic {
+  tbody {
+    tr {
+      &:hover {
+        background-color: var(--color-oscuro);
+        box-shadow: 0 0 10px var(--color-primario);
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        transform: translateY(-2px);
+      }
+
+      td button:hover i {
+        color: var(--color-primario);
+        transform: scale(1.2);
+        transition: all 0.3s ease;
+      }
+    }
+  }
+}

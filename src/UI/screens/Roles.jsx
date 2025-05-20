@@ -14,7 +14,7 @@ import SearchInput from "@componentsUseable/SearchInput";
 import ErrorMessage from "@componentsUseable/ErrorMessage";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
 import ModalVerPermisos from "@componentsUseable/permisos/ModalVerPermisos";
-import ModalEditarPermisos from "@componentsUseable/permisos/ModalEditarPermisos";
+import ModalEditarRol from "@src/UI/useable-components/permisos/ModalEditarRol";
 import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Anuncio.css";
@@ -124,7 +124,7 @@ const RolesList = () => {
 
       {/* Modal para editar */}
       {modalShow && (
-        <ModalEditarPermisos
+        <ModalEditarRol
           show={modalShow}
           onClose={() => setModalShow(false)}
           campos={camposRol}
