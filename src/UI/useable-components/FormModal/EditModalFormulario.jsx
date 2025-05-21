@@ -18,7 +18,6 @@ const ModalEditForm = ({
   const [mensajeExito, setMensajeExito] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const { error, handleError, resetError } = useErrorHandler();
-
   useEffect(() => {
     if (JSON.stringify(formState) !== JSON.stringify(datos)) {
       setFormState(datos || {});
@@ -135,7 +134,7 @@ const ModalEditForm = ({
                     onChange={handleChange}
                     placeholder={campo.placeholder || ""}
                     ref={textareaRef}
-                    disabled={campo.bloqueado}
+                    disabled={campo.bloqueado || false}
                   />
                 )}
               </Form.Group>

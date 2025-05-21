@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Container, Row, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
-import PermisoService from "@services/PermisoService"; // Services
+import EstadoService from "@services/EstadoService"; // Services
 import useSearch from "@hooks/useSearch"; // Hooks
 import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
@@ -13,62 +13,56 @@ import SearchInput from "@componentsUseable/SearchInput";
 import ErrorMessage from "@componentsUseable/ErrorMessage";
 import TableGeneric from "@componentsUseable/TableGeneric";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
-import PermisoVer from "@componentsUseable/permisos/PermisoVer";
-import PermisoEditor from "@src/UI/useable-components/permisos/PermisoEditor";
-import PermisoCreador from "@componentsUseable/permisos/PermisoCreador";
+import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
+import ModalEditForm from "@componentsUseable/FormModal/EditModalFormulario";
+import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Permiso.css"; // Styles
 
-const PermisosList = () => {
-  const { data: permisos, loading, error, reload: cargarPermisos } = useFetchData(PermisoService.permisos);
+const EstadosList = () => {
+  const { data: estados, loading, error, reload: cargarEstados } = useFetchData(EstadoService.estados);
   const { handleError } = useErrorHandler();
 
   const [modalVer, setModalVer] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [modalCrearShow, setModalCrearShow] = useState(false);
-  const [permisoSeleccionado, setPermisoSeleccionado] = useState(null);
-  const [permisoVer, setPermisoVer] = useState(null);
+  const [estadoSeleccionado, setEstadoSeleccionado] = useState(null);
+  const [estadoVer, setEstadoVer] = useState(null);
   const [modoEdicion, setModoEdicion] = useState(false);
-  const { query, setQuery, filtered } = useSearch(permisos, "entidad");
+  const { query, setQuery, filtered } = useSearch(estados, "nombre");
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
-  const columnsPermiso = [
-    { key: "entidad", label: "Nombre" },
+  const columnsEstado = [
+    { key: "nombre", label: "Nombre" },
     { key: "descripcion", label: "Descripción" }
   ];
   const confirmModal = useModalConfirm();
 
-  const camposPermiso = [
-    { nombre: "entidad", label: "Nombre", tipo: "text", bloqueado: true },
+  const camposEstado = [
+    { nombre: "nombre", label: "Nombre", tipo: "text" },
     { nombre: "descripcion", label: "Descripción", tipo: "text" }
   ];
 
-  const handleEditar = (permiso) => {
-    const permisosSeleccionados = {
-      [permiso.entidad]: permiso.permisos || []
-    };
-    setPermisoSeleccionado({
-      ...permiso,
-      permisosSeleccionados
-    });
+  const handleEditar = (estado) => {
     setModoEdicion(true);
+    setEstadoSeleccionado(estado);
     setModalShow(true);
   };
 
-  const handleVer = (permiso) => {
-    setPermisoVer(permiso);
+  const handleVer = (estado) => {
+    setEstadoVer(estado);
     setModalVer(true);
   };
 
-  const guardarOActualizarPermiso = async (datosForm) => {
+  const guardarOActualizarEstado = async (datosForm) => {
     const esEdicion = modoEdicion;
     try {
       setGuardando(true);
-      esEdicion ? await PermisoService.upPermiso(datosForm.permisos) : await PermisoService.crPermiso(datosForm);
-      sessionStorage.removeItem("permisos");
-      await cargarPermisos();
-      setErrorGuardar({ message: esEdicion ? "Permiso actualizado correctamente" : "Permiso creado correctamente", variant: "success" });
+      esEdicion ? await EstadoService.upEstado(datosForm) : await EstadoService.crEstado(datosForm);
+      sessionStorage.removeItem("estados");
+      await cargarEstados();
+      setErrorGuardar({ message: esEdicion ? "Estado actualizado correctamente" : "Estado creado correctamente", variant: "success" });
     } catch (err) {
       const mensaje = handleError(err);
       setErrorGuardar({ message: mensaje, variant: "danger" });
@@ -85,20 +79,20 @@ const PermisosList = () => {
   return (
 
     <Container className="py-4">
-      {/* <h2 className="mb-4 text-center fw-bold">Permisos</h2> */}
+      {/* <h2 className="mb-4 text-center fw-bold">Estados</h2> */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold mb-0">Permisos</h2>
+        <h2 className="fw-bold mb-0">Estados</h2>
         <div className="d-flex align-items-center gap-2">
           <Button
             variant="success"
             onClick={() => {
               setModoEdicion(false);
-              setPermisoSeleccionado(null);
+              setEstadoSeleccionado(null);
               setModalCrearShow(true);
             }}
             className="rounded-circle d-flex justify-content-center align-items-center"
             style={{ width: "45px", height: "45px" }}
-            title="Crear Permiso"
+            title="Crear Estado"
           >
             <MDBIcon fas icon="plus" />
           </Button>
@@ -114,24 +108,25 @@ const PermisosList = () => {
 
       <TableGeneric
         data={paginatedData}
-        columns={columnsPermiso}
+        columns={columnsEstado}
         onEdit={handleEditar}
         onView={handleVer}
       />
 
       {/* Modal para editar */}
-      {modalShow && permisoSeleccionado && (
-        <PermisoEditor
+      {modalShow && estadoSeleccionado && (
+        <ModalEditForm
+          titulo={"Editar Estado"}
           show={modalShow}
           onClose={() => setModalShow(false)}
-          permisosSeleccionado={permisoSeleccionado}
-          camposPermiso={camposPermiso}
-          onGuardar={(nuevosPermisos) => {
+          datos={estadoSeleccionado}
+          campos={camposEstado}
+          onSubmit={(nuevosEstados) => {
             const datosForm = {
-              ...permisoSeleccionado,
-              permisos: nuevosPermisos
+              ...estadoSeleccionado,
+              ...nuevosEstados  
             };
-            guardarOActualizarPermiso(datosForm);
+            guardarOActualizarEstado(datosForm);
             setModalShow(false);
           }}
         />
@@ -139,11 +134,11 @@ const PermisosList = () => {
 
       {/* Modal para ver */}
       {modalVer && (
-        <PermisoVer
+        <ModalVerGenerico
           show={modalVer}
           onClose={() => setModalVer(false)}
-          campos={camposPermiso}
-          datos={permisoVer}
+          campos={camposEstado}
+          datos={estadoVer}
         />
       )}
 
@@ -155,12 +150,12 @@ const PermisosList = () => {
       />
 
       {modalCrearShow && (
-        <PermisoCreador
+        <CreateModalFormulario
           show={modalCrearShow}
           onClose={() => setModalCrearShow(false)}
-          campos={camposPermiso}
-          onSubmit={guardarOActualizarPermiso}
-          permisosDisponibles={permisos}
+          campos={camposEstado}
+          onSubmit={guardarOActualizarEstado}
+          estadosDisponibles={estados}
           guardando={guardando}
         />
       )}
@@ -178,4 +173,4 @@ const PermisosList = () => {
   );
 };
 
-export default PermisosList;
+export default EstadosList;

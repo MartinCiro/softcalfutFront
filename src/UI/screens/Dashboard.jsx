@@ -1,6 +1,7 @@
 import React from 'react';
 import AnunciosList from '@screens/Anuncio';
 import RolesList from '@screens/Roles';
+import EstadoList from '@screens/Estado';
 import PermisosList from '@screens/Permisos';
 import { MDBIcon } from 'mdb-react-ui-kit';
 import '@styles/Dashboard.css';
@@ -16,7 +17,7 @@ const Dashboard = () => {
       </div>
 
       {/* Componente de anuncios maneja su propio estado */}
-      <PermisosList />
+      <EstadoList />
     </div>
   );
 };
