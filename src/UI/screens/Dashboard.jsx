@@ -3,7 +3,8 @@ import AnunciosList from '@screens/Anuncio';
 import RolesList from '@screens/Roles';
 import EstadoList from '@screens/Estado';
 import CategoriaList from '@screens/Categoria';
-import PermisosList from '@screens/Permisos';
+import PermisosList from '@screens/Permiso';
+import TorneosList from '@screens/Torneo';
 import { MDBIcon } from 'mdb-react-ui-kit';
 import '@styles/Dashboard.css';
 
@@ -18,7 +19,7 @@ const Dashboard = () => {
       </div>
 
       {/* Componente de anuncios maneja su propio estado */}
-      <CategoriaList />
+      <TorneosList />
     </div>
   );
 };
