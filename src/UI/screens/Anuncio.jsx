@@ -10,7 +10,7 @@ import useErrorHandler from "@hooks/useErrorHandler";
 import useModalConfirm from "@hooks/useModalConfirm";
 import useToggleEstado from "@hooks/useToggleEstado";
 import Paginator from "@componentsUseable/Paginator"; // Components
-import CardGeneric from "@componentsUseable/CardGeneric"; 
+import CardGeneric from "@componentsUseable/CardGeneric";
 import LoadingSpinner from "@componentsUseable/Loading";
 import SearchInput from "@componentsUseable/SearchInput";
 import ErrorMessage from "@componentsUseable/ErrorMessage";
@@ -36,7 +36,7 @@ const AnunciosList = () => {
   const { estadoFiltro, toggleEstado, filtrarPorEstado } = useToggleEstado();
   const anunciosFiltrados = filtrarPorEstado(filtered);
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
-  const { paginatedData, currentPage, maxPage, nextPage, prevPage, } = usePagination(anunciosFiltrados, 6);
+  const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(anunciosFiltrados, 6);
   const clavesAnuncio = {
     id: "id",
     title: "titulo",
@@ -175,13 +175,14 @@ const AnunciosList = () => {
           guardando={guardando}
         />
       )}
-
-      <Paginator
-        currentPage={currentPage}
-        maxPage={maxPage}
-        nextPage={nextPage}
-        prevPage={prevPage}
-      />
+      {shouldShowPaginator && (
+        <Paginator
+          currentPage={currentPage}
+          maxPage={maxPage}
+          nextPage={nextPage}
+          prevPage={prevPage}
+        />
+      )}
       <ScrollTopButton />
     </Container>
   );

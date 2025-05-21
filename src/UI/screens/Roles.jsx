@@ -33,9 +33,8 @@ const RolesList = () => {
   const [rolVer, setRolVer] = useState(null);
   const { query, setQuery, filtered } = useSearch(roles, "nombre");
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
-  const { paginatedData, currentPage, maxPage, nextPage, prevPage, } = usePagination(filtered, 6);
-  const [shouldShowPaginator] = useState(false);
-
+  const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
+ 
   const { data: permisosActuales } = useFetchData(PermisoService.permisos);
 
   const confirmModal = useModalConfirm();

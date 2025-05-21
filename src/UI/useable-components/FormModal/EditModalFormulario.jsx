@@ -38,7 +38,16 @@ const ModalEditForm = ({
     if (!onSubmit) return;
     try {
       setGuardando(true);
-      await onSubmit(formState);
+
+      const camposBloqueados = campos
+        .filter(campo => campo.bloqueado)
+        .map(campo => campo.nombre);
+
+      const formStateFiltrado = Object.fromEntries(
+        Object.entries(formState).filter(([key]) => !camposBloqueados.includes(key))
+      );
+
+      await onSubmit(formStateFiltrado);
       setMensajeExito("Actualizado correctamente");
     } catch (err) {
       handleError(err);
@@ -46,6 +55,7 @@ const ModalEditForm = ({
       setGuardando(false);
     }
   };
+
 
   return (
     <Modal show={show} onHide={onClose} centered animation={false}>
@@ -125,6 +135,7 @@ const ModalEditForm = ({
                     onChange={handleChange}
                     placeholder={campo.placeholder || ""}
                     ref={textareaRef}
+                    disabled={campo.bloqueado}
                   />
                 )}
               </Form.Group>

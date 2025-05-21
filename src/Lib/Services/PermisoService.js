@@ -2,7 +2,7 @@ import {
   getFriendlyErrorMessage,
   getByEndpoint,
   cacheSession,
-  loadSessionCache
+  loadSessionCache,
 } from "@utils/helpers";
 
 const PermisoService = {
@@ -17,13 +17,18 @@ const PermisoService = {
       const data = await getByEndpoint(PermisoService.endpoint);
 
       if (!data) throw new Error("No se recibieron permisos.");
-      const permisosNormalizados = Object.entries(data).map(([entidad, permisos]) => ({
-        entidad,
-        permisos,
-      }));
 
+      const permisosNormalizados = data.map((item) => {
+        const { descripcion, ...entidadObj } = item;
+        const [entidad] = Object.keys(entidadObj);
+        return {
+          entidad,
+          permisos: entidadObj[entidad],
+          descripcion,
+        };
+      });
       cacheSession(cacheKey, permisosNormalizados);
-      
+
       return { result: permisosNormalizados };
     } catch (error) {
       console.error("Error al obtener permisos:", error);
@@ -31,14 +36,19 @@ const PermisoService = {
     }
   },
 
-  upPermiso: async (id, data) => {
+  upPermiso: async (data) => {
     try {
-      const permisosPlanos = Object.entries(data.permisos || {}).flatMap(
-        ([modulo, acciones]) => acciones.map((accion) => `${modulo}:${accion}`)
+      const permisosPlanos = Object.entries(
+        data.permisosSeleccionados || {}
+      ).flatMap(([modulo, acciones]) =>
+        acciones.map((accion) => `${modulo}:${accion}`)
       );
-      const id = parseInt(id);
-      const dataFilter = { ...data, permisos: permisosPlanos, id };
-      const response = await getByEndpoint(PermisoService.endpoint, dataFilter, 'put');
+      const dataFilter = { ...data, permisos: permisosPlanos };
+      const response = await getByEndpoint(
+        PermisoService.endpoint,
+        dataFilter,
+        "put"
+      );
       return response;
     } catch (error) {
       console.error("Error al actualizar rol:", error);
@@ -48,14 +58,21 @@ const PermisoService = {
 
   crPermiso: async (data) => {
     try {
-      data = { ...data, nombre: data.titulo };
-      const response = await getByEndpoint(PermisoService.endpoint, data, 'post');
+      const permisos = (data.permisosSeleccionados || []).map(
+      (accion) => `${data.entidad}:${accion}`
+    );
+      const dataFilter = { ...data, permisos };
+      const response = await getByEndpoint(
+        PermisoService.endpoint,
+        dataFilter,
+        "post"
+      );
       return response;
     } catch (error) {
-      console.error("Error al crear rol:", error);
+      console.error("Error al actualizar rol:", error);
       throw new Error(getFriendlyErrorMessage(error));
     }
-  }
+  },
 };
 
 export default PermisoService;
