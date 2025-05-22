@@ -54,11 +54,6 @@ const EquiposList = () => {
       nombre: "documento_representante",
       label: "Documento del representante",
       render: (_, datos) => datos.representante?.documento || "Sin documento"
-    },
-    {
-      nombre: "estado_representante",
-      label: "Estado del representante",
-      render: (_, datos) => datos.representante?.estado || "Sin estado"
     }
   ];
 

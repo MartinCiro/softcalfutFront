@@ -6,6 +6,7 @@ import usePagination from "@hooks/usePagination";
 
 import Paginator from "@componentsUseable/Paginator";
 import SearchInput from "@componentsUseable/SearchInput";
+import EmptyMessage from "@componentsUseable/EmptyMessage";
 import TableGeneric from "@componentsUseable/TableGeneric";
 import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
 
@@ -123,7 +124,7 @@ const ModalCreateRol = ({
         >
             <div>
                 {permisosSeleccionados.length === 0 ? (
-                    <p className="text-muted text-center">No hay permisos disponibles para este rol.</p>
+                    <EmptyMessage mensaje="No hay permisos disponibles para este rol." />
                 ) : (
                     <>
                         <div className="mb-3">

@@ -23,9 +23,7 @@ const CreateModalFormulario = ({
 
   // Si se pasa un estado externo (datos), sincronízalo al abrir el modal
   useEffect(() => {
-    if (datos && Object.keys(datos).length > 0) {
-      setFormState(datos);
-    }
+    if (datos && Object.keys(datos).length > 0) setFormState(datos);
   }, [datos]);
 
   const handleChange = (e) => {

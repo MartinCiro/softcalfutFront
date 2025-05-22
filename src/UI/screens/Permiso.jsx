@@ -13,9 +13,9 @@ import SearchInput from "@componentsUseable/SearchInput";
 import ErrorMessage from "@componentsUseable/ErrorMessage";
 import TableGeneric from "@componentsUseable/TableGeneric";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
-import PermisoVer from "@src/UI/useable-components/Permisos/PermisoVer";
-import PermisoEditor from "@src/UI/useable-components/Permisos/PermisoEditor";
-import PermisoCreador from "@src/UI/useable-components/Permisos/PermisoCreador";
+import PermisoVer from "@componentsUseable/Permisos/PermisoVer";
+import PermisoEditor from "@componentsUseable/Permisos/PermisoEditor";
+import PermisoCreador from "@componentsUseable/Permisos/PermisoCreador";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Permiso.css"; // Styles
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import EmptyMessage from "@componentsUseable/EmptyMessage";
+import PermisosEditor from "@componentsUseable/Permisos/PermisosEditor";
 import ModalEditarGenerico from "@componentsUseable/FormModal/EditModalFormulario";
-import PermisosEditor from "@src/UI/useable-components/Permisos/PermisosEditor";
 
 const ModalEditarRol = ({
     show,
@@ -63,7 +64,7 @@ const ModalEditarRol = ({
             onSubmit={handleGuardar}
         >
             {permisosEditados.length === 0 ? (
-                <p className="text-muted text-center">Este rol no tiene permisos asignados.</p>
+                <EmptyMessage mensaje="Este rol no tiene permisos asignados." />
             ) : (
                 <PermisosEditor
                     permisosEditados={permisosEditados}

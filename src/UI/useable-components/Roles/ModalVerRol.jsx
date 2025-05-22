@@ -3,6 +3,7 @@ import useSearch from "@hooks/useSearch";
 import usePagination from "@hooks/usePagination";
 import Paginator from "@componentsUseable/Paginator";
 import SearchInput from "@componentsUseable/SearchInput";
+import EmptyMessage from "@componentsUseable/EmptyMessage";
 import TableGeneric from "@componentsUseable/TableGeneric";
 import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
 import { dataFormated } from "@utils/helpers";
@@ -28,7 +29,7 @@ const ModalVerRol = ({ show, onClose, campos = [], titulo = "Ver rol", datos = {
     <ModalVerGenerico show={show} campos={sinPermisos} datos={datos} onClose={onClose} titulo={titulo}>
       <div>
         {dataPermisos.length === 0 ? (
-          <p className="text-muted text-center">Este rol no tiene permisos asignados.</p>
+          <EmptyMessage mensaje="Este rol no tiene permisos asignados." />
         ) : (
           <>
             <div className="mb-3">
