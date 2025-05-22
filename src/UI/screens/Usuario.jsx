@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Container, Row, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
-import PermisoService from "@services/PermisoService"; // Services
+import UsuarioService from "@services/UsuarioService"; // Services
 import useSearch from "@hooks/useSearch"; // Hooks
 import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
@@ -13,62 +13,59 @@ import SearchInput from "@componentsUseable/SearchInput";
 import ErrorMessage from "@componentsUseable/ErrorMessage";
 import TableGeneric from "@componentsUseable/TableGeneric";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
-import PermisoVer from "@src/UI/useable-components/Permisos/PermisoVer";
-import PermisoEditor from "@src/UI/useable-components/Permisos/PermisoEditor";
-import PermisoCreador from "@src/UI/useable-components/Permisos/PermisoCreador";
+import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
+import ModalEditForm from "@componentsUseable/FormModal/EditModalFormulario";
+import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Permiso.css"; // Styles
 
-const PermisosList = () => {
-  const { data: permisos, loading, error, reload: cargarPermisos } = useFetchData(PermisoService.permisos);
+const UsuariosList = () => {
+  const { data: usuarios, loading, error, reload: cargarUsuarios } = useFetchData(UsuarioService.usuarios);
   const { handleError } = useErrorHandler();
 
   const [modalVer, setModalVer] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [modalCrearShow, setModalCrearShow] = useState(false);
-  const [permisoSeleccionado, setPermisoSeleccionado] = useState(null);
-  const [permisoVer, setPermisoVer] = useState(null);
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
+  const [usuarioVer, setUsuarioVer] = useState(null);
   const [modoEdicion, setModoEdicion] = useState(false);
-  const { query, setQuery, filtered } = useSearch(permisos, "entidad");
+  const { query, setQuery, filtered } = useSearch(usuarios, "nombre_usuario");
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
-  const columnsPermiso = [
-    { key: "entidad", label: "Nombre" },
-    { key: "descripcion", label: "Descripción" }
+  const columnsUsuario = [
+    { key: "nombre_usuario", label: "Nombre" }
   ];
   const confirmModal = useModalConfirm();
 
-  const camposPermiso = [
-    { nombre: "entidad", label: "Nombre", tipo: "text", bloqueado: true },
-    { nombre: "descripcion", label: "Descripción", tipo: "text" }
+  const camposUsuario = [
+    { nombre: "nombre_usuario", label: "Nombre", tipo: "text" }
   ];
 
-  const handleEditar = (permiso) => {
-    const permisosSeleccionados = {
-      [permiso.entidad]: permiso.permisos || []
-    };
-    setPermisoSeleccionado({
-      ...permiso,
-      permisosSeleccionados
-    });
+  const handleEditar = (usuario) => {
     setModoEdicion(true);
+    setUsuarioSeleccionado(usuario);
     setModalShow(true);
   };
 
-  const handleVer = (permiso) => {
-    setPermisoVer(permiso);
+  const handleVer = (usuario) => {
+    setUsuarioVer(usuario);
     setModalVer(true);
   };
 
-  const guardarOActualizarPermiso = async (datosForm) => {
+  const guardarOActualizarUsuario = async (datosForm) => {
     const esEdicion = modoEdicion;
+    const datosTransformados = {
+      ...datosForm,
+      nombre: datosForm.nombre_usuario,
+    };
+    delete datosTransformados.nombre_usuario;
     try {
       setGuardando(true);
-      esEdicion ? await PermisoService.upPermiso(datosForm.permisos) : await PermisoService.crPermiso(datosForm);
-      sessionStorage.removeItem("permisos");
-      await cargarPermisos();
-      setErrorGuardar({ message: esEdicion ? "Permiso actualizado correctamente" : "Permiso creado correctamente", variant: "success" });
+      esEdicion ? await UsuarioService.upUsuario(datosTransformados) : await UsuarioService.crUsuario(datosTransformados);
+      sessionStorage.removeItem("usuarios");
+      await cargarUsuarios();
+      setErrorGuardar({ message: esEdicion ? "Usuario actualizado correctamente" : "Usuario creado correctamente", variant: "success" });
     } catch (err) {
       const mensaje = handleError(err);
       setErrorGuardar({ message: mensaje, variant: "danger" });
@@ -85,20 +82,20 @@ const PermisosList = () => {
   return (
 
     <Container className="py-4">
-      {/* <h2 className="mb-4 text-center fw-bold">Permisos</h2> */}
+      {/* <h2 className="mb-4 text-center fw-bold">Usuarios</h2> */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold mb-0">Permisos</h2>
+        <h2 className="fw-bold mb-0">Usuarios</h2>
         <div className="d-flex align-items-center gap-2">
           <Button
             variant="success"
             onClick={() => {
               setModoEdicion(false);
-              setPermisoSeleccionado(null);
+              setUsuarioSeleccionado(null);
               setModalCrearShow(true);
             }}
             className="rounded-circle d-flex justify-content-center align-items-center"
             style={{ width: "45px", height: "45px" }}
-            title="Crear Permiso"
+            title="Crear Usuario"
           >
             <MDBIcon fas icon="plus" />
           </Button>
@@ -114,24 +111,25 @@ const PermisosList = () => {
 
       <TableGeneric
         data={paginatedData}
-        columns={columnsPermiso}
+        columns={columnsUsuario}
         onEdit={handleEditar}
         onView={handleVer}
       />
 
       {/* Modal para editar */}
-      {modalShow && permisoSeleccionado && (
-        <PermisoEditor
+      {modalShow && usuarioSeleccionado && (
+        <ModalEditForm
+          titulo={"Editar Usuario"}
           show={modalShow}
           onClose={() => setModalShow(false)}
-          permisosSeleccionado={permisoSeleccionado}
-          camposPermiso={camposPermiso}
-          onGuardar={(nuevosPermisos) => {
+          datos={usuarioSeleccionado}
+          campos={camposUsuario}
+          onSubmit={(nuevosUsuarios) => {
             const datosForm = {
-              ...permisoSeleccionado,
-              permisos: nuevosPermisos
+              ...usuarioSeleccionado,
+              ...nuevosUsuarios
             };
-            guardarOActualizarPermiso(datosForm);
+            guardarOActualizarUsuario(datosForm);
             setModalShow(false);
           }}
         />
@@ -139,11 +137,11 @@ const PermisosList = () => {
 
       {/* Modal para ver */}
       {modalVer && (
-        <PermisoVer
+        <ModalVerGenerico
           show={modalVer}
           onClose={() => setModalVer(false)}
-          campos={camposPermiso}
-          datos={permisoVer}
+          campos={camposUsuario}
+          datos={usuarioVer}
         />
       )}
 
@@ -155,12 +153,12 @@ const PermisosList = () => {
       />
 
       {modalCrearShow && (
-        <PermisoCreador
+        <CreateModalFormulario
           show={modalCrearShow}
           onClose={() => setModalCrearShow(false)}
-          campos={camposPermiso}
-          onSubmit={guardarOActualizarPermiso}
-          permisosDisponibles={permisos}
+          campos={camposUsuario}
+          onSubmit={guardarOActualizarUsuario}
+          usuariosDisponibles={usuarios}
           guardando={guardando}
         />
       )}
@@ -178,4 +176,4 @@ const PermisosList = () => {
   );
 };
 
-export default PermisosList;
+export default UsuariosList;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Container, Row, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
-import PermisoService from "@services/PermisoService"; // Services
+import EquipoService from "@services/EquipoService"; // Services
 import useSearch from "@hooks/useSearch"; // Hooks
 import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
@@ -13,62 +13,80 @@ import SearchInput from "@componentsUseable/SearchInput";
 import ErrorMessage from "@componentsUseable/ErrorMessage";
 import TableGeneric from "@componentsUseable/TableGeneric";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
-import PermisoVer from "@src/UI/useable-components/Permisos/PermisoVer";
-import PermisoEditor from "@src/UI/useable-components/Permisos/PermisoEditor";
-import PermisoCreador from "@src/UI/useable-components/Permisos/PermisoCreador";
+import ModalVerEquipo from "@componentsUseable/Equipos/ModalVerEquipo";
+import ModalEditForm from "@componentsUseable/FormModal/EditModalFormulario";
+import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Permiso.css"; // Styles
 
-const PermisosList = () => {
-  const { data: permisos, loading, error, reload: cargarPermisos } = useFetchData(PermisoService.permisos);
+const EquiposList = () => {
+  const { data: equipos, loading, error, reload: cargarEquipos } = useFetchData(EquipoService.equipos);
   const { handleError } = useErrorHandler();
 
   const [modalVer, setModalVer] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [modalCrearShow, setModalCrearShow] = useState(false);
-  const [permisoSeleccionado, setPermisoSeleccionado] = useState(null);
-  const [permisoVer, setPermisoVer] = useState(null);
+  const [equipoSeleccionado, setEquipoSeleccionado] = useState(null);
+  const [equipoVer, setEquipoVer] = useState(null);
   const [modoEdicion, setModoEdicion] = useState(false);
-  const { query, setQuery, filtered } = useSearch(permisos, "entidad");
+  const { query, setQuery, filtered } = useSearch(equipos, "nom_equipo");
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
-  const columnsPermiso = [
-    { key: "entidad", label: "Nombre" },
-    { key: "descripcion", label: "Descripción" }
+  const columnsEquipo = [
+    { key: "nom_equipo", label: "Nombre del equipo" },
+    {
+      key: "representante",
+      label: "Nombre del representante",
+      render: (rep) => rep ? `${rep.nombres}` : "Sin representante"
+    }
   ];
   const confirmModal = useModalConfirm();
 
-  const camposPermiso = [
-    { nombre: "entidad", label: "Nombre", tipo: "text", bloqueado: true },
-    { nombre: "descripcion", label: "Descripción", tipo: "text" }
+  const camposEquipo = [
+    { nombre: "nom_equipo", label: "Nombre" },
+    {
+      nombre: "nombre_representante",
+      label: "Representante",
+      render: (_, datos) => datos.representante?.nombres || "Sin representante"
+    },
+    {
+      nombre: "documento_representante",
+      label: "Documento del representante",
+      render: (_, datos) => datos.representante?.documento || "Sin documento"
+    },
+    {
+      nombre: "estado_representante",
+      label: "Estado del representante",
+      render: (_, datos) => datos.representante?.estado || "Sin estado"
+    }
   ];
 
-  const handleEditar = (permiso) => {
-    const permisosSeleccionados = {
-      [permiso.entidad]: permiso.permisos || []
-    };
-    setPermisoSeleccionado({
-      ...permiso,
-      permisosSeleccionados
-    });
+
+  const handleEditar = (equipo) => {
     setModoEdicion(true);
+    setEquipoSeleccionado(equipo);
     setModalShow(true);
   };
 
-  const handleVer = (permiso) => {
-    setPermisoVer(permiso);
+  const handleVer = (equipo) => {
+    setEquipoVer(equipo);
     setModalVer(true);
   };
 
-  const guardarOActualizarPermiso = async (datosForm) => {
+  const guardarOActualizarEquipo = async (datosForm) => {
     const esEdicion = modoEdicion;
+    const datosTransformados = {
+      ...datosForm,
+      nombre: datosForm.nombre_equipo,
+    };
+    delete datosTransformados.nombre_equipo;
     try {
       setGuardando(true);
-      esEdicion ? await PermisoService.upPermiso(datosForm.permisos) : await PermisoService.crPermiso(datosForm);
-      sessionStorage.removeItem("permisos");
-      await cargarPermisos();
-      setErrorGuardar({ message: esEdicion ? "Permiso actualizado correctamente" : "Permiso creado correctamente", variant: "success" });
+      esEdicion ? await EquipoService.upEquipo(datosTransformados) : await EquipoService.crEquipo(datosTransformados);
+      sessionStorage.removeItem("equipos");
+      await cargarEquipos();
+      setErrorGuardar({ message: esEdicion ? "Equipo actualizado correctamente" : "Equipo creado correctamente", variant: "success" });
     } catch (err) {
       const mensaje = handleError(err);
       setErrorGuardar({ message: mensaje, variant: "danger" });
@@ -85,20 +103,20 @@ const PermisosList = () => {
   return (
 
     <Container className="py-4">
-      {/* <h2 className="mb-4 text-center fw-bold">Permisos</h2> */}
+      {/* <h2 className="mb-4 text-center fw-bold">Equipos</h2> */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold mb-0">Permisos</h2>
+        <h2 className="fw-bold mb-0">Equipos</h2>
         <div className="d-flex align-items-center gap-2">
           <Button
             variant="success"
             onClick={() => {
               setModoEdicion(false);
-              setPermisoSeleccionado(null);
+              setEquipoSeleccionado(null);
               setModalCrearShow(true);
             }}
             className="rounded-circle d-flex justify-content-center align-items-center"
             style={{ width: "45px", height: "45px" }}
-            title="Crear Permiso"
+            title="Crear Equipo"
           >
             <MDBIcon fas icon="plus" />
           </Button>
@@ -114,24 +132,25 @@ const PermisosList = () => {
 
       <TableGeneric
         data={paginatedData}
-        columns={columnsPermiso}
+        columns={columnsEquipo}
         onEdit={handleEditar}
         onView={handleVer}
       />
 
       {/* Modal para editar */}
-      {modalShow && permisoSeleccionado && (
-        <PermisoEditor
+      {modalShow && equipoSeleccionado && (
+        <ModalEditForm
+          titulo={"Editar Equipo"}
           show={modalShow}
           onClose={() => setModalShow(false)}
-          permisosSeleccionado={permisoSeleccionado}
-          camposPermiso={camposPermiso}
-          onGuardar={(nuevosPermisos) => {
+          datos={equipoSeleccionado}
+          campos={camposEquipo}
+          onSubmit={(nuevosEquipos) => {
             const datosForm = {
-              ...permisoSeleccionado,
-              permisos: nuevosPermisos
+              ...equipoSeleccionado,
+              ...nuevosEquipos
             };
-            guardarOActualizarPermiso(datosForm);
+            guardarOActualizarEquipo(datosForm);
             setModalShow(false);
           }}
         />
@@ -139,11 +158,12 @@ const PermisosList = () => {
 
       {/* Modal para ver */}
       {modalVer && (
-        <PermisoVer
+        <ModalVerEquipo
           show={modalVer}
           onClose={() => setModalVer(false)}
-          campos={camposPermiso}
-          datos={permisoVer}
+          campos={camposEquipo}
+          datos={equipoVer}
+          titulo={"Detalles del equipo"}
         />
       )}
 
@@ -155,12 +175,12 @@ const PermisosList = () => {
       />
 
       {modalCrearShow && (
-        <PermisoCreador
+        <CreateModalFormulario
           show={modalCrearShow}
           onClose={() => setModalCrearShow(false)}
-          campos={camposPermiso}
-          onSubmit={guardarOActualizarPermiso}
-          permisosDisponibles={permisos}
+          campos={camposEquipo}
+          onSubmit={guardarOActualizarEquipo}
+          equiposDisponibles={equipos}
           guardando={guardando}
         />
       )}
@@ -178,4 +198,4 @@ const PermisosList = () => {
   );
 };
 
-export default PermisosList;
+export default EquiposList;

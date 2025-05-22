@@ -14,9 +14,9 @@ import LoadingSpinner from "@componentsUseable/Loading";
 import SearchInput from "@componentsUseable/SearchInput";
 import ErrorMessage from "@componentsUseable/ErrorMessage";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
-import ModalVerRol from "@src/UI/useable-components/roles/ModalVerRol";
-import ModalEditarRol from "@src/UI/useable-components/roles/ModalEditarRol";
-import ModalCreateRol from "@componentsUseable/roles/ModalCreateRol";
+import ModalVerRol from "@src/UI/useable-components/Roles/ModalVerRol";
+import ModalEditarRol from "@src/UI/useable-components/Roles/ModalEditarRol";
+import ModalCreateRol from "@src/UI/useable-components/Roles/ModalCreateRol";
 
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Anuncio.css";

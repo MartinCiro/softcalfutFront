@@ -17,7 +17,7 @@ const ModalVerGenerico = ({
       </Modal.Header>
       <Modal.Body>
         {campos.map((campo) => {
-          const valor = datos[campo.nombre];
+          const valor = campo.render ? campo.render(datos[campo.nombre], datos) : datos[campo.nombre];
 
           if (campo.tipo === "imagen" && valor) {
             return (
@@ -33,19 +33,21 @@ const ModalVerGenerico = ({
           }
 
           return (
-                <div key={campo.nombre} className="mb-3">
-                  <strong>{campo.label || campo.nombre}:</strong>
-                  <p style={{ whiteSpace: "pre-wrap", marginBottom: 0 }}>
-                    {valor === null || valor === undefined
-                      ? "Sin información"
-                      : typeof valor === "object"
+            <div key={campo.nombre} className="mb-3">
+              <strong>{campo.label || campo.nombre}:</strong>
+              <p style={{ whiteSpace: "pre-wrap", marginBottom: 0 }}>
+                {campo.render
+                  ? campo.render(valor, datos)
+                  : valor === null || valor === undefined
+                    ? "Sin información"
+                    : typeof valor === "object"
                       ? JSON.stringify(valor)
                       : valor}
-                  </p>
-                </div>
-              );
-            })}
-            {children}
+              </p>
+            </div>
+          );
+        })}
+        {children}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose}>

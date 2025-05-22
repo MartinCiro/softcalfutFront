@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ModalEditarGenerico from "@componentsUseable/FormModal/EditModalFormulario";
-import PermisosEditor from "@componentsUseable/permisos/PermisosEditor";
+import PermisosEditor from "@src/UI/useable-components/Permisos/PermisosEditor";
 
 const ModalEditarRol = ({
     show,

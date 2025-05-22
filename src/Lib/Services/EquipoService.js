@@ -5,28 +5,28 @@ import {
   loadSessionCache,
 } from "@utils/helpers";
 
-const UsuarioService = {
-  endpoint: "usuarios",
-  usuarios: async () => {
-    const cacheKey = UsuarioService.endpoint;
+const EquipoService = {
+  endpoint: "equipos",
+  equipos: async () => {
+    const cacheKey = EquipoService.endpoint;
     const cached = loadSessionCache(cacheKey);
     if (cached) return { result: cached };
     
     try {
-      const data = await getByEndpoint(UsuarioService.endpoint);
-      if (!data) throw new Error("No se recibieron usuarios.");
+      const data = await getByEndpoint(EquipoService.endpoint);
+      if (!data) throw new Error("No se recibieron equipos.");
       cacheSession(cacheKey, data);
       return { result: data };
     } catch (error) {
-      console.error("Error al obtener usuarios:", error);
+      console.error("Error al obtener equipos:", error);
       throw new Error(getFriendlyErrorMessage(error));
     }
   },
 
-  upUsuario: async (data) => {
+  upEquipo: async (data) => {
     try {
       const response = await getByEndpoint(
-        UsuarioService.endpoint,
+        EquipoService.endpoint,
         data,
         "put"
       );
@@ -37,10 +37,10 @@ const UsuarioService = {
     }
   },
 
-  crUsuario: async (data) => {
+  crEquipo: async (data) => {
     try {
       const response = await getByEndpoint(
-        UsuarioService.endpoint,
+        EquipoService.endpoint,
         data,
         "post"
       );
@@ -52,4 +52,4 @@ const UsuarioService = {
   },
 };
 
-export default UsuarioService;
+export default EquipoService;
