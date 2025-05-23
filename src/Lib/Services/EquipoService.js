@@ -25,11 +25,7 @@ const EquipoService = {
 
   upEquipo: async (data) => {
     try {
-      const response = await getByEndpoint(
-        EquipoService.endpoint,
-        data,
-        "put"
-      );
+      const response = await getByEndpoint(EquipoService.endpoint, data, "put");
       return response;
     } catch (error) {
       console.error("Error al actualizar rol:", error);
