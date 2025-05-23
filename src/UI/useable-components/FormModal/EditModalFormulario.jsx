@@ -19,7 +19,9 @@ const ModalEditForm = ({
   const [guardando, setGuardando] = useState(false);
   const { error, handleError, resetError } = useErrorHandler();
   useEffect(() => {
-    if (JSON.stringify(formState) !== JSON.stringify(datos)) {
+    const claves = Object.keys(datos);
+    const hayCambio = claves.some(k => formState[k] !== datos[k]);
+    if (hayCambio) {
       setFormState(datos || {});
       setMensajeExito(null);
       resetError();
@@ -77,7 +79,7 @@ const ModalEditForm = ({
           {campos.map((campo) => {
             const isTextarea = campo.tipo === "textarea";
             const value = formState[campo.nombre] || "";
-            const textareaRef = isTextarea ? useAutoResizeTextarea(value) : null;
+            const textareaRef = useAutoResizeTextarea(isTextarea ? value : "");
 
             return (
               <Form.Group key={campo.nombre} className="mb-3">

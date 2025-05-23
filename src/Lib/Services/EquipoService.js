@@ -11,7 +11,7 @@ const EquipoService = {
     const cacheKey = EquipoService.endpoint;
     const cached = loadSessionCache(cacheKey);
     if (cached) return { result: cached };
-    
+
     try {
       const data = await getByEndpoint(EquipoService.endpoint);
       if (!data) throw new Error("No se recibieron equipos.");

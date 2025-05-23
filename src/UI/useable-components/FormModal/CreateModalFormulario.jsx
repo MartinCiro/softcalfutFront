@@ -21,7 +21,6 @@ const CreateModalFormulario = ({
   const { error, handleError, resetError } = useErrorHandler();
   const textareaRefs = useRef({});
 
-  // Si se pasa un estado externo (datos), sincronízalo al abrir el modal
   useEffect(() => {
     if (datos && Object.keys(datos).length > 0) setFormState(datos);
   }, [datos]);
@@ -29,13 +28,9 @@ const CreateModalFormulario = ({
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Actualiza estado interno
     setFormState((prev) => ({ ...prev, [name]: value }));
 
-    // Si se pasa una función onChange externa, notifícale el cambio
-    if (typeof onChange === "function") {
-      onChange(name, value);
-    }
+    if (typeof onChange === "function") onChange(name, value);
   };
 
   const handleSubmit = async () => {

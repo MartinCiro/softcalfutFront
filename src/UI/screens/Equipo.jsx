@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Container, Row, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
 import EquipoService from "@services/EquipoService"; // Services
+import UsuarioService from "@services/UsuarioService";
 import useSearch from "@hooks/useSearch"; // Hooks
 import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
@@ -14,13 +15,14 @@ import ErrorMessage from "@componentsUseable/ErrorMessage";
 import TableGeneric from "@componentsUseable/TableGeneric";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
 import ModalVerEquipo from "@componentsUseable/Equipos/ModalVerEquipo";
-import ModalEditForm from "@componentsUseable/FormModal/EditModalFormulario";
-import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
+import ModalEditEquipo from "@componentsUseable/Equipos/ModalEditEquipo";
+import ModalCreateEquipo from "@componentsUseable/Equipos/ModalCreateEquipo";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Permiso.css"; // Styles
 
 const EquiposList = () => {
   const { data: equipos, loading, error, reload: cargarEquipos } = useFetchData(EquipoService.equipos);
+  const { data: usuarios } = useFetchData(UsuarioService.usuarios);
   const { handleError } = useErrorHandler();
 
   const [modalVer, setModalVer] = useState(false);
@@ -44,7 +46,7 @@ const EquiposList = () => {
   const confirmModal = useModalConfirm();
 
   const camposEquipo = [
-    { nombre: "nom_equipo", label: "Nombre" },
+    { nombre: "nom_equipo", label: "Nombre del equipo" },
     {
       nombre: "nombre_representante",
       label: "Representante",
@@ -54,9 +56,13 @@ const EquiposList = () => {
       nombre: "documento_representante",
       label: "Documento del representante",
       render: (_, datos) => datos.representante?.documento || "Sin documento"
+    },
+    {
+      nombre: "estado_representante",
+      label: "Estado del representante",
+      render: (_, datos) => datos.representante?.estado || "Sin estado"
     }
   ];
-
 
   const handleEditar = (equipo) => {
     setModoEdicion(true);
@@ -98,7 +104,6 @@ const EquiposList = () => {
   return (
 
     <Container className="py-4">
-      {/* <h2 className="mb-4 text-center fw-bold">Equipos</h2> */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold mb-0">Equipos</h2>
         <div className="d-flex align-items-center gap-2">
@@ -134,7 +139,7 @@ const EquiposList = () => {
 
       {/* Modal para editar */}
       {modalShow && equipoSeleccionado && (
-        <ModalEditForm
+        <ModalEditEquipo
           titulo={"Editar Equipo"}
           show={modalShow}
           onClose={() => setModalShow(false)}
@@ -170,13 +175,14 @@ const EquiposList = () => {
       />
 
       {modalCrearShow && (
-        <CreateModalFormulario
+        <ModalCreateEquipo
           show={modalCrearShow}
           onClose={() => setModalCrearShow(false)}
           campos={camposEquipo}
           onSubmit={guardarOActualizarEquipo}
           equiposDisponibles={equipos}
           guardando={guardando}
+          usuarios={usuarios}
         />
       )}
 

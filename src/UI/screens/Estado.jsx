@@ -79,7 +79,6 @@ const EstadosList = () => {
   return (
 
     <Container className="py-4">
-      {/* <h2 className="mb-4 text-center fw-bold">Estados</h2> */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold mb-0">Estados</h2>
         <div className="d-flex align-items-center gap-2">

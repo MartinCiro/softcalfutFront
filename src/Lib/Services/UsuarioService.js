@@ -10,7 +10,7 @@ const UsuarioService = {
   usuarios: async () => {
     const cacheKey = UsuarioService.endpoint;
     const cached = loadSessionCache(cacheKey);
-    if (cached) return { result: cached };
+    //if (cached) return { result: cached };
     
     try {
       const data = await getByEndpoint(UsuarioService.endpoint);
