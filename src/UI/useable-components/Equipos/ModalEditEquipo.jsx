@@ -1,8 +1,9 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { Form } from "react-bootstrap";
 
 import useSearch from "@hooks/useSearch";
 import usePagination from "@hooks/usePagination";
+import useRadioSelection from "@hooks/useRadioSelection";
 
 import Paginator from "@componentsUseable/Paginator";
 import SearchInput from "@componentsUseable/SearchInput";
@@ -10,6 +11,7 @@ import EmptyMessage from "@componentsUseable/EmptyMessage";
 import TableGeneric from "@componentsUseable/TableGeneric";
 import SelectSearch from "@componentsUseable/SelectSearch";
 import ModalEditForm from "@componentsUseable/FormModal/EditModalFormulario";
+import RadioSelection from "@componentsUseable/RadioSelection";
 
 const ModalEditEquipo = ({
     show,
@@ -21,6 +23,7 @@ const ModalEditEquipo = ({
     onSubmit,
     loading,
 }) => {
+    //Elimino estos campos para el formulario
     const camposFiltrados = campos.filter(
         (campo) =>
             campo.nombre !== "documento_representante" &&
@@ -28,20 +31,44 @@ const ModalEditEquipo = ({
             campo.nombre !== "nombre_representante"
     );
 
+    // Filtrar los usuarios para obtener solo los jugadores (rol "Jugador" o "AdminJugador")
     const jugadoresDisponibles = useMemo(
         () => usuarios.filter((u) => u.rol === "Jugador" || u.rol === "AdminJugador"),
         [usuarios]
     );
 
+    // Si el usuario representa esta en la lista aparecera de primero en el select
     const [encargado, setEncargado] = useState(() =>
-        jugadoresDisponibles.find((u) => u.documento === datos.encargado) || null
+        jugadoresDisponibles.find((u) => u.documento === datos?.representante?.documento) || null
     );
 
+    // Filtrar los jugadores seleccionados para que solo contengan los que ya están en el equipo
+    // y no los que están en la lista de jugadores disponibles
+    // (esto es para evitar que se repitan en la lista de seleccionados)
     const [jugadoresSeleccionados, setJugadoresSeleccionados] = useState(() =>
-        jugadoresDisponibles.filter((u) => datos.jugadores?.includes(u.documento))
+        jugadoresDisponibles.filter((u) =>
+            datos.jugadores?.some((j) => j.documento === u.documento)
+        )
     );
 
     const { query, setQuery, filtered } = useSearch(jugadoresDisponibles, "nombres");
+    const options =[
+            { label: "Todos", value: "todos" },
+            { label: "Activos", value: "activo" },
+            { label: "Inactivos", value: "inactivo" },
+        ]
+    // Hook para selección de estado
+    const { selection, setSelection } = useRadioSelection({
+        options: options,
+        initialValue: "todos",
+    });
+
+    const jugadoresFiltrados = useMemo(() => {
+        if (selection === "todos") return filtered;
+        return filtered.filter(
+            (j) => j.estado?.toLowerCase() === selection.toLowerCase()
+        );
+    }, [filtered, selection]);
 
     const {
         paginatedData,
@@ -50,7 +77,7 @@ const ModalEditEquipo = ({
         nextPage,
         prevPage,
         shouldShowPaginator,
-    } = usePagination(filtered, 6);
+    } = usePagination(jugadoresFiltrados, 6);
 
     const toggleJugador = (jugador) => {
         setJugadoresSeleccionados((prev) =>
@@ -116,8 +143,7 @@ const ModalEditEquipo = ({
                 </div>
             )}
 
-            <div>
-                <h5>Seleccionar jugadores</h5>
+            <div className="mt-4">
                 {jugadoresDisponibles.length === 0 ? (
                     <EmptyMessage mensaje="No hay jugadores disponibles." />
                 ) : (
@@ -127,9 +153,16 @@ const ModalEditEquipo = ({
                                 value={query}
                                 onChange={setQuery}
                                 placeholder="Buscar por nombre..."
-                                title="Jugadores"
+                                title="Seleccionar jugadores"
                             />
                         </div>
+
+                        {/* <div className="mb-3">
+                            <RadioSelection
+                                options={options}
+                                initialValue={selection}
+                            />
+                        </div> */}
 
                         <TableGeneric
                             data={paginatedData}

@@ -145,6 +145,7 @@ const EquiposList = () => {
           onClose={() => setModalShow(false)}
           datos={equipoSeleccionado}
           campos={camposEquipo}
+          usuarios={usuarios}
           onSubmit={(nuevosEquipos) => {
             const datosForm = {
               ...equipoSeleccionado,
