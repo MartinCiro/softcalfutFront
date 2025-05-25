@@ -20,7 +20,7 @@ const Dashboard = () => {
       </div>
 
       {/* Componente de anuncios maneja su propio estado */}
-      <EquiposList />
+      <PermisosList />
     </div>
   );
 };
