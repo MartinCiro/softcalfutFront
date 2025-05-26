@@ -108,7 +108,7 @@ const AnunciosList = () => {
           <Button
             variant="success"
             onClick={() => setModalCrearShow(true)}
-            className="rounded-circle d-flex justify-content-center align-items-center"
+            className="rounded-circle d-flex justify-content-center align-items-center btn_add"
             style={{ width: "45px", height: "45px" }}
             title="Crear Anuncio"
           >
