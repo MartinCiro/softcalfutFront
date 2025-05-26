@@ -10,4 +10,4 @@ services:
       - /usr/src/app/node_modules/
     command: npm run dev -- --host
     environment:
-      - VITE_BASE_URL=localhost:8000
+      - VITE_API_URL=${VITE_API_URL}
