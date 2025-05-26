@@ -13,3 +13,13 @@
   margin-top: 0.25rem;
 }
 
+button {
+  &.btn_add {
+    background-color: var(--color-secundario) !important;
+    &:hover {
+      color: var(--color-primario) !important;
+      transform: scale(1.1);
+      transition: all 0.3s ease;
+    }
+  }
+}

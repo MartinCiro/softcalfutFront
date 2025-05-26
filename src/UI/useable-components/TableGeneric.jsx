@@ -45,24 +45,27 @@ const TableGeneric = ({
                                 {columns
                                     .filter((col) => col.key !== "id")
                                     .map((col) => (
-                                        <td key={col.key}>
-                                            {col.render
-                                                ? col.render(item[col.key], item) // Usa render personalizado si existe
-                                                : Array.isArray(item[col.key])
-                                                    ? item[col.key].map((icon, i) => (
-                                                        <span key={i} className="me-2">{icon}</span>
-                                                    ))
-                                                    : item[col.key]}
+                                        <td key={col.key} title={item[col.key]}>
+                                            <div className="text-truncate">
+                                                {col.render
+                                                    ? col.render(item[col.key], item)
+                                                    : Array.isArray(item[col.key])
+                                                        ? item[col.key].map((icon, i) => (
+                                                            <span key={i} className="me-2">{icon}</span>
+                                                        ))
+                                                        : item[col.key]}
+                                            </div>
                                         </td>
+
                                     ))}
 
                                 {mostrarAcciones && (
                                     <td className="text-center table-actions">
                                         {showView && (
                                             <Button
-                                                variant="outline-info"
+                                                variant="primary"
                                                 size="sm"
-                                                className="me-2"
+                                                className="me-2 view-button"
                                                 title="Ver"
                                                 onClick={() => onView?.(item)}
                                             >
@@ -71,9 +74,9 @@ const TableGeneric = ({
                                         )}
                                         {showEdit && (
                                             <Button
-                                                variant="outline-primary"
+                                                variant="warning"
                                                 size="sm"
-                                                className="me-2"
+                                                className="me-2 edit-button"
                                                 title="Editar"
                                                 onClick={() => onEdit?.(item)}
                                             >

@@ -1,5 +1,6 @@
 import React from "react";
 import { Form } from "react-bootstrap";
+import "@styles/SearchInput.css";
 
 const SearchInput = ({ value, onChange, placeholder = "Buscar...", title = "" }) => (
   <>

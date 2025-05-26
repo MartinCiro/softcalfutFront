@@ -114,7 +114,7 @@ const EquiposList = () => {
               setEquipoSeleccionado(null);
               setModalCrearShow(true);
             }}
-            className="rounded-circle d-flex justify-content-center align-items-center"
+            className="rounded-circle d-flex justify-content-center align-items-center btn_add"
             style={{ width: "45px", height: "45px" }}
             title="Crear Equipo"
           >
