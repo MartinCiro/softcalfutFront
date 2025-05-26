@@ -22,7 +22,7 @@ import "@styles/Permiso.css"; // Styles
 const UsuariosList = () => {
   const { data: usuarios, loading, error, reload: cargarUsuarios } = useFetchData(UsuarioService.usuarios);
   const { handleError } = useErrorHandler();
-
+  console.log(usuarios);
   const [modalVer, setModalVer] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [modalShow, setModalShow] = useState(false);
@@ -30,11 +30,24 @@ const UsuariosList = () => {
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [usuarioVer, setUsuarioVer] = useState(null);
   const [modoEdicion, setModoEdicion] = useState(false);
-  const { query, setQuery, filtered } = useSearch(usuarios, "nombre_usuario");
+  const { query, setQuery, filtered } = useSearch(usuarios, "nom_user");
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
   const columnsUsuario = [
-    { key: "nombre_usuario", label: "Nombre" }
+    { key: "documento", label: "Documento" },
+    { key: "nombres", label: "Nombre" },
+    {
+      key: "estado",
+      label: "Estado",
+      render: (estado) => (
+        <MDBIcon
+          fas
+          icon={estado ? "check-circle" : "times-circle"}
+          className={estado ? "text-success" : "text-danger"}
+          title={estado ? "Activo" : "Inactivo"}
+        />
+      )
+    }
   ];
   const confirmModal = useModalConfirm();
 
@@ -93,7 +106,7 @@ const UsuariosList = () => {
               setUsuarioSeleccionado(null);
               setModalCrearShow(true);
             }}
-            className="rounded-circle d-flex justify-content-center align-items-center"
+            className="rounded-circle d-flex justify-content-center align-items-center btn_add"
             style={{ width: "45px", height: "45px" }}
             title="Crear Usuario"
           >

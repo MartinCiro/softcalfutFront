@@ -6,6 +6,7 @@ import CategoriaList from '@screens/Categoria';
 import PermisosList from '@screens/Permiso';
 import TorneosList from '@screens/Torneo';
 import EquiposList from '@screens/Equipo';
+import UsuariosList from '@screens/Usuario';
 import { MDBIcon } from 'mdb-react-ui-kit';
 import '@styles/Dashboard.css';
 
@@ -20,7 +21,7 @@ const Dashboard = () => {
       </div>
 
       {/* Componente de anuncios maneja su propio estado */}
-      <EquiposList />
+      <UsuariosList />
     </div>
   );
 };

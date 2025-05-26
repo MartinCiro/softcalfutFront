@@ -1,0 +1,7 @@
+input {
+    color: var(--color-oscuro) !important;
+    &:focus {
+        border-color: var(--color-primario) !important;
+        box-shadow: 0 0 5px var(--color-primario) !important;
+    }
+}
