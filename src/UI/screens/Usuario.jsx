@@ -22,7 +22,6 @@ import "@styles/Permiso.css"; // Styles
 const UsuariosList = () => {
   const { data: usuarios, loading, error, reload: cargarUsuarios } = useFetchData(UsuarioService.usuarios);
   const { handleError } = useErrorHandler();
-  console.log(usuarios);
   const [modalVer, setModalVer] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [modalShow, setModalShow] = useState(false);
@@ -50,9 +49,16 @@ const UsuariosList = () => {
     }
   ];
   const confirmModal = useModalConfirm();
-
   const camposUsuario = [
-    { nombre: "nombre_usuario", label: "Nombre", tipo: "text" }
+    { nombre: "nombres", label: "Nombre", tipo: "text" },
+    { nombre: "nom_user", label: "Nombre de usuario", tipo: "text" },
+    { nombre: "fecha_nacimiento", label: "Fecha de nacimiento", tipo: "date" },
+    { nombre: "documento", label: "Documento", tipo: "text" },
+    { nombre: "email", label: "Correo", tipo: "email" },
+    { nombre: "num_contacto", label: "Numero de contacto", tipo: "text" },
+    { nombre: "info_perfil", label: "Informacion personal", tipo: "textarea" },
+    { nombre: "rol", label: "Rol", tipo: "text" },
+    { nombre: "estado", label: "Estado", tipo: "select", options: [{ value: true, label: "Activo" }, { value: false, label: "Inactivo" }] },
   ];
 
   const handleEditar = (usuario) => {
