@@ -3,7 +3,6 @@ import { Form } from "react-bootstrap";
 
 import useSearch from "@hooks/useSearch";
 import usePagination from "@hooks/usePagination";
-import useRadioSelection from "@hooks/useRadioSelection";
 
 import Paginator from "@componentsUseable/Paginator";
 import SearchInput from "@componentsUseable/SearchInput";
@@ -11,7 +10,6 @@ import EmptyMessage from "@componentsUseable/EmptyMessage";
 import TableGeneric from "@componentsUseable/TableGeneric";
 import SelectSearch from "@componentsUseable/SelectSearch";
 import ModalEditForm from "@componentsUseable/FormModal/EditModalFormulario";
-import RadioSelection from "@componentsUseable/RadioSelection";
 
 const ModalEditEquipo = ({
     show,
@@ -19,6 +17,7 @@ const ModalEditEquipo = ({
     campos,
     titulo = "Editar Equipo",
     usuarios = [],
+    categorias = [],
     datos = {},
     onSubmit,
     loading,
@@ -28,7 +27,8 @@ const ModalEditEquipo = ({
         (campo) =>
             campo.nombre !== "documento_representante" &&
             campo.nombre !== "estado_representante" &&
-            campo.nombre !== "nombre_representante"
+            campo.nombre !== "nombre_representante" &&
+            campo.nombre !== "categoria"
     );
 
     // Filtrar los usuarios para obtener solo los jugadores (rol "Jugador" o "AdminJugador")
@@ -42,6 +42,10 @@ const ModalEditEquipo = ({
         jugadoresDisponibles.find((u) => u.documento === datos?.representante?.documento) || null
     );
 
+    const [categoria, setCategoria ] = useState(() =>
+        categorias.find((c) => c.nombre_categoria === datos?.categoria) || null
+    );
+
     // Filtrar los jugadores seleccionados para que solo contengan los que ya están en el equipo
     // y no los que están en la lista de jugadores disponibles
     // (esto es para evitar que se repitan en la lista de seleccionados)
@@ -52,23 +56,7 @@ const ModalEditEquipo = ({
     );
 
     const { query, setQuery, filtered } = useSearch(jugadoresDisponibles, "nombres");
-    const options =[
-            { label: "Todos", value: "todos" },
-            { label: "Activos", value: "activo" },
-            { label: "Inactivos", value: "inactivo" },
-        ]
     // Hook para selección de estado
-    const { selection, setSelection } = useRadioSelection({
-        options: options,
-        initialValue: "todos",
-    });
-
-    const jugadoresFiltrados = useMemo(() => {
-        if (selection === "todos") return filtered;
-        return filtered.filter(
-            (j) => j.estado?.toLowerCase() === selection.toLowerCase()
-        );
-    }, [filtered, selection]);
 
     const {
         paginatedData,
@@ -77,7 +65,7 @@ const ModalEditEquipo = ({
         nextPage,
         prevPage,
         shouldShowPaginator,
-    } = usePagination(jugadoresFiltrados, 6);
+    } = usePagination(filtered, 6);
 
     const toggleJugador = (jugador) => {
         setJugadoresSeleccionados((prev) =>
@@ -124,10 +112,26 @@ const ModalEditEquipo = ({
         >
             <div className="mb-4 mt-3 w-100">
                 <SelectSearch
+                    label="Categoría"
+                    options={categorias}
+                    value={categoria}
+                    onChange={setCategoria}
+                    getOptionValue={(c) => (c ? c.nombre_categoria : "")}
+                    getOptionLabel={(c) => `${c.nombre_categoria}`}
+                    searchPlaceholder="Buscar por categoría..."
+                    defaultNoFilter="No se ha encontrado categorias."
+                    placeholder="Seleccione una categoría"
+                    filterKeys={["nombres"]}
+                />
+            </div>
+            <div className="mb-4 mt-3 w-100">
+                <SelectSearch
                     label="Encargado del equipo"
                     options={jugadoresDisponibles}
                     value={encargado}
                     onChange={setEncargado}
+                    defaultNoFilter="No se ha encontrado representantes."
+                    placeholder="Seleccione un representante"
                     getOptionValue={(u) => (u ? u.documento : "")}
                     getOptionLabel={(u) => `${u.nombres} (${u.rol})`}
                     searchPlaceholder="Buscar por nombre o cédula..."
@@ -156,20 +160,13 @@ const ModalEditEquipo = ({
                                 title="Seleccionar jugadores"
                             />
                         </div>
-
-                        {/* <div className="mb-3">
-                            <RadioSelection
-                                options={options}
-                                initialValue={selection}
-                            />
-                        </div> */}
-
                         <TableGeneric
                             data={paginatedData}
                             columns={columnas}
                             showEdit={false}
                             showView={false}
                             showDelete={false}
+                            sinDatos={"No se ha encontrado el jugador."}
                         />
 
                         {shouldShowPaginator && (

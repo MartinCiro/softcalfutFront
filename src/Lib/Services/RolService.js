@@ -22,7 +22,8 @@ const RolService = {
       return { result: data };
     } catch (error) {
       console.error("Error al obtener roles:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 
@@ -50,7 +51,8 @@ const RolService = {
       return response;
     } catch (error) {
       console.error("Error al actualizar rol:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 
@@ -74,7 +76,8 @@ const RolService = {
       return response;
     } catch (error) {
       console.error("Error al crear rol:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 };

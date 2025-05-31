@@ -17,6 +17,7 @@ const ModalCreateEquipo = ({
     campos,
     titulo = "Crear Equipo",
     usuarios = [],
+    categorias = [],
     onSubmit,
 }) => {
     const [formValues, setFormValues] = useState({
@@ -27,10 +28,12 @@ const ModalCreateEquipo = ({
     const camposFiltrados = campos.filter(
         (campo) => campo.nombre !== "documento_representante" &&
             campo.nombre !== "estado_representante" &&
-            campo.nombre !== "nombre_representante"
+            campo.nombre !== "nombre_representante" &&
+            campo.nombre !== "categoria"
     );
 
     const [encargado, setEncargado] = useState(null);
+    const [categoria, setCategoria] = useState(null);
     const [jugadoresSeleccionados, setJugadoresSeleccionados] = useState([]);
 
     const jugadoresDisponibles = useMemo(
@@ -81,6 +84,7 @@ const ModalCreateEquipo = ({
         onSubmit({
             nom_equipo: formValues.nom_equipo.trim(),
             encargado: encargado?.documento ?? null,
+            categoria: categoria.nombre_categoria,
             jugadores: jugadoresSeleccionados.map(j => j.documento),
         });
         onClose();
@@ -97,6 +101,20 @@ const ModalCreateEquipo = ({
             onChange={handleFormChange}
             onSubmit={handleGuardar}
         >
+            <div className="mb-4 mt-3 w-100">
+                <SelectSearch
+                    label="Categoría"
+                    options={categorias}
+                    value={categoria}
+                    onChange={setCategoria}
+                    getOptionValue={(c) => (c ? c.nombre_categoria : "")}
+                    getOptionLabel={(c) => `${c.nombre_categoria}`}
+                    searchPlaceholder="Buscar por categoría..."
+                    defaultNoFilter="No se ha encontrado categorias."
+                    placeholder="Seleccione una categoría"
+                    filterKeys={["nombres"]}
+                />
+            </div>
             <div className="mb-4 mt-3 w-100">
                 <SelectSearch
                     label="Encargado del equipo"
@@ -138,6 +156,7 @@ const ModalCreateEquipo = ({
                             showEdit={false}
                             showView={false}
                             showDelete={false}
+                            sinDatos={"No se encontraron jugadores."}
                         />
 
                         {shouldShowPaginator && (

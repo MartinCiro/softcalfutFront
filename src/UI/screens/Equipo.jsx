@@ -3,6 +3,7 @@ import { Container, Row, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
 import EquipoService from "@services/EquipoService"; // Services
 import UsuarioService from "@services/UsuarioService";
+import CategoriaService from "@services/CategoriaService";
 import useSearch from "@hooks/useSearch"; // Hooks
 import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
@@ -22,7 +23,9 @@ import "@styles/Permiso.css"; // Styles
 
 const EquiposList = () => {
   const { data: equipos, loading, error, reload: cargarEquipos } = useFetchData(EquipoService.equipos);
+  const { data: categorias } = useFetchData(CategoriaService.categorias);
   const { data: usuarios } = useFetchData(UsuarioService.usuarios);
+
   const { handleError } = useErrorHandler();
 
   const [modalVer, setModalVer] = useState(false);
@@ -35,12 +38,14 @@ const EquiposList = () => {
   const { query, setQuery, filtered } = useSearch(equipos, "nom_equipo");
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
+
   const columnsEquipo = [
     { key: "nom_equipo", label: "Nombre del equipo" },
+    { key: "categoria", label: "Categoria" },
     {
       key: "representante",
       label: "Nombre del representante",
-      render: (rep) => rep ? `${rep.nombres}` : "Sin representante"
+      render: (rep) => rep ? `${rep.nombre}` : "Sin representante"
     }
   ];
   const confirmModal = useModalConfirm();
@@ -50,7 +55,11 @@ const EquiposList = () => {
     {
       nombre: "nombre_representante",
       label: "Representante",
-      render: (_, datos) => datos.representante?.nombres || "Sin representante"
+      render: (_, datos) => datos.representante?.nombre || "Sin representante"
+    },
+    {
+      nombre: "categoria",
+      label: "Categoria"
     },
     {
       nombre: "documento_representante",
@@ -76,6 +85,7 @@ const EquiposList = () => {
   };
 
   const guardarOActualizarEquipo = async (datosForm) => {
+    console.log(datosForm);
     const esEdicion = modoEdicion;
     const datosTransformados = {
       ...datosForm,
@@ -135,6 +145,7 @@ const EquiposList = () => {
         columns={columnsEquipo}
         onEdit={handleEditar}
         onView={handleVer}
+        sinDatos={"No se encontraron equipos"}
       />
 
       {/* Modal para editar */}
@@ -146,6 +157,7 @@ const EquiposList = () => {
           datos={equipoSeleccionado}
           campos={camposEquipo}
           usuarios={usuarios}
+          categorias={categorias}
           onSubmit={(nuevosEquipos) => {
             const datosForm = {
               ...equipoSeleccionado,
@@ -184,6 +196,7 @@ const EquiposList = () => {
           equiposDisponibles={equipos}
           guardando={guardando}
           usuarios={usuarios}
+          categorias={categorias}
         />
       )}
 

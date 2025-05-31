@@ -32,7 +32,8 @@ const PermisoService = {
       return { result: permisosNormalizados };
     } catch (error) {
       console.error("Error al obtener permisos:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 
@@ -52,7 +53,8 @@ const PermisoService = {
       return response;
     } catch (error) {
       console.error("Error al actualizar rol:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 
@@ -70,7 +72,8 @@ const PermisoService = {
       return response;
     } catch (error) {
       console.error("Error al actualizar rol:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 };

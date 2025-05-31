@@ -38,6 +38,7 @@ const ModalVerEquipo = ({ show, onClose, campos = [], titulo = "Ver equipo", dat
               showEdit={false}
               showView={false}
               showDelete={false}
+              sinDatos={"No se ha encontrado el jugador o jugadores buscados."}
             />
 
             {shouldShowPaginator && (

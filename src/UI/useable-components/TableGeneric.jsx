@@ -14,6 +14,7 @@ const TableGeneric = ({
     showDelete = false,
     showCreate = false,
     title = "",
+    sinDatos = "Sin datos disponibles",
 }) => {
     // Verifica si se debe mostrar la columna de acciones
     const mostrarAcciones = showView || showEdit || showDelete || showCreate;
@@ -36,7 +37,7 @@ const TableGeneric = ({
                     {data.length === 0 ? (
                         <tr>
                             <td colSpan={columns.length + (mostrarAcciones ? 1 : 0)} className="text-center">
-                                Sin datos disponibles
+                                {sinDatos}
                             </td>
                         </tr>
                     ) : (
