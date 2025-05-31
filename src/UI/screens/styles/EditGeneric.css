@@ -68,37 +68,5 @@
   .modal-footer {
     background-color: var(--color-oscuro);
     border-top: 3px solid var(--color-primario);
-
-    .btn-primary {
-      background-color: var(--color-secundario) !important;
-      color: var(--color-claro);
-      font-weight: bold;
-
-      &:hover {
-        background-color: var(--color-secundario);
-        box-shadow: 0 0 10px var(--color-primario);
-        color: var(--color-oscuro);
-        border-radius: 5px;
-        font-weight: semibold;
-        transition: all 0.3s ease;
-        transform: translateY(-2px);
-      }
-    }
-
-    .btn-secondary {
-      background-color: var(--color-claro) !important;
-      color: var(--color-oscuro) !important;
-      font-weight: bold;
-
-      &:hover {
-        background-color: var(--color-claro);
-        box-shadow: 0 0 10px var(--color-primario) !important;
-        color: var(--color-oscuro);
-        border-radius: 5px;
-        font-weight: semibold;
-        transition: all 0.3s ease;
-        transform: translateY(-2px);
-      }
-    }
   }
 }

@@ -16,10 +16,48 @@
 button {
   &.btn_add {
     background-color: var(--color-secundario) !important;
+
     &:hover {
       color: var(--color-primario) !important;
       transform: scale(1.1);
       transition: all 0.3s ease;
+    }
+  }
+}
+
+.modal-footer {
+  background-color: var(--color-oscuro) !important;
+  border-top: 3px solid var(--color-primario) !important;
+  .btn-primary,
+  .btn-secondary {
+    font-weight: bold;
+
+    &:hover {
+      box-shadow: 0 0 10px var(--color-primario) !important;
+      border-radius: 5px;
+      font-weight: semibold;
+      transition: all 0.3s ease;
+      transform: translateY(-2px);
+    }
+  }
+
+  .btn-primary {
+    background-color: var(--color-secundario) !important;
+    color: var(--color-claro);
+
+    &:hover {
+      background-color: var(--color-secundario) !important;
+      color: var(--color-oscuro);
+    }
+  }
+
+  .btn-secondary {
+    background-color: var(--color-claro) !important;
+    color: var(--color-oscuro) !important;
+
+    &:hover {
+      background-color: var(--color-claro) !important;
+      color: var(--color-primario);
     }
   }
 }

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import useErrorHandler from "@hooks/useErrorHandler";
 import { useAutoResizeTextarea } from "@hooks/useAutoResizeTextarea";
-import { formatDateForInput, getCurrentDate } from "@utils/helpers";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "@styles/EditGeneric.css"
@@ -35,14 +34,14 @@ const ModalEditForm = ({
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    
+
     let finalValue = value;
-    
+
     // Si es un campo de fecha, convertimos a formato ISO
     if (type === "date" && value) {
       finalValue = new Date(value).toISOString();
     }
-    
+
     if (onChange) onChange(name, finalValue);
     setFormState((prev) => ({ ...prev, [name]: finalValue }));
   };
@@ -71,14 +70,14 @@ const ModalEditForm = ({
   return (
     <Modal show={show} onHide={onClose} centered size="lg" className="editModal">
       <Modal.Header
-        closeButton 
+        closeButton
       >
         <Modal.Title>{titulo}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {mensajeExito && (
-          <Alert 
-            variant="success" 
+          <Alert
+            variant="success"
             className="text-center"
             style={{ backgroundColor: "#07852E", color: "#F5F5F5" }}
           >
@@ -119,7 +118,7 @@ const ModalEditForm = ({
                       value={value}
                       onChange={handleChange}
                       placeholder="URL de la imagen"
-                      style={{ 
+                      style={{
                         borderColor: "#141414",
                         backgroundColor: "#F5F5F5"
                       }}
@@ -135,7 +134,7 @@ const ModalEditForm = ({
                       const selected = Array.from(e.target.selectedOptions, opt => opt.value);
                       handleChange({ target: { name: campo.nombre, value: selected } });
                     }}
-                    style={{ 
+                    style={{
                       borderColor: "#141414",
                       backgroundColor: "#F5F5F5"
                     }}
@@ -161,42 +160,42 @@ const ModalEditForm = ({
                       </option>
                     ))}
                   </Form.Control>
-) : campo.tipo === "date" ? (
-  <DatePicker
-    selected={value ? new Date(value) : null}
-    onChange={(date) => handleChange({
-      target: {
-        name: campo.nombre,
-        value: date ? date.toISOString() : '',
-        type: 'date'
-      }
-    })}
-    maxDate={campo.fechaMaxima === 'hoy' ? new Date() : undefined}
-    className="form-control"
-    disabled={campo.bloqueado}
-    dateFormat="yyyy-MM-dd"
-  />
-) : (
-  <Form.Control
-    as={isTextarea ? "textarea" : "input"}
-    type={isTextarea ? undefined : campo.tipo}
-    rows={isTextarea ? 1 : undefined}
-    style={{
-      ...(isTextarea ? { 
-        minHeight: "70px", 
-        resize: "none", 
-        overflow: "hidden" 
-      } : {})
-    }}
-    className={isTextarea ? "textarea-edit-modal" : ""}
-    name={campo.nombre}
-    value={value}
-    onChange={handleChange}
-    placeholder={campo.placeholder || ""}
-    ref={textareaRef}
-    disabled={campo.bloqueado || false}
-  />
-)}
+                ) : campo.tipo === "date" ? (
+                  <DatePicker
+                    selected={value ? new Date(value) : null}
+                    onChange={(date) => handleChange({
+                      target: {
+                        name: campo.nombre,
+                        value: date ? date.toISOString() : '',
+                        type: 'date'
+                      }
+                    })}
+                    maxDate={campo.fechaMaxima === 'hoy' ? new Date() : undefined}
+                    className="form-control"
+                    disabled={campo.bloqueado}
+                    dateFormat="yyyy-MM-dd"
+                  />
+                ) : (
+                  <Form.Control
+                    as={isTextarea ? "textarea" : "input"}
+                    type={isTextarea ? undefined : campo.tipo}
+                    rows={isTextarea ? 1 : undefined}
+                    style={{
+                      ...(isTextarea ? {
+                        minHeight: "70px",
+                        resize: "none",
+                        overflow: "hidden"
+                      } : {})
+                    }}
+                    className={isTextarea ? "textarea-edit-modal" : ""}
+                    name={campo.nombre}
+                    value={value}
+                    onChange={handleChange}
+                    placeholder={campo.placeholder || ""}
+                    ref={textareaRef}
+                    disabled={campo.bloqueado || false}
+                  />
+                )}
               </Form.Group>
             );
           })}
@@ -209,8 +208,8 @@ const ModalEditForm = ({
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button 
-          variant="secondary" 
+        <Button
+          variant="secondary"
           onClick={onClose}
         >
           Cancelar

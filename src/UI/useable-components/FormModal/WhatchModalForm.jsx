@@ -125,15 +125,10 @@ const ModalVerGenerico = ({
           </div>
         )}
       </Modal.Body>
-      <Modal.Footer style={{ backgroundColor: "#141414", borderTop: "3px solid #F4D609" }}>
+      <Modal.Footer>
         <Button 
           variant="secondary" 
           onClick={onClose}
-          style={{
-            backgroundColor: "#07852E",
-            borderColor: "#07852E",
-            fontWeight: "bold"
-          }}
         >
           Cerrar
         </Button>
