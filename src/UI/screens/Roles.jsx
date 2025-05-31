@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
 import RolService from "@services/RolService"; // Services
 import PermisoService from "@services/PermisoService";
@@ -19,7 +19,7 @@ import ModalEditarRol from "@componentsUseable/Roles/ModalEditarRol";
 import ModalCreateRol from "@componentsUseable/Roles/ModalCreateRol";
 
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
-import "@styles/Anuncio.css";
+import "@styles/Permiso.css";
 
 const RolesList = () => {
   const { data: roles, loading, error, reload: cargarRoles } = useFetchData(RolService.roles);
