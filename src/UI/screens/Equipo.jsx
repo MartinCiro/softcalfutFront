@@ -19,7 +19,7 @@ import ModalEditEquipo from "@componentsUseable/Equipos/ModalEditEquipo";
 import ModalCreateEquipo from "@componentsUseable/Equipos/ModalCreateEquipo";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 
-import { useEquiposLogic } from "@hooks/useEquiposLogic";
+import { useEquiposLogic } from "@hooks/equipo/useEquiposLogic";
 import { columnsEquipo, camposEquipo } from "@constants/equiposConfig";
 import "@styles/Permiso.css"; // Styles
 
