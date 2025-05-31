@@ -7,7 +7,6 @@ import CategoriaService from "@services/CategoriaService";
 import useSearch from "@hooks/useSearch"; // Hooks
 import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
-import useErrorHandler from "@hooks/useErrorHandler";
 import useModalConfirm from "@hooks/useModalConfirm";
 import Paginator from "@componentsUseable/Paginator"; // Components
 import LoadingSpinner from "@componentsUseable/Loading";
@@ -19,94 +18,20 @@ import ModalVerEquipo from "@componentsUseable/Equipos/ModalVerEquipo";
 import ModalEditEquipo from "@componentsUseable/Equipos/ModalEditEquipo";
 import ModalCreateEquipo from "@componentsUseable/Equipos/ModalCreateEquipo";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
+
+import { useEquiposLogic } from "@hooks/useEquiposLogic";
+import { columnsEquipo, camposEquipo } from "@constants/equiposConfig";
 import "@styles/Permiso.css"; // Styles
 
 const EquiposList = () => {
   const { data: equipos, loading, error, reload: cargarEquipos } = useFetchData(EquipoService.equipos);
   const { data: categorias } = useFetchData(CategoriaService.categorias);
   const { data: usuarios } = useFetchData(UsuarioService.usuarios);
-
-  const { handleError } = useErrorHandler();
-
-  const [modalVer, setModalVer] = useState(false);
-  const [guardando, setGuardando] = useState(false);
-  const [modalShow, setModalShow] = useState(false);
-  const [modalCrearShow, setModalCrearShow] = useState(false);
-  const [equipoSeleccionado, setEquipoSeleccionado] = useState(null);
-  const [equipoVer, setEquipoVer] = useState(null);
-  const [modoEdicion, setModoEdicion] = useState(false);
+  const { modalStates, equipoStates, flags, errorGuardar, handlers } = useEquiposLogic(cargarEquipos);
   const { query, setQuery, filtered } = useSearch(equipos, "nom_equipo");
-  const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
 
-  const columnsEquipo = [
-    { key: "nom_equipo", label: "Nombre del equipo" },
-    { key: "categoria", label: "Categoria" },
-    {
-      key: "representante",
-      label: "Nombre del representante",
-      render: (rep) => rep ? `${rep.nombre}` : "Sin representante"
-    }
-  ];
   const confirmModal = useModalConfirm();
-
-  const camposEquipo = [
-    { nombre: "nom_equipo", label: "Nombre del equipo" },
-    {
-      nombre: "nombre_representante",
-      label: "Representante",
-      render: (_, datos) => datos.representante?.nombre || "Sin representante"
-    },
-    {
-      nombre: "categoria",
-      label: "Categoria"
-    },
-    {
-      nombre: "documento_representante",
-      label: "Documento del representante",
-      render: (_, datos) => datos.representante?.documento || "Sin documento"
-    },
-    {
-      nombre: "estado_representante",
-      label: "Estado del representante",
-      render: (_, datos) => datos.representante?.estado || "Sin estado"
-    }
-  ];
-
-  const handleEditar = (equipo) => {
-    setModoEdicion(true);
-    setEquipoSeleccionado(equipo);
-    setModalShow(true);
-  };
-
-  const handleVer = (equipo) => {
-    setEquipoVer(equipo);
-    setModalVer(true);
-  };
-
-  const guardarOActualizarEquipo = async (datosForm) => {
-    console.log(datosForm);
-    const esEdicion = modoEdicion;
-    const datosTransformados = {
-      ...datosForm,
-      nombre: datosForm.nombre_equipo,
-    };
-    delete datosTransformados.nombre_equipo;
-    try {
-      setGuardando(true);
-      esEdicion ? await EquipoService.upEquipo(datosTransformados) : await EquipoService.crEquipo(datosTransformados);
-      sessionStorage.removeItem("equipos");
-      await cargarEquipos();
-      setErrorGuardar({ message: esEdicion ? "Equipo actualizado correctamente" : "Equipo creado correctamente", variant: "success" });
-    } catch (err) {
-      const mensaje = handleError(err);
-      setErrorGuardar({ message: mensaje, variant: "danger" });
-    } finally {
-      setTimeout(() => setErrorGuardar({ message: null, variant: "danger" }), 3000);
-      setGuardando(false);
-      setModoEdicion(false);
-    }
-  };
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
@@ -120,9 +45,9 @@ const EquiposList = () => {
           <Button
             variant="success"
             onClick={() => {
-              setModoEdicion(false);
-              setEquipoSeleccionado(null);
-              setModalCrearShow(true);
+              flags.setModoEdicion(false);
+              equipoStates.setEquipoSeleccionado(null);
+              modalStates.setModalCrearShow(true);
             }}
             className="rounded-circle d-flex justify-content-center align-items-center btn_add"
             style={{ width: "45px", height: "45px" }}
@@ -143,39 +68,39 @@ const EquiposList = () => {
       <TableGeneric
         data={paginatedData}
         columns={columnsEquipo}
-        onEdit={handleEditar}
-        onView={handleVer}
+        onEdit={handlers.handleEditar}
+        onView={handlers.handleVer}
         sinDatos={"No se encontraron equipos"}
       />
 
       {/* Modal para editar */}
-      {modalShow && equipoSeleccionado && (
+      {modalStates.modalShow && equipoStates.equipoSeleccionado && (
         <ModalEditEquipo
           titulo={"Editar Equipo"}
-          show={modalShow}
-          onClose={() => setModalShow(false)}
-          datos={equipoSeleccionado}
+          show={modalStates.modalShow}
+          onClose={() => modalStates.setModalShow(false)}
+          datos={equipoStates.equipoSeleccionado}
           campos={camposEquipo}
           usuarios={usuarios}
           categorias={categorias}
           onSubmit={(nuevosEquipos) => {
             const datosForm = {
-              ...equipoSeleccionado,
+              ...equipoStates.equipoSeleccionado,
               ...nuevosEquipos
             };
-            guardarOActualizarEquipo(datosForm);
-            setModalShow(false);
+            handlers.guardarOActualizarEquipo(datosForm);
+            modalStates.setModalShow(false);
           }}
         />
       )}
 
       {/* Modal para ver */}
-      {modalVer && (
+      {modalStates.modalVer && (
         <ModalVerEquipo
-          show={modalVer}
-          onClose={() => setModalVer(false)}
+          show={modalStates.modalVer}
+          onClose={() => modalStates.setModalVer(false)}
           campos={camposEquipo}
-          datos={equipoVer}
+          datos={equipoStates.equipoVer}
           titulo={"Detalles del equipo"}
         />
       )}
@@ -187,14 +112,14 @@ const EquiposList = () => {
         onClose={confirmModal.close}
       />
 
-      {modalCrearShow && (
+      {modalStates.modalCrearShow && (
         <ModalCreateEquipo
-          show={modalCrearShow}
-          onClose={() => setModalCrearShow(false)}
+          show={modalStates.modalCrearShow}
+          onClose={() => modalStates.setModalCrearShow(false)}
           campos={camposEquipo}
-          onSubmit={guardarOActualizarEquipo}
+          onSubmit={handlers.guardarOActualizarEquipo}
           equiposDisponibles={equipos}
-          guardando={guardando}
+          guardando={flags.guardando}
           usuarios={usuarios}
           categorias={categorias}
         />

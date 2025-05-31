@@ -187,7 +187,6 @@ const ModalEditForm = ({
                         overflow: "hidden"
                       } : {})
                     }}
-                    className={isTextarea ? "textarea-edit-modal" : ""}
                     name={campo.nombre}
                     value={value}
                     onChange={handleChange}

@@ -8,6 +8,7 @@ import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
 import EmptyMessage from "@componentsUseable/EmptyMessage";
 import { columnasJugadoresGenericas } from "@constants/teamConfig";
 
+
 const ModalVerEquipo = ({ show, onClose, campos = [], titulo = "Ver equipo", datos = {} }) => {
   const jugadores = datos.jugadores || [];
 
@@ -17,7 +18,7 @@ const ModalVerEquipo = ({ show, onClose, campos = [], titulo = "Ver equipo", dat
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
 
   return (
-    <ModalVerGenerico show={show} campos={sinJugadores} datos={datos} onClose={onClose} titulo={titulo}>
+    <ModalVerGenerico show={show} campos={sinJugadores} datos={datos} onClose={onClose} titulo={titulo} className="modal-editar-permisos">
       <div>
         {jugadores.length === 0 ? (
           <EmptyMessage mensaje="Este equipo no tiene jugadores registrados." />

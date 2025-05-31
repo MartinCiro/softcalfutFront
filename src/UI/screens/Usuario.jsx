@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Container, Row, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
 import UsuarioService from "@services/UsuarioService"; // Services
+import RolService from "@services/RolService";
+import EstadoService from "@services/EstadoService";
 import useSearch from "@hooks/useSearch"; // Hooks
 import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
@@ -21,6 +23,11 @@ import "@styles/Permiso.css"; // Styles
 
 const UsuariosList = () => {
   const { data: usuarios, loading, error, reload: cargarUsuarios } = useFetchData(UsuarioService.usuarios);
+  const { data: roles } = useFetchData(RolService.roles);
+  const { data: estados } = useFetchData(EstadoService.estados);
+  console.log(estados);
+  console.log(roles);
+
   const { handleError } = useErrorHandler();
   const [modalVer, setModalVer] = useState(false);
   const [guardando, setGuardando] = useState(false);
