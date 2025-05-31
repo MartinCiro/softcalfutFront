@@ -57,6 +57,7 @@ Este proyecto está bajo la licencia [MIT](https://opensource.org/licenses/MIT).
 /src
 ├── /Utils                    # Funciones auxiliares reutilizables
 │   ├── helpers.js            # Funciones de apoyo generales
+│   ├──constants/             # Metodos en comun
 │
 ├── /Lib                      # Librerías del proyecto (núcleo funcional)
 │   ├── /Hooks                # Custom hooks reutilizables (useAuth, useFetch, etc.)

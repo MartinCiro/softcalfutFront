@@ -1,5 +1,6 @@
-import AuthService from "@services/AuthService";
 import axios from 'axios';
+import AuthService from "@services/AuthService";
+import config from "@constants/config";
 
 export const saveSession = ({ access, usuario }) => {
   sessionStorage.setItem("accessToken", access);
@@ -34,7 +35,7 @@ export const getStatusConnection = () => {
 };
 
 export const getByEndpoint = async (endpoint, body = null, method = "get") => {
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = config.server;
 
   try {
     getStatusConnection();
