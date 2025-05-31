@@ -45,7 +45,7 @@ const ModalVerGenerico = ({
           paddingBottom: "10px"
         }}
       >
-        <strong style={{ color: "#07852E" }}>{campo.label || campo.nombre}:</strong>
+        <strong>{campo.label || campo.nombre}:</strong>
         <div 
           style={{ 
             marginTop: "5px",
