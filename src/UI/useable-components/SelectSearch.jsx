@@ -136,10 +136,12 @@ const SelectSearch = ({
                         <div className="px-3 py-2 text-muted">{defaultNoFilter}</div>
                     ) : (
                         filteredOptions.map((opt, index) => {
+                            const optionValue = getOptionValue(opt);
                             const isFocused = index === focusedIndex;
+
                             return (
                                 <div
-                                    key={getOptionValue(opt)}
+                                    key={optionValue ?? `option-${index}`} // ¡Clave única garantizada!
                                     className={`px-3 py-2 ${isFocused ? "bg-light" : ""}`}
                                     onClick={() => handleSelect(opt)}
                                     style={{ cursor: "pointer" }}
