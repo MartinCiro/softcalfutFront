@@ -1,104 +1,139 @@
-import React from "react";
-import { Modal, Button, Form, Alert } from "react-bootstrap";
-import { useFormModal } from "@hooks/forms/useFormModal";
-import ModalFormInput from "@componentsUseable/FormModal/ModalFormInput";
-import "@styles/EditGeneric.css";
+import React, { useMemo } from "react";
+import { useJugadoresLogic } from "@hooks/equipo/useJugadoresLogic";
+import useSearch from "@hooks/useSearch";
+import usePagination from "@hooks/usePagination";
+import Paginator from "@componentsUseable/Paginator";
+import SearchInput from "@componentsUseable/SearchInput";
+import EmptyMessage from "@componentsUseable/EmptyMessage";
+import TableGeneric from "@componentsUseable/TableGeneric";
+import SelectSearch from "@componentsUseable/SelectSearch";
+import { useState } from "react";
+import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
 
-const CreateModalFormulario = ({
+const CreateEquipoModal = ({
   show,
   onClose,
-  titulo = "Crear nuevo",
+  titulo = "Crear Equipo",
   campos = [],
+  categorias = [],
+  usuarios = [],
   onSubmit,
   loading: externalLoading = false,
-  children,
-  datos = null,
-  onChange = null,
+  datosIniciales = {},
 }) => {
-  const {
-    formState,
-    guardando,
-    mensajeExito,
-    error,
-    handleChange,
-    handleSubmit,
-    resetForm,
-  } = useFormModal({ datos, campos, onChange });
+  // Filtra campos no editables
+  const camposFiltrados = campos.filter(
+    campo => !["documento_representante", "estado_representante", "nombre_representante", "categoria"].includes(campo.nombre)
+  );
 
-  const handleClose = () => {
-    onClose();
-    resetForm();
-  };
+  // Jugadores disponibles
+  const jugadoresDisponibles = useMemo(
+    () => usuarios.filter(u => ["Jugador", "AdminJugador"].includes(u.rol)),
+    [usuarios]
+  );
 
-  const handleInternalSubmit = () => {
-    handleSubmit(onSubmit);
+  // Lógica de selección de jugadores
+  const { jugadoresSeleccionados, toggleJugador } = useJugadoresLogic(
+    jugadoresDisponibles,
+    datosIniciales.jugadores || []
+  );
+
+  // Representante y categoría
+  const [encargado, setEncargado] = useState(datosIniciales.representante || null);
+  const [categoria, setCategoria] = useState(datosIniciales.categoria || null);
+
+  // Búsqueda y paginación de jugadores
+  const { query, setQuery, filtered } = useSearch(jugadoresDisponibles, "nombres");
+  const pagination = usePagination(filtered, 6);
+
+  // Columnas para la tabla de jugadores
+  const columnas = [
+    { key: "nombres", label: "Nombre" },
+    { key: "documento", label: "Documento" },
+    {
+      key: "seleccionado",
+      label: "Seleccionar",
+      render: (_, row) => (
+        <input
+          type="checkbox"
+          checked={jugadoresSeleccionados.some(j => j.documento === row.documento)}
+          onChange={() => toggleJugador(row)}
+        />
+      ),
+    },
+  ];
+
+  const handleSubmit = (formData) => {
+    const datosCompletos = {
+      ...formData,
+      encargado: encargado?.documento,
+      jugadores: jugadoresSeleccionados.map(j => j.documento),
+      categoria: categoria?.nombre_categoria,
+    };
+    onSubmit(datosCompletos);
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered size="lg" className="editModal">
-      <Modal.Header 
-        closeButton
-        style={{ 
-          backgroundColor: "#141414",
-          color: "#F5F5F5",
-          borderBottom: "3px solid #F4D609"
-        }}
-      >
-        <Modal.Title style={{ fontWeight: "bold" }}>{titulo}</Modal.Title>
-      </Modal.Header>
-      
-      <Modal.Body style={{ backgroundColor: "#F5F5F5", padding: "20px" }}>
-        {mensajeExito && (
-          <Alert 
-            variant="success" 
-            className="text-center"
-            style={{ backgroundColor: "#07852E", color: "#F5F5F5" }}
-          >
-            {mensajeExito}
-          </Alert>
-        )}
-        {error && (
-          <Alert variant="danger" className="text-center">
-            {error}
-          </Alert>
-        )}
+    <CreateModalFormulario
+      show={show}
+      onClose={onClose}
+      titulo={titulo}
+      campos={camposFiltrados}
+      onSubmit={handleSubmit}
+      loading={externalLoading}
+      datos={datosIniciales}
+    >
+      {/* Selects para categoría y encargado */}
+      <div className="row">
+        <div className="col-md-6 mb-4">
+          <SelectSearch
+            label="Categoría"
+            options={categorias}
+            value={categoria}
+            onChange={setCategoria}
+            getOptionLabel={c => c.nombre_categoria}
+            getOptionValue={c => c.id}
+            required
+          />
+        </div>
+        <div className="col-md-6 mb-4">
+          <SelectSearch
+            label="Encargado"
+            options={jugadoresDisponibles}
+            value={encargado}
+            onChange={setEncargado}
+            getOptionLabel={u => `${u.nombres} (${u.documento})`}
+            getOptionValue={u => u.documento}
+            required
+          />
+        </div>
+      </div>
 
-        <Form>
-          <div className="row">
-            {campos.map((campo) => (
-              <div key={campo.nombre} className={`mb-3 ${campo.columna === 'derecha' ? 'col-md-6' : 'col-md-6'}`}>
-                <Form.Group>
-                  <Form.Label style={{ color: "#07852E", fontWeight: "bold" }}>
-                    {campo.label || campo.nombre}
-                    {campo.requerido && <span className="text-danger"> *</span>}
-                  </Form.Label>
-                  <ModalFormInput 
-                    campo={campo} 
-                    value={formState[campo.nombre] || ""} 
-                    onChange={handleChange} 
-                  />
-                </Form.Group>
-              </div>
-            ))}
-          </div>
-          {children}
-        </Form>
-      </Modal.Body>
-      
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Cancelar
-        </Button>
-        <Button
-          variant="primary"
-          onClick={handleInternalSubmit}
-          disabled={guardando || externalLoading}
-        >
-          {guardando || externalLoading ? "Guardando..." : "Guardar"}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      {/* Lista de jugadores */}
+      <div className="mt-4">
+        <h5>Jugadores del equipo</h5>
+        <SearchInput
+          value={query}
+          onChange={setQuery}
+          placeholder="Buscar jugadores..."
+          className="mb-3"
+        />
+
+        {filtered.length === 0 ? (
+          <EmptyMessage mensaje="No hay jugadores disponibles" />
+        ) : (
+          <>
+            <TableGeneric
+              data={pagination.paginatedData}
+              columns={columnas}
+              sinDatos="No se encontraron jugadores"
+            />
+            <Paginator {...pagination} />
+          </>
+        )}
+      </div>
+    </CreateModalFormulario>
   );
 };
 
-export default CreateModalFormulario;
+export default CreateEquipoModal;

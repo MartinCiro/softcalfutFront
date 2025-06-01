@@ -1,6 +1,11 @@
 import { useState } from "react";
-export const useJugadoresLogic = (jugadoresDisponibles, jugadoresIniciales = []) => {
-  const [jugadoresSeleccionados, setJugadoresSeleccionados] = useState(jugadoresDisponibles.filter(u => jugadoresIniciales.some(j => j.documento === u.documento)));
+
+export const useJugadoresLogic = (jugadoresDisponibles = [], jugadoresIniciales = []) => {
+  const [jugadoresSeleccionados, setJugadoresSeleccionados] = useState(
+    jugadoresDisponibles.filter(u => 
+      jugadoresIniciales.some(j => j.documento === u.documento)
+    )
+  );
 
   const toggleJugador = (jugador) => {
     setJugadoresSeleccionados(prev =>
@@ -10,5 +15,9 @@ export const useJugadoresLogic = (jugadoresDisponibles, jugadoresIniciales = [])
     );
   };
 
-  return { jugadoresSeleccionados, toggleJugador };
+  return { 
+    jugadoresSeleccionados, 
+    toggleJugador,
+    jugadoresIds: jugadoresSeleccionados.map(j => j.documento)
+  };
 };
