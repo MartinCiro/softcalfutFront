@@ -8,7 +8,12 @@ const useFetchData = (fetchFunction, deps = []) => {
     setLoading(true);
     try {
       const { result } = await fetchFunction();
-      setData(result.map(item => ({ ...item })));
+      if (Array.isArray(result)) {
+        setData(result.map(item => ({ ...item })));
+      } else {
+        setData([]);
+        setError(result || "No se recibieron datos.");
+      }
       setLoading(false);
       setError(null);
     } catch (err) {
