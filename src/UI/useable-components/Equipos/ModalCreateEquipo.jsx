@@ -1,52 +1,60 @@
-import React, { useMemo } from "react";
-import { useJugadoresLogic } from "@hooks/equipo/useJugadoresLogic";
+import React, { useMemo, useState } from "react";
+
 import useSearch from "@hooks/useSearch";
 import usePagination from "@hooks/usePagination";
-import Paginator from "@componentsUseable/Paginator";
-import SearchInput from "@componentsUseable/SearchInput";
-import EmptyMessage from "@componentsUseable/EmptyMessage";
-import TableGeneric from "@componentsUseable/TableGeneric";
-import SelectSearch from "@componentsUseable/SelectSearch";
-import { useState } from "react";
-import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
+import { useJugadoresLogic } from "@hooks/equipo/useJugadoresLogic";
 
-const CreateEquipoModal = ({
+import ModalCreate from "@componentsUseable/FormModal/CreateModalFormulario";
+import SelectSearch from "@componentsUseable/SelectSearch";
+import SearchInput from "@componentsUseable/SearchInput";
+import TableGeneric from "@componentsUseable/TableGeneric";
+import Paginator from "@componentsUseable/Paginator";
+import EmptyMessage from "@componentsUseable/EmptyMessage";
+
+const CreateModalEquipo = ({
   show,
   onClose,
+  campos,
   titulo = "Crear Equipo",
-  campos = [],
-  categorias = [],
   usuarios = [],
+  categorias = [],
   onSubmit,
-  loading: externalLoading = false,
-  datosIniciales = {},
+  loading,
 }) => {
-  // Filtra campos no editables
-  const camposFiltrados = campos.filter(
-    campo => !["documento_representante", "estado_representante", "nombre_representante", "categoria"].includes(campo.nombre)
-  );
-
-  // Jugadores disponibles
   const jugadoresDisponibles = useMemo(
     () => usuarios.filter(u => ["Jugador", "AdminJugador"].includes(u.rol)),
     [usuarios]
   );
 
-  // Lógica de selección de jugadores
-  const { jugadoresSeleccionados, toggleJugador } = useJugadoresLogic(
-    jugadoresDisponibles,
-    datosIniciales.jugadores || []
-  );
+  const { jugadoresSeleccionados, toggleJugador } = useJugadoresLogic(jugadoresDisponibles, []);
 
-  // Representante y categoría
-  const [encargado, setEncargado] = useState(datosIniciales.representante || null);
-  const [categoria, setCategoria] = useState(datosIniciales.categoria || null);
+  const [encargado, setEncargado] = useState(null);
+  const [categoria, setCategoria] = useState(null);
 
-  // Búsqueda y paginación de jugadores
   const { query, setQuery, filtered } = useSearch(jugadoresDisponibles, "nombres");
   const pagination = usePagination(filtered, 6);
 
-  // Columnas para la tabla de jugadores
+  const camposFiltrados = campos.filter(
+    campo =>
+      !["documento_representante", "estado_representante", "nombre_representante", "categoria"].includes(campo.nombre)
+  );
+
+  const handleFinalSubmit = async (formData) => {
+    const dataFinal = {
+      ...formData,
+      encargado: encargado?.documento,
+      jugadores: jugadoresSeleccionados.map(j => j.documento),
+      categoria: categoria?.nombre_categoria,
+    };
+    await onSubmit(dataFinal);
+    onClose();
+  };
+
+  const handleExtraChange = (name, value) => {
+    if (name === "encargado") setEncargado(value);
+    if (name === "categoria") setCategoria(value);
+  };
+
   const columnas = [
     { key: "nombres", label: "Nombre" },
     { key: "documento", label: "Documento" },
@@ -63,55 +71,36 @@ const CreateEquipoModal = ({
     },
   ];
 
-  const handleSubmit = (formData) => {
-    const datosCompletos = {
-      ...formData,
-      encargado: encargado?.documento,
-      jugadores: jugadoresSeleccionados.map(j => j.documento),
-      categoria: categoria?.nombre_categoria,
-    };
-    onSubmit(datosCompletos);
-  };
-
   return (
-    <CreateModalFormulario
+    <ModalCreate
       show={show}
       onClose={onClose}
       titulo={titulo}
       campos={camposFiltrados}
-      onSubmit={handleSubmit}
-      loading={externalLoading}
-      datos={datosIniciales}
+      onSubmit={handleFinalSubmit}
+      onChange={handleExtraChange}
+      loading={loading}
     >
-      {/* Selects para categoría y encargado */}
-      <div className="row">
-        <div className="col-md-6 mb-4">
-          <SelectSearch
-            label="Categoría"
-            options={categorias}
-            value={categoria}
-            onChange={setCategoria}
-            getOptionLabel={c => c.nombre_categoria}
-            getOptionValue={c => c.id}
-            required
-          />
-        </div>
-        <div className="col-md-6 mb-4">
-          <SelectSearch
-            label="Encargado"
-            options={jugadoresDisponibles}
-            value={encargado}
-            onChange={setEncargado}
-            getOptionLabel={u => `${u.nombres} (${u.documento})`}
-            getOptionValue={u => u.documento}
-            required
-          />
-        </div>
-      </div>
+      {/* Componentes personalizados */}
+      <SelectSearch
+        label="Categoría"
+        options={categorias}
+        value={categoria}
+        onChange={value => handleExtraChange("categoria", value)}
+        getOptionLabel={c => c.nombre_categoria}
+        className="mb-4"
+      />
 
-      {/* Lista de jugadores */}
+      <SelectSearch
+        label="Encargado"
+        options={jugadoresDisponibles}
+        value={encargado}
+        onChange={value => handleExtraChange("encargado", value)}
+        getOptionLabel={u => `${u.nombres} (${u.documento})`}
+        className="mb-4"
+      />
+
       <div className="mt-4">
-        <h5>Jugadores del equipo</h5>
         <SearchInput
           value={query}
           onChange={setQuery}
@@ -132,8 +121,8 @@ const CreateEquipoModal = ({
           </>
         )}
       </div>
-    </CreateModalFormulario>
+    </ModalCreate>
   );
 };
 
-export default CreateEquipoModal;
+export default CreateModalEquipo;

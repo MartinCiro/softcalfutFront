@@ -42,6 +42,7 @@ const SelectSearch = ({
     };
 
     const selectedLabel = useMemo(() => {
+        if (!value) return placeholder;
         const selected = options.find(
             (opt) => getOptionValue(opt) === getOptionValue(value)
         );

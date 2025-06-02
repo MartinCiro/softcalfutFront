@@ -41,9 +41,10 @@ const ModalEditEquipo = ({
 
   // Representante y categoría (estado inicial desde props)
   const [encargado, setEncargado] = useState(datos.representante || null);
-  const [categoria, setCategoria] = useState(datos.categoria || null);
+  const [categoria, setCategoria] = useState(
+    categorias.find(c => c.nombre_categoria === datos.categoria) || null
+  );
 
-  // Búsqueda y paginación (igual que en CreateEquipo)
   const { query, setQuery, filtered } = useSearch(jugadoresDisponibles, "nombres");
   const pagination = usePagination(filtered, 6);
 
@@ -70,6 +71,7 @@ const ModalEditEquipo = ({
       jugadores: jugadoresSeleccionados.map(j => j.documento),
       categoria: categoria?.nombre_categoria,
     });
+    onClose();
   };
 
   return (
@@ -88,6 +90,7 @@ const ModalEditEquipo = ({
         options={categorias}
         value={categoria}
         onChange={setCategoria}
+        getOptionValue={c => c.id}
         getOptionLabel={c => c.nombre_categoria}
         className="mb-4"
       />

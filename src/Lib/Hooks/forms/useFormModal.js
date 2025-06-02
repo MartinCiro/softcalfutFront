@@ -9,16 +9,22 @@ export const useFormModal = ({ datos, campos, onChange }) => {
 
   useEffect(() => {
     if (datos && Object.keys(datos).length > 0) {
-      setFormState(datos);
+      setFormState((prev) => {
+        const iguales = JSON.stringify(prev) === JSON.stringify(datos);
+        return iguales ? prev : datos;
+      });
     } else {
-      // Inicializar con valores por defecto
       const initialState = {};
       campos.forEach((campo) => {
         if (campo.defaultValue !== undefined) {
           initialState[campo.nombre] = campo.defaultValue;
         }
       });
-      setFormState(initialState);
+
+      setFormState((prev) => {
+        const iguales = JSON.stringify(prev) === JSON.stringify(initialState);
+        return iguales ? prev : initialState;
+      });
     }
   }, [datos, campos]);
 
