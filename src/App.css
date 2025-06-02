@@ -60,7 +60,7 @@ button {
   color: var(--color-oscuro) !important;
 
   strong {
-    color: var(--color-oscuro) !important;
+    color: var(--color-secundario) !important;
   }
 
   .form-label {

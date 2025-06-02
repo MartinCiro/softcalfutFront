@@ -7,6 +7,7 @@ import PermisosList from '@screens/Permiso';
 import TorneosList from '@screens/Torneo';
 import EquiposList from '@screens/Equipo';
 import UsuariosList from '@screens/Usuario';
+import NotasList from '@screens/Notas';
 import { MDBIcon } from 'mdb-react-ui-kit';
 import '@styles/Dashboard.css';
 
