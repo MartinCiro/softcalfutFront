@@ -7,6 +7,7 @@ import PermisosList from '@screens/Permiso';
 import TorneosList from '@screens/Torneo';
 import EquiposList from '@screens/Equipo';
 import UsuariosList from '@screens/Usuario';
+import ProgramacionList from '@screens/Programacion';
 import LugarEncuentroList from '@screens/LugarEncuentro';
 /* import NotasList from '@screens/Notas'; */
 import { MDBIcon } from 'mdb-react-ui-kit';
@@ -23,7 +24,7 @@ const Dashboard = () => {
       </div>
 
       {/* Componente de anuncios maneja su propio estado */}
-        <LugarEncuentroList />
+        <ProgramacionList />
       </div>
   );
 };
