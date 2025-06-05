@@ -15,6 +15,7 @@ import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
 import ModalEditGenerico from "@componentsUseable/FormModal/EditModalFormulario";
 import ModalCreateGenerico from "@componentsUseable/FormModal/CreateModalFormulario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
+import Calendar from "@componentsUseable/Programacion/Calendar";
 
 import { useProgramacionLogic } from "@hooks/programacion/useProgramacionLogic";
 import { columnsProgramacion, camposProgramacion } from "@constants/programacionConfig";
@@ -23,7 +24,8 @@ import "@styles/Permiso.css"; // Styles
 const ProgramacionList = () => {
   const { data: programacion, loading, error, reload: cargarProgramacion } = useFetchData(ProgramacionService.programacion);
   const { modalStates, programacionStates, flags, errorGuardar, handlers } = useProgramacionLogic(cargarProgramacion);
-  const { query, setQuery, filtered } = useSearch(programacion, "nombre_competencia");
+  
+  const { query, setQuery, filtered } = useSearch(programacion, "fecha");
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
 
   const confirmModal = useModalConfirm();
@@ -60,13 +62,8 @@ const ProgramacionList = () => {
         </div>
       )}
 
-      <TableGeneric
-        data={paginatedData}
-        columns={columnsProgramacion}
-        onEdit={handlers.handleEditar}
-        onView={handlers.handleVer}
-        sinDatos={"No se han encontrado lugares de encuentro"}
-      />
+      
+      <Calendar data={programacion} />
 
       {/* Modal para editar */}
       {modalStates.modalShow && programacionStates.programacionSeleccionado && (
