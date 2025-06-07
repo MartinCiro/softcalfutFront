@@ -11,7 +11,7 @@ const createField = (nombre, label, config = {}) => ({
 // Usar para columnas
 export const columnsProgramacion = [
   createField("fecha", "Fecha de encuentro", { isParentField: true }),
-  createField("competencia", "Nombre de la competencia", { isParentField: true }),
+  createField("categoria", "Nombre de la categoria", { isParentField: true }),
   createField("eventos", "Eventos", { 
     render: (eventos) => eventos ? eventos.length : 0 
   })
@@ -20,7 +20,7 @@ export const columnsProgramacion = [
 // Usar para campos
 export const camposProgramacion = [
   createField("fecha", "Fecha de encuentro", { tipo: "date", isParentField: true }),
-  createField("competencia", "Nombre de la competencia", { isParentField: true }),
+  createField("categoria", "Nombre de la categoria", { isParentField: true }),
   createField("dia", "Dia", { isParentField: true }),
   createField("local", "Local", { 
     render: (rep) => rep ? `${rep.local}` : "Sin representante",

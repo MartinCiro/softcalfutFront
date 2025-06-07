@@ -28,8 +28,8 @@ const CalendarioEventosModal = ({ data }) => {
                 if (fechaEvento.toISOString().split('T')[0] === fechaSeleccionadaStr) {
                     eventosEnFecha.push({
                         ...evento,
-                        competencia: competencia.competencia,
-                        id: `${competencia.competencia}-${evento.local}-${evento.visitante}`
+                        competencia: competencia.categoria,
+                        id: `${competencia.categoria}-${evento.local}-${evento.visitante}`
                     });
                 }
             });
@@ -58,7 +58,7 @@ const CalendarioEventosModal = ({ data }) => {
 
     // Columnas para la tabla de eventos
     const columnasEventos = [
-        { key: "competencia", label: "Competencia" },
+        { key: "categoria", label: "Categoria" },
         { key: "local", label: "Local" },
         { key: "visitante", label: "Visitante" },
         { key: "hora", label: "Hora" },

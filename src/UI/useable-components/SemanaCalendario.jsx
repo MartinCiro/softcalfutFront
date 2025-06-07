@@ -64,7 +64,7 @@ const SemanaCalendario = ({
         if (fechaEvento.toISOString().split('T')[0] === fechaKey) {
           eventos.push({
             ...evento,
-            competencia: competencia.competencia,
+            competencia: competencia.categoria,
             id: `${competencia.competencia}-${evento.local}-${evento.visitante}`
           });
         }
@@ -79,7 +79,7 @@ const SemanaCalendario = ({
 
   // Columnas para la tabla de eventos
   const columnasEventos = [
-    { key: "competencia", label: "Competencia" },
+    { key: "categoria", label: "Categoria" },
     { key: "local", label: "Local" },
     { key: "visitante", label: "Visitante" },
     { key: "hora", label: "Hora" },
