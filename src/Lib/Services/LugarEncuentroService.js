@@ -5,54 +5,51 @@ import {
   loadSessionCache,
 } from "@utils/helpers";
 
-const UsuarioService = {
-  endpoint: "usuarios",
-  usuarios: async () => {
-    const cacheKey = UsuarioService.endpoint;
+const LugarEncuentroService = {
+  endpoint: "lugarEncuentro",
+  lugarEncuentro: async () => {
+    const cacheKey = LugarEncuentroService.endpoint;
     const cached = loadSessionCache(cacheKey);
-    //if (cached) return { result: cached };
-    
+    if (cached) return { result: cached };
+
     try {
-      const data = await getByEndpoint(UsuarioService.endpoint);
-      if (!data) throw new Error("No se recibieron usuarios.");
+      const data = await getByEndpoint(LugarEncuentroService.endpoint);
+      if (!data) {
+        error.friendlyMessage = getFriendlyErrorMessage(error);
+        throw error;
+      }
       cacheSession(cacheKey, data);
       return { result: data };
     } catch (error) {
-      console.error("Error al obtener usuarios:", error);
+      console.error("Error al obtener el lugar de Encuentro:", error);
       error.friendlyMessage = getFriendlyErrorMessage(error);
       throw error;
     }
   },
 
-  upUsuario: async (data) => {
+  upLugarEncuentro: async (data) => {
     try {
-      const response = await getByEndpoint(
-        UsuarioService.endpoint,
-        data,
-        "put"
-      );
+      const response = await getByEndpoint(LugarEncuentroService.endpoint, data, "put");
       return response;
     } catch (error) {
-      console.error("Error al actualizar rol:", error);
       error.friendlyMessage = getFriendlyErrorMessage(error);
       throw error;
     }
   },
 
-  crUsuario: async (data) => {
+  crLugarEncuentro: async (data) => {
     try {
       const response = await getByEndpoint(
-        UsuarioService.endpoint,
+        LugarEncuentroService.endpoint,
         data,
         "post"
       );
       return response;
     } catch (error) {
-      console.error("Error al actualizar rol:", error);
       error.friendlyMessage = getFriendlyErrorMessage(error);
       throw error;
     }
   },
 };
 
-export default UsuarioService;
+export default LugarEncuentroService;

@@ -10,9 +10,10 @@ const SelectSearch = ({
     getOptionLabel = (opt) => opt.label ?? opt.nombre,
     placeholder = "Seleccione una opción",
     searchPlaceholder = "Buscar...",
-    filterKeys = ["label", "nombre"],
+    filterKeys = ["label", "nombre", "nombres", "documento"],
     disabled = false,
     searchThreshold = 5,
+    defaultNoFilter = "No hay opciones."
 }) => {
     const [query, setQuery] = useState("");
     const [isOpen, setIsOpen] = useState(false);
@@ -41,6 +42,7 @@ const SelectSearch = ({
     };
 
     const selectedLabel = useMemo(() => {
+        if (!value) return placeholder;
         const selected = options.find(
             (opt) => getOptionValue(opt) === getOptionValue(value)
         );
@@ -132,13 +134,15 @@ const SelectSearch = ({
                     )}
 
                     {filteredOptions.length === 0 ? (
-                        <div className="px-3 py-2 text-muted">No hay opciones.</div>
+                        <div className="px-3 py-2 text-muted">{defaultNoFilter}</div>
                     ) : (
                         filteredOptions.map((opt, index) => {
+                            const optionValue = getOptionValue(opt);
                             const isFocused = index === focusedIndex;
+
                             return (
                                 <div
-                                    key={getOptionValue(opt)}
+                                    key={optionValue ?? `option-${index}`} // ¡Clave única garantizada!
                                     className={`px-3 py-2 ${isFocused ? "bg-light" : ""}`}
                                     onClick={() => handleSelect(opt)}
                                     style={{ cursor: "pointer" }}

@@ -1,5 +1,6 @@
-import AuthService from "@services/AuthService";
 import axios from 'axios';
+import AuthService from "@services/AuthService";
+import config from "@constants/config";
 
 export const saveSession = ({ access, usuario }) => {
   sessionStorage.setItem("accessToken", access);
@@ -17,10 +18,11 @@ export const getFriendlyErrorMessage = (error, msg="Error al iniciar sesión. In
   if (!error.response && error.request) return "No se pudo conectar con el servidor. Verifique su conexión a internet o que el servidor esté en funcionamiento.";
 
   if (error.code === "ECONNABORTED") return "La conexión con el servidor ha tardado demasiado. Intente nuevamente.";
-
+  
   return (
     error.response?.data?.mensaje ||
     error.response?.data?.message ||
+    error.response.data.result ||
     msg
   );
 };
@@ -33,7 +35,7 @@ export const getStatusConnection = () => {
 };
 
 export const getByEndpoint = async (endpoint, body = null, method = "get") => {
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = config.server;
 
   try {
     getStatusConnection();

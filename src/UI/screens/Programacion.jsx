@@ -1,9 +1,6 @@
-import { useState } from "react";
-import { Container, Row, Button } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
-import EquipoService from "@services/EquipoService"; // Services
-import UsuarioService from "@services/UsuarioService";
-import CategoriaService from "@services/CategoriaService";
+import ProgramacionService from "@services/ProgramacionService"; // Services
 import useSearch from "@hooks/useSearch"; // Hooks
 import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
@@ -14,21 +11,21 @@ import SearchInput from "@componentsUseable/SearchInput";
 import ErrorMessage from "@componentsUseable/ErrorMessage";
 import TableGeneric from "@componentsUseable/TableGeneric";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
-import ModalVerEquipo from "@componentsUseable/Equipos/ModalVerEquipo";
-import ModalEditEquipo from "@componentsUseable/Equipos/ModalEditEquipo";
-import ModalCreateEquipo from "@componentsUseable/Equipos/ModalCreateEquipo";
+import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
+import ModalEditGenerico from "@componentsUseable/FormModal/EditModalFormulario";
+import ModalCreateGenerico from "@componentsUseable/FormModal/CreateModalFormulario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
+import Calendar from "@componentsUseable/Programacion/Calendar";
 
-import { useEquiposLogic } from "@hooks/equipo/useEquiposLogic";
-import { columnsEquipo, camposEquipo } from "@constants/equiposConfig";
+import { useProgramacionLogic } from "@hooks/programacion/useProgramacionLogic";
+import { columnsProgramacion, camposProgramacion } from "@constants/programacionConfig";
 import "@styles/Permiso.css"; // Styles
 
-const EquiposList = () => {
-  const { data: equipos, loading, error, reload: cargarEquipos } = useFetchData(EquipoService.equipos);
-  const { data: categorias } = useFetchData(CategoriaService.categorias);
-  const { data: usuarios } = useFetchData(UsuarioService.usuarios);
-  const { modalStates, equipoStates, flags, errorGuardar, handlers } = useEquiposLogic(cargarEquipos);
-  const { query, setQuery, filtered } = useSearch(equipos, "nom_equipo");
+const ProgramacionList = () => {
+  const { data: programacion, loading, error, reload: cargarProgramacion } = useFetchData(ProgramacionService.programacion);
+  const { modalStates, programacionStates, flags, errorGuardar, handlers } = useProgramacionLogic(cargarProgramacion);
+  
+  const { query, setQuery, filtered } = useSearch(programacion, "fecha");
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
 
   const confirmModal = useModalConfirm();
@@ -40,18 +37,18 @@ const EquiposList = () => {
 
     <Container className="py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold mb-0">Equipos</h2>
+        <h2 className="fw-bold mb-0">Programaciones</h2>
         <div className="d-flex align-items-center gap-2">
           <Button
             variant="success"
             onClick={() => {
               flags.setModoEdicion(false);
-              equipoStates.setEquipoSeleccionado(null);
+              programacionStates.setProgramacionSeleccionado(null);
               modalStates.setModalCrearShow(true);
             }}
             className="rounded-circle d-flex justify-content-center align-items-center btn_add"
             style={{ width: "45px", height: "45px" }}
-            title="Crear Equipo"
+            title="Crear Programacion"
           >
             <MDBIcon fas icon="plus" />
           </Button>
@@ -65,43 +62,36 @@ const EquiposList = () => {
         </div>
       )}
 
-      <TableGeneric
-        data={paginatedData}
-        columns={columnsEquipo}
-        onEdit={handlers.handleEditar}
-        onView={handlers.handleVer}
-        sinDatos={"No se encontraron equipos"}
-      />
+      
+      <Calendar data={programacion} />
 
       {/* Modal para editar */}
-      {modalStates.modalShow && equipoStates.equipoSeleccionado && (
-        <ModalEditEquipo
-          titulo={"Editar Equipo"}
+      {modalStates.modalShow && programacionStates.programacionSeleccionado && (
+        <ModalEditGenerico
+          titulo={"Editar Programacion"}
           show={modalStates.modalShow}
           onClose={() => modalStates.setModalShow(false)}
-          datos={equipoStates.equipoSeleccionado}
-          campos={camposEquipo}
-          usuarios={usuarios}
-          categorias={categorias}
-          onSubmit={(nuevosEquipos) => {
+          datos={programacionStates.programacionSeleccionado}
+          campos={camposProgramacion}
+          onSubmit={(nuevosProgramacion) => {
             const datosForm = {
-              ...equipoStates.equipoSeleccionado,
-              ...nuevosEquipos
+              ...programacionStates.programacionSeleccionado,
+              ...nuevosProgramacion
             };
-            handlers.guardarOActualizarEquipo(datosForm);
-            modalStates.setModalShow(false);
+            handlers.guardarOActualizarProgramacion(datosForm);
+            if (!errorGuardar.message || errorGuardar.variant === "success") modalStates.setModalShow(false);
           }}
         />
       )}
 
       {/* Modal para ver */}
       {modalStates.modalVer && (
-        <ModalVerEquipo
+        <ModalVerGenerico
           show={modalStates.modalVer}
           onClose={() => modalStates.setModalVer(false)}
-          campos={camposEquipo}
-          datos={equipoStates.equipoVer}
-          titulo={"Detalles del equipo"}
+          campos={camposProgramacion}
+          datos={programacionStates.programacionVer}
+          titulo={"Detalles del programacion"}
         />
       )}
 
@@ -113,15 +103,16 @@ const EquiposList = () => {
       />
 
       {modalStates.modalCrearShow && (
-        <ModalCreateEquipo
+        <ModalCreateGenerico
           show={modalStates.modalCrearShow}
           onClose={() => modalStates.setModalCrearShow(false)}
-          campos={camposEquipo}
-          onSubmit={handlers.guardarOActualizarEquipo}
-          equiposDisponibles={equipos}
+          campos={camposProgramacion}
+          onSubmit={(programacion)=> {
+            handlers.guardarOActualizarProgramacion(programacion);
+            if (!errorGuardar.message || errorGuardar.variant === "success") modalStates.setModalCrearShow(false);
+          }}
+          programacionDisponibles={programacion}
           guardando={flags.guardando}
-          usuarios={usuarios}
-          categorias={categorias}
         />
       )}
 
@@ -138,4 +129,4 @@ const EquiposList = () => {
   );
 };
 
-export default EquiposList;
+export default ProgramacionList;

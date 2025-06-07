@@ -27,7 +27,8 @@ const AuthService = {
       return { token, usuario };
     } catch (error) {
       console.error("Error en login:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 

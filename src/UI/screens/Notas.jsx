@@ -1,9 +1,6 @@
-import { useState } from "react";
-import { Container, Row, Button } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
-import EquipoService from "@services/EquipoService"; // Services
-import UsuarioService from "@services/UsuarioService";
-import CategoriaService from "@services/CategoriaService";
+import NotaService from "@services/NotaService"; // Services
 import useSearch from "@hooks/useSearch"; // Hooks
 import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
@@ -14,21 +11,19 @@ import SearchInput from "@componentsUseable/SearchInput";
 import ErrorMessage from "@componentsUseable/ErrorMessage";
 import TableGeneric from "@componentsUseable/TableGeneric";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
-import ModalVerEquipo from "@componentsUseable/Equipos/ModalVerEquipo";
-import ModalEditEquipo from "@componentsUseable/Equipos/ModalEditEquipo";
-import ModalCreateEquipo from "@componentsUseable/Equipos/ModalCreateEquipo";
+import ModalVerNota from "@componentsUseable/FormModal/WhatchModalForm";
+import ModalEditNota from "@componentsUseable/FormModal/EditModalFormulario";
+import ModalCreateNota from "@componentsUseable/FormModal/CreateModalFormulario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 
-import { useEquiposLogic } from "@hooks/equipo/useEquiposLogic";
-import { columnsEquipo, camposEquipo } from "@constants/equiposConfig";
+import { useNotasLogic } from "@hooks/nota/useNotasLogic";
+import { columnsNota, camposNota } from "@constants/notasConfig";
 import "@styles/Permiso.css"; // Styles
 
-const EquiposList = () => {
-  const { data: equipos, loading, error, reload: cargarEquipos } = useFetchData(EquipoService.equipos);
-  const { data: categorias } = useFetchData(CategoriaService.categorias);
-  const { data: usuarios } = useFetchData(UsuarioService.usuarios);
-  const { modalStates, equipoStates, flags, errorGuardar, handlers } = useEquiposLogic(cargarEquipos);
-  const { query, setQuery, filtered } = useSearch(equipos, "nom_equipo");
+const NotasList = () => {
+  const { data: notas, loading, error, reload: cargarNotas } = useFetchData(NotaService.notas);
+  const { modalStates, notaStates, flags, errorGuardar, handlers } = useNotasLogic(cargarNotas);
+  const { query, setQuery, filtered } = useSearch(notas, "nombre");
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
 
   const confirmModal = useModalConfirm();
@@ -40,18 +35,18 @@ const EquiposList = () => {
 
     <Container className="py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold mb-0">Equipos</h2>
+        <h2 className="fw-bold mb-0">Notas</h2>
         <div className="d-flex align-items-center gap-2">
           <Button
             variant="success"
             onClick={() => {
               flags.setModoEdicion(false);
-              equipoStates.setEquipoSeleccionado(null);
+              notaStates.setNotaSeleccionado(null);
               modalStates.setModalCrearShow(true);
             }}
             className="rounded-circle d-flex justify-content-center align-items-center btn_add"
             style={{ width: "45px", height: "45px" }}
-            title="Crear Equipo"
+            title="Crear Nota"
           >
             <MDBIcon fas icon="plus" />
           </Button>
@@ -67,41 +62,39 @@ const EquiposList = () => {
 
       <TableGeneric
         data={paginatedData}
-        columns={columnsEquipo}
+        columns={columnsNota}
         onEdit={handlers.handleEditar}
         onView={handlers.handleVer}
-        sinDatos={"No se encontraron equipos"}
+        sinDatos={"No se encontraron notas"}
       />
 
       {/* Modal para editar */}
-      {modalStates.modalShow && equipoStates.equipoSeleccionado && (
-        <ModalEditEquipo
-          titulo={"Editar Equipo"}
+      {modalStates.modalShow && notaStates.notaSeleccionado && (
+        <ModalEditNota
+          titulo={"Editar Nota"}
           show={modalStates.modalShow}
           onClose={() => modalStates.setModalShow(false)}
-          datos={equipoStates.equipoSeleccionado}
-          campos={camposEquipo}
-          usuarios={usuarios}
-          categorias={categorias}
-          onSubmit={(nuevosEquipos) => {
+          datos={notaStates.notaSeleccionado}
+          campos={camposNota}
+          onSubmit={(nuevosNotas) => {
             const datosForm = {
-              ...equipoStates.equipoSeleccionado,
-              ...nuevosEquipos
+              ...notaStates.notaSeleccionado,
+              ...nuevosNotas
             };
-            handlers.guardarOActualizarEquipo(datosForm);
-            modalStates.setModalShow(false);
+            handlers.guardarOActualizarNota(datosForm);
+            if (!errorGuardar.message || errorGuardar.variant === "success") modalStates.setModalShow(false);
           }}
         />
       )}
 
       {/* Modal para ver */}
       {modalStates.modalVer && (
-        <ModalVerEquipo
+        <ModalVerNota
           show={modalStates.modalVer}
           onClose={() => modalStates.setModalVer(false)}
-          campos={camposEquipo}
-          datos={equipoStates.equipoVer}
-          titulo={"Detalles del equipo"}
+          campos={camposNota}
+          datos={notaStates.notaVer}
+          titulo={"Detalles del nota"}
         />
       )}
 
@@ -113,15 +106,16 @@ const EquiposList = () => {
       />
 
       {modalStates.modalCrearShow && (
-        <ModalCreateEquipo
+        <ModalCreateNota
           show={modalStates.modalCrearShow}
           onClose={() => modalStates.setModalCrearShow(false)}
-          campos={camposEquipo}
-          onSubmit={handlers.guardarOActualizarEquipo}
-          equiposDisponibles={equipos}
+          campos={camposNota}
+          onSubmit={(nota)=> {
+            handlers.guardarOActualizarNota(nota);
+            if (!errorGuardar.message || errorGuardar.variant === "success") modalStates.setModalCrearShow(false);
+          }}
+          notasDisponibles={notas}
           guardando={flags.guardando}
-          usuarios={usuarios}
-          categorias={categorias}
         />
       )}
 
@@ -138,4 +132,4 @@ const EquiposList = () => {
   );
 };
 
-export default EquiposList;
+export default NotasList;

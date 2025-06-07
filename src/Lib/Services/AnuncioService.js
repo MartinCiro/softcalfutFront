@@ -23,7 +23,8 @@ const AnuncioService = {
       return { result: data };
     } catch (error) {
       console.error("Error al obtener anuncios:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 
@@ -36,7 +37,8 @@ const AnuncioService = {
       return response;
     } catch (error) {
       console.error("Error al actualizar anuncio:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 
@@ -47,7 +49,8 @@ const AnuncioService = {
       return response;
     } catch (error) {
       console.error("Error al crear anuncio:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   }
 };

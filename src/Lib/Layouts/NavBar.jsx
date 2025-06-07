@@ -28,7 +28,7 @@ const NavBar = () => {
             </NavLink>
             <NavLink to="/escuela" className="nav-link">
               <MDBIcon fas icon="book" className="me-1" />
-              Escuela LCF
+              Selecciones LCF
             </NavLink>
             <NavLink to="/club" className="nav-link">
               <MDBIcon fas icon="futbol" className="me-1" />

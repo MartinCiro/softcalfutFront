@@ -209,19 +209,10 @@ const CreateModalFormulario = ({
           {children}
         </Form>
       </Modal.Body>
-      <Modal.Footer style={{ 
-        backgroundColor: "#141414", 
-        borderTop: "3px solid #F4D609"
-      }}>
+      <Modal.Footer>
         <Button 
           variant="secondary" 
           onClick={handleClose}
-          style={{
-            backgroundColor: "transparent",
-            borderColor: "#F4D609",
-            color: "#F4D609",
-            fontWeight: "bold"
-          }}
         >
           Cancelar
         </Button>
@@ -229,11 +220,6 @@ const CreateModalFormulario = ({
           variant="primary"
           onClick={handleSubmit}
           disabled={guardando || externalLoading}
-          style={{
-            backgroundColor: "#07852E",
-            borderColor: "#07852E",
-            fontWeight: "bold"
-          }}
         >
           {guardando || externalLoading ? "Guardando..." : "Guardar"}
         </Button>

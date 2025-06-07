@@ -4,13 +4,15 @@ const useErrorHandler = () => {
   const [error, setError] = useState("");
 
   const handleError = (err) => {
-    console.error("Error capturado:", err);
+    console.log(err);
     const handlers = [
       {
         condition: () => err.response,
         message: () =>
+          err.response.data?.result ||
           err.response.data?.mensaje ||
           err.response.data?.message ||
+          err.error ||
           "Error en la solicitud. Verifique los datos enviados.",
       },
       {
