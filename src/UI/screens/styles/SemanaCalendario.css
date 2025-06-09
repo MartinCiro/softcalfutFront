@@ -7,6 +7,10 @@
       transform: scale(1.1);
       transition: all 0.3s ease;
       border: 2px solid var(--color-secundario) !important;
+      .text-primary {
+        font-size: 1rem !important;
+        color: var(--color-secundario) !important;
+      }
     }
 
    

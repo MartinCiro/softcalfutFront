@@ -24,7 +24,7 @@ import "@styles/Permiso.css"; // Styles
 const ProgramacionList = () => {
   const { data: programacion, loading, error, reload: cargarProgramacion } = useFetchData(ProgramacionService.programacion);
   const { modalStates, programacionStates, flags, errorGuardar, handlers } = useProgramacionLogic(cargarProgramacion);
-  
+
   const { query, setQuery, filtered } = useSearch(programacion, "fecha");
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
 
@@ -36,8 +36,11 @@ const ProgramacionList = () => {
   return (
 
     <Container className="py-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold mb-0">Programaciones</h2>
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+        <h2 className="fw-bold mb-2 mb-md-0 text-center text-md-start text-truncate w-100" style={{ maxWidth: '100%' }}>
+          Programacion
+        </h2>
+
         <div className="d-flex align-items-center gap-2">
           <Button
             variant="success"
@@ -52,9 +55,11 @@ const ProgramacionList = () => {
           >
             <MDBIcon fas icon="plus" />
           </Button>
+
           <SearchInput value={query} onChange={setQuery} />
         </div>
       </div>
+
 
       {errorGuardar.message && (
         <div className={`alert alert-${errorGuardar.variant} text-center`}>
@@ -62,7 +67,7 @@ const ProgramacionList = () => {
         </div>
       )}
 
-      
+
       <Calendar data={programacion} />
 
       {/* Modal para editar */}
@@ -107,7 +112,7 @@ const ProgramacionList = () => {
           show={modalStates.modalCrearShow}
           onClose={() => modalStates.setModalCrearShow(false)}
           campos={camposProgramacion}
-          onSubmit={(programacion)=> {
+          onSubmit={(programacion) => {
             handlers.guardarOActualizarProgramacion(programacion);
             if (!errorGuardar.message || errorGuardar.variant === "success") modalStates.setModalCrearShow(false);
           }}
