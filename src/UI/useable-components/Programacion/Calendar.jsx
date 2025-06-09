@@ -7,7 +7,7 @@ import { columnasEventos, camposModal } from "@constants/programacionConfig";
 
 const isSameDate = (a, b) => a.toISOString().split("T")[0] === b.toISOString().split("T")[0];
 
-const CalendarioSemanal = ({ data, config = {} }) => {
+const CalendarioSemanal = ({ data, config = {}, onEditEvento }) => {
     const [showModal, setShowModal] = useState(false);
     const [eventosDia, setEventosDia] = useState([]);
     const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
@@ -43,6 +43,14 @@ const CalendarioSemanal = ({ data, config = {} }) => {
         return cantidad > 0 ? cantidad : null;
     };
 
+    const handleEditEvento = (eventoEditado) => {
+        onEditEvento(eventoEditado);
+        // Actualizamos los eventos del día para reflejar los cambios
+        setEventosDia(prev => prev.map(e => 
+            e.id === eventoEditado.id ? eventoEditado : e
+        ));
+    };
+
     return (
         <div>
             <SemanaCalendario
@@ -69,8 +77,10 @@ const CalendarioSemanal = ({ data, config = {} }) => {
                     title="Eventos programados"
                     sinDatos="No hay eventos programados para este día"
                     showView={false}
-                    showEdit={false}
+                    showEdit={true}
                     showDelete={false}
+                    onEdit={handleEditEvento}
+                    
                 />
             </ModalVerGenerico>
         </div>

@@ -33,6 +33,34 @@ const ProgramacionList = () => {
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
 
+  const handleEditEvento = (eventoEditado) => {
+    // Buscar competencia y evento original
+    const competencia = programacion.find(c =>
+      c.eventos.some(e =>
+        `${c.categoria}-${e.local}-${e.visitante}` === eventoEditado.id
+      )
+    );
+
+    if (!competencia) return;
+
+    const eventoOriginal = competencia.eventos.find(e =>
+      `${competencia.categoria}-${e.local}-${e.visitante}` === eventoEditado.id
+    );
+
+    const eventoCompleto = {
+      ...eventoOriginal,
+      ...eventoEditado,
+      categoria: competencia.categoria
+    };
+
+    // Setear evento en estado y abrir modal
+    programacionStates.setProgramacionSeleccionado(eventoCompleto);
+    flags.setModoEdicion(true);
+    modalStates.setModalShow(true);
+  };
+
+
+
   return (
 
     <Container className="py-4">
@@ -68,7 +96,7 @@ const ProgramacionList = () => {
       )}
 
 
-      <Calendar data={programacion} />
+      <Calendar data={programacion} onEditEvento={handleEditEvento} />
 
       {/* Modal para editar */}
       {modalStates.modalShow && programacionStates.programacionSeleccionado && (
