@@ -1,104 +1,62 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import SemanaCalendario from "@componentsUseable/SemanaCalendario";
 import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
 import TableGeneric from "@componentsUseable/TableGeneric";
+import { parseFecha, getCurrentWeekDates } from "@utils/helpers";
+import { columnasEventos, camposModal } from "@constants/programacionConfig";
 
-const CalendarioEventosModal = ({ data }) => {
+const isSameDate = (a, b) => a.toISOString().split("T")[0] === b.toISOString().split("T")[0];
+
+const CalendarioSemanal = ({ data, config = {} }) => {
     const [showModal, setShowModal] = useState(false);
     const [eventosDia, setEventosDia] = useState([]);
     const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
 
-    // Función para convertir fecha "dd/mm/aaaa" a objeto Date
-    const parseFecha = (fechaStr) => {
-        const [dia, mes, año] = fechaStr.split('/');
-        return new Date(año, mes - 1, dia);
-    };
+    const eventosSemana = useMemo(() => {
+        const semanaActual = getCurrentWeekDates();
 
-    // Función que se ejecuta al seleccionar una fecha
+        return data.flatMap(competencia =>
+            competencia.eventos
+                .filter(evento =>
+                    semanaActual.some(dia =>
+                        isSameDate(parseFecha(evento.fecha), dia)
+                    )
+                )
+                .map(evento => ({
+                    ...evento,
+                    competencia: competencia.categoria,
+                    id: `${competencia.categoria}-${evento.local}-${evento.visitante}`
+                }))
+        );
+    }, [data]);
+
+    const obtenerEventosPorFecha = (fecha) => eventosSemana.filter(evento => isSameDate(parseFecha(evento.fecha), fecha));
+
     const handleSeleccionFecha = (fecha) => {
-        const fechaSeleccionadaStr = fecha.toISOString().split('T')[0];
         setFechaSeleccionada(fecha);
-
-        // Buscar eventos que coincidan con la fecha seleccionada
-        const eventosEnFecha = [];
-
-        data.forEach(competencia => {
-            competencia.eventos.forEach(evento => {
-                const fechaEvento = parseFecha(evento.fecha);
-                if (fechaEvento.toISOString().split('T')[0] === fechaSeleccionadaStr) {
-                    eventosEnFecha.push({
-                        ...evento,
-                        competencia: competencia.categoria,
-                        id: `${competencia.categoria}-${evento.local}-${evento.visitante}`
-                    });
-                }
-            });
-        });
-
-        setEventosDia(eventosEnFecha);
+        setEventosDia(obtenerEventosPorFecha(fecha));
         setShowModal(true);
     };
 
-    // Render para mostrar la cantidad de eventos en cada día
     const renderCantidadEventos = (fecha) => {
-        const fechaStr = fecha.toISOString().split('T')[0];
-        let cantidad = 0;
-
-        data.forEach(competencia => {
-            competencia.eventos.forEach(evento => {
-                const fechaEvento = parseFecha(evento.fecha);
-                if (fechaEvento.toISOString().split('T')[0] === fechaStr) {
-                    cantidad++;
-                }
-            });
-        });
-
+        const cantidad = obtenerEventosPorFecha(fecha).length;
         return cantidad > 0 ? cantidad : null;
     };
-
-    // Columnas para la tabla de eventos
-    const columnasEventos = [
-        { key: "categoria", label: "Categoria" },
-        { key: "local", label: "Local" },
-        { key: "visitante", label: "Visitante" },
-        { key: "hora", label: "Hora" },
-        { key: "lugar", label: "Lugar" },
-        { key: "rama", label: "Rama" }
-    ];
-
-    // Campos para el modal (información de la fecha)
-    const camposModal = [
-        {
-            nombre: "fechaCompleta",
-            label: "Fecha",
-            render: () => fechaSeleccionada?.toLocaleDateString("es-ES", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-            })
-        },
-        {
-            nombre: "totalEventos",
-            label: "Total de eventos",
-            render: () => eventosDia.length
-        }
-    ];
 
     return (
         <div>
             <SemanaCalendario
-                data={data}
+                eventos={eventosSemana}
                 render={renderCantidadEventos}
                 onFechaSeleccionada={handleSeleccionFecha}
+                config={config}
             />
 
-            {/* Modal con los eventos del día */}
             <ModalVerGenerico
                 show={showModal}
                 onClose={() => setShowModal(false)}
                 titulo="Eventos del día"
-                campos={camposModal}
+                campos={camposModal(fechaSeleccionada, eventosDia)}
                 datos={{}}
                 columnas={{
                     izquierda: ["fechaCompleta"],
@@ -108,7 +66,7 @@ const CalendarioEventosModal = ({ data }) => {
                 <TableGeneric
                     data={eventosDia}
                     columns={columnasEventos}
-                    title="Partidos programados"
+                    title="Eventos programados"
                     sinDatos="No hay eventos programados para este día"
                     showView={false}
                     showEdit={false}
@@ -119,4 +77,4 @@ const CalendarioEventosModal = ({ data }) => {
     );
 };
 
-export default CalendarioEventosModal;
+export default CalendarioSemanal;

@@ -4,7 +4,6 @@ import useErrorHandler from "@hooks/useErrorHandler";
 import { useAutoResizeTextarea } from "@hooks/useAutoResizeTextarea";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "@styles/EditGeneric.css"
 
 const ModalEditForm = ({
   show,

@@ -4,7 +4,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import useErrorHandler from "@hooks/useErrorHandler";
 import { useAutoResizeTextarea } from "@hooks/useAutoResizeTextarea";
-import "@styles/EditGeneric.css"
 
 const CreateModalFormulario = ({
   show,

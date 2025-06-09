@@ -1,26 +1,24 @@
 .footer-custom {
   background-color: var(--color-oscuro);
+  font-size: 1rem; /* Tamaño base */
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem; /* Más pequeño en móviles */
+  }
 
   a {
     color: var(--color-claro);
+    text-decoration: none;
     &:hover {
       color: var(--color-primario);
     }
   }
+
   .navbar-toggler {
     background-color: var(--color-secundario);
   }
-  a.active {
+
+  a.active, a:focus:not(.active), a:focus, .nav-link.active {
     color: var(--color-primario); 
-  }
-  a:focus:not(.active) {
-    color: var(--color-primario); 
-  }
-  /* Nuevos */
-  a:focus {
-    color: var(--color-primario); 
-  }
-  .nav-link.active {
-    color: var(--color-primario) !important; 
   }
 }

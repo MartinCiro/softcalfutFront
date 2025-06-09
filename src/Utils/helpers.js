@@ -68,40 +68,39 @@ export const getByEndpoint = async (endpoint, body = null, method = "get") => {
 };
 
 // Función para formatear fecha desde cualquier formato
-export const dateFormatter = (fechaInput) => {
-  if (!fechaInput) return 'Sin fecha';
-
-  const isUUID = (str) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
-  const formatISODate = (str) => {
-    const [year, month, day] = str.split('-');
-    return `${day}/${month}/${year}`;
-  };
-
-  let fechaStr = '';
-
-  if (typeof fechaInput === 'object' && fechaInput !== null) {
-    if (fechaInput.fecha) fechaStr = fechaInput.fecha;
-    else if (fechaInput.uuid) return 'Fecha no disponible';
-    else return 'Sin fecha';
-  } else if (typeof fechaInput === 'string') {
-    fechaStr = fechaInput;
+export const parseFecha = (fechaStr) => {
+  let date;
+  
+  if (fechaStr.includes('/')) {
+    // Formato dd/mm/yyyy
+    const [dia, mes, año] = fechaStr.split('/');
+    return new Date(año, mes - 1, dia);
   } else {
-    return 'Sin fecha';
+    // Formato ISO u otro válido para Date
+    date = new Date(fechaStr);
   }
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
 
-  if (isUUID(fechaStr) || (fechaStr.includes('-') && fechaStr.length > 30)) return 'Fecha no disponible';
-  if (/^\d{4}-\d{2}-\d{2}/.test(fechaStr)) return formatISODate(fechaStr);
+  return `${year}-${month}-${day}`;
+};
 
-  const fecha = new Date(fechaStr);
-  if (!isNaN(fecha.getTime())) {
-    return fecha.toLocaleDateString('es-CO', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
+export const getCurrentWeekDates = (empezarEnLunes = false) => {
+    const hoy = new Date();
+    const diaSemana = hoy.getDay();
+    const diff = empezarEnLunes 
+        ? (diaSemana === 0 ? -6 : 1) - diaSemana // Si es domingo, retrocede 6 días
+        : -diaSemana; // Empieza en domingo
+    
+    const inicioSemana = new Date(hoy);
+    inicioSemana.setDate(hoy.getDate() + diff);
+    
+    return Array.from({ length: 7 }).map((_, i) => {
+        const fecha = new Date(inicioSemana);
+        fecha.setDate(inicioSemana.getDate() + i);
+        return fecha;
     });
-  }
-
-  return fechaStr;
 };
 
 // Guarda un objeto en sessionStorage con un timestamp
