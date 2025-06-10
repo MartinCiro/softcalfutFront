@@ -1,20 +1,14 @@
 import { Container, Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
 import ProgramacionService from "@services/ProgramacionService"; // Services
-import useSearch from "@hooks/useSearch"; // Hooks
-import useFetchData from "@hooks/useFetchData";
-import usePagination from "@hooks/usePagination";
-import useModalConfirm from "@hooks/useModalConfirm";
-import Paginator from "@componentsUseable/Paginator"; // Components
-import LoadingSpinner from "@componentsUseable/Loading";
-import SearchInput from "@componentsUseable/SearchInput";
+import EquipoService from "@services/EquipoService";
+import LugarService from "@services/LugarEncuentroService";
+import useFetchData from "@hooks/useFetchData"; // Hooks
+import LoadingSpinner from "@componentsUseable/Loading"; // Components
 import ErrorMessage from "@componentsUseable/ErrorMessage";
-import TableGeneric from "@componentsUseable/TableGeneric";
-import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
 import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
-import ModalEditGenerico from "@componentsUseable/FormModal/EditModalFormulario";
+import ModalEditProgramacion from "@componentsUseable/Programacion/ModalEditEquipo";
 import ModalCreateGenerico from "@componentsUseable/FormModal/CreateModalFormulario";
-import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import Calendar from "@componentsUseable/Programacion/Calendar";
 
 import { useProgramacionLogic } from "@hooks/programacion/useProgramacionLogic";
@@ -23,12 +17,9 @@ import "@styles/Permiso.css"; // Styles
 
 const ProgramacionList = () => {
   const { data: programacion, loading, error, reload: cargarProgramacion } = useFetchData(ProgramacionService.programacion);
+  const { data: equipos } = useFetchData(EquipoService.equipos);
+  const { data: lugares } = useFetchData(LugarService.lugarEncuentro);
   const { modalStates, programacionStates, flags, errorGuardar, handlers } = useProgramacionLogic(cargarProgramacion);
-
-  const { query, setQuery, filtered } = useSearch(programacion, "fecha");
-  const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
-
-  const confirmModal = useModalConfirm();
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
@@ -47,11 +38,17 @@ const ProgramacionList = () => {
       `${competencia.categoria}-${e.local}-${e.visitante}` === eventoEditado.id
     );
 
+    console.log(eventoOriginal);
+    console.log(eventoEditado);
+
     const eventoCompleto = {
       ...eventoOriginal,
       ...eventoEditado,
-      categoria: competencia.categoria
+      competencia: competencia.competencia,
+      categoria: eventoEditado.categoria
     };
+
+    console.log(eventoCompleto);
 
     // Setear evento en estado y abrir modal
     programacionStates.setProgramacionSeleccionado(eventoCompleto);
@@ -84,7 +81,6 @@ const ProgramacionList = () => {
             <MDBIcon fas icon="plus" />
           </Button>
 
-          <SearchInput value={query} onChange={setQuery} />
         </div>
       </div>
 
@@ -100,12 +96,13 @@ const ProgramacionList = () => {
 
       {/* Modal para editar */}
       {modalStates.modalShow && programacionStates.programacionSeleccionado && (
-        <ModalEditGenerico
+        <ModalEditProgramacion
           titulo={"Editar Programacion"}
           show={modalStates.modalShow}
           onClose={() => modalStates.setModalShow(false)}
           datos={programacionStates.programacionSeleccionado}
-          campos={camposProgramacion}
+          lugares={lugares}
+          equipos={equipos}
           onSubmit={(nuevosProgramacion) => {
             const datosForm = {
               ...programacionStates.programacionSeleccionado,
@@ -128,13 +125,6 @@ const ProgramacionList = () => {
         />
       )}
 
-      <ModalConfirmacion
-        show={confirmModal.show}
-        mensaje={confirmModal.mensaje}
-        onConfirm={confirmModal.onConfirm}
-        onClose={confirmModal.close}
-      />
-
       {modalStates.modalCrearShow && (
         <ModalCreateGenerico
           show={modalStates.modalCrearShow}
@@ -148,16 +138,6 @@ const ProgramacionList = () => {
           guardando={flags.guardando}
         />
       )}
-
-      {shouldShowPaginator && (
-        <Paginator
-          currentPage={currentPage}
-          maxPage={maxPage}
-          nextPage={nextPage}
-          prevPage={prevPage}
-        />
-      )}
-      <ScrollTopButton />
     </Container>
   );
 };

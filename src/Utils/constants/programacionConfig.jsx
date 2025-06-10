@@ -40,7 +40,7 @@ const commonFields = {
     typedField("lugar", "Lugar", isEvent ? 'event' : 'common'),
   
   rama: (isEvent = true) => 
-    typedField("rama", isEvent ? "Nombre de la programacion" : "Rama", 
+    typedField("rama", isEvent ? "Genero" : "Rama", 
       isEvent ? 'event' : 'common')
 };
 
@@ -54,7 +54,7 @@ export const toColumns = (campos) => campos.map(({ nombre, label }) => ({
 // Campos de programación usando la nueva función unificada
 export const camposProgramacion = [
   typedField("fecha", "Fecha de encuentro", 'parent', { tipo: "date" }),
-  typedField("categoria", "Nombre de la categoria", 'parent'),
+  typedField("categoria", "Categoria", 'parent'),
   typedField("dia", "Dia", 'parent'),
   typedField("local", "Local", 'event', {
     render: (rep) => rep ? `${rep.local}` : "Sin representante"
@@ -62,7 +62,7 @@ export const camposProgramacion = [
   typedField("visitante", "Visitante", 'event'),
   typedField("hora", "Hora", 'event'),
   typedField("lugar", "Lugar", 'event'),
-  typedField("rama", "Nombre de la programacion", 'event'),
+  typedField("rama", "Genero", 'event'),
   typedField("eventos", "Eventos", 'parent', {
     render: (eventos) => eventos ? eventos.length : 0
   })
