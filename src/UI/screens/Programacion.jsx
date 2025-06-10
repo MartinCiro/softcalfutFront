@@ -38,9 +38,6 @@ const ProgramacionList = () => {
       `${competencia.categoria}-${e.local}-${e.visitante}` === eventoEditado.id
     );
 
-    console.log(eventoOriginal);
-    console.log(eventoEditado);
-
     const eventoCompleto = {
       ...eventoOriginal,
       ...eventoEditado,

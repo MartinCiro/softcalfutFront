@@ -19,7 +19,6 @@ const ProgramacionService = {
         throw error;
       }
       cacheSession(cacheKey, data);
-      console.log(data);
       return { result: data };
     } catch (error) {
       console.error("Error al obtener programacion:", error);
@@ -29,6 +28,7 @@ const ProgramacionService = {
   },
 
   upProgramacion: async (data) => {
+    console.log(data);
     try {
       const response = await getByEndpoint(ProgramacionService.endpoint, data, "put");
       return response;

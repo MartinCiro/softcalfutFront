@@ -27,10 +27,6 @@ export const useProgramacionLogic = (cargarProgramacion) => {
 
   const guardarOActualizarProgramacion = async (datosForm) => {
     const esEdicion = modoEdicion;
-    if (!datosForm.nombre || !datosForm.descripcion) {
-      setErrorGuardar({ message: "Nombre y descripción son obligatorios", variant: "danger" });
-      return;
-    }
     try {
       setGuardando(true);
       esEdicion 
