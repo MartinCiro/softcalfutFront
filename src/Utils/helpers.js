@@ -73,8 +73,8 @@ export const parseFecha = (fechaStr) => {
   
   if (fechaStr.includes('/')) {
     // Formato dd/mm/yyyy
-    const [dia, mes, año] = fechaStr.split('/');
-    return new Date(año, mes - 1, dia);
+    const [dia, mes, ano] = fechaStr.split('/');
+    return new Date(ano, mes - 1, dia);
   } else {
     // Formato ISO u otro válido para Date
     date = new Date(fechaStr);

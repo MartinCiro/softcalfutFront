@@ -66,6 +66,7 @@ button {
   .form-label {
     font-weight: bold;
     color: var(--color-secundario);
+    margin-right: 5px;
   }
 
   img {

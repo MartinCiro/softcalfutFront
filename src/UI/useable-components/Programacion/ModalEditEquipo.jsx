@@ -19,7 +19,7 @@ const ModalEditProgramacion = ({
   console.log("lugares", lugares);
   console.log("datos", datos); */
   const camposFiltrados = camposProgramacion.filter(
-    campo => !["eventos", "local", "visitante", "rama", "lugar"].includes(campo.nombre)
+    campo => !["eventos", "local", "visitante", "rama", "lugar", "dia"].includes(campo.nombre)
   );
   const [genero, setGenero] = useState(datos.rama || "M");
 

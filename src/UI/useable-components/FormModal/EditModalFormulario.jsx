@@ -4,6 +4,7 @@ import useErrorHandler from "@hooks/useErrorHandler";
 import { useAutoResizeTextarea } from "@hooks/useAutoResizeTextarea";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { parseFecha } from "@utils/helpers";
 
 const ModalEditForm = ({
   show,
@@ -161,7 +162,7 @@ const ModalEditForm = ({
                   </Form.Control>
                 ) : campo.tipo === "date" ? (
                   <DatePicker
-                    selected={value ? new Date(value) : null}
+                    selected={value ? parseFecha(value) : null}
                     onChange={(date) => handleChange({
                       target: {
                         name: campo.nombre,
@@ -169,10 +170,10 @@ const ModalEditForm = ({
                         type: 'date'
                       }
                     })}
-                    maxDate={campo.fechaMaxima === 'hoy' ? new Date() : undefined}
+                    maxDate={campo.fechaMaxima ? new Date() : undefined}
                     className="form-control"
                     disabled={campo.bloqueado}
-                    dateFormat="yyyy-MM-dd"
+                    dateFormat="dd/MM/yyyy"
                   />
                 ) : (
                   <Form.Control
