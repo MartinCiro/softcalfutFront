@@ -3,6 +3,7 @@ import { MDBIcon } from "mdb-react-ui-kit";
 import ProgramacionService from "@services/ProgramacionService"; // Services
 import EquipoService from "@services/EquipoService";
 import LugarService from "@services/LugarEncuentroService";
+import CategoriaService from "@services/CategoriaService";
 import useFetchData from "@hooks/useFetchData"; // Hooks
 import LoadingSpinner from "@componentsUseable/Loading"; // Components
 import ErrorMessage from "@componentsUseable/ErrorMessage";
@@ -19,6 +20,7 @@ const ProgramacionList = () => {
   const { data: programacion, loading, error, reload: cargarProgramacion } = useFetchData(ProgramacionService.programacion);
   const { data: equipos } = useFetchData(EquipoService.equipos);
   const { data: lugares } = useFetchData(LugarService.lugarEncuentro);
+  const { data: categorias } = useFetchData(CategoriaService.categorias);
   const { modalStates, programacionStates, flags, errorGuardar, handlers } = useProgramacionLogic(cargarProgramacion);
 
   if (loading) return <LoadingSpinner />;
@@ -100,6 +102,7 @@ const ProgramacionList = () => {
           datos={programacionStates.programacionSeleccionado}
           lugares={lugares}
           equipos={equipos}
+          categorias={categorias}
           onSubmit={(nuevosProgramacion) => {
             const datosForm = {
               ...programacionStates.programacionSeleccionado,

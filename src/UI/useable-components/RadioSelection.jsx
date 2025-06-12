@@ -10,7 +10,7 @@ const RadioSelection = ({ options, initialValue, onChange }) => {
   };
 
   return (
-    <div className="radio-selection mb-4">
+    <div className="radio-selection mb-2">
       {options.map(({ label, value }) => (
         <label key={value} style={{ marginRight: 15, cursor: "pointer" }}>
           <input

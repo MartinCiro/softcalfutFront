@@ -11,6 +11,7 @@ const ModalEditProgramacion = ({
   titulo = "Editar Programación",
   equipos = [],
   lugares = [],
+  categorias = [],
   datos = {},
   onSubmit,
   loading,
@@ -19,8 +20,10 @@ const ModalEditProgramacion = ({
   console.log("lugares", lugares);
   console.log("datos", datos); */
   const camposFiltrados = camposProgramacion.filter(
-    campo => !["eventos", "local", "visitante", "rama", "lugar", "dia", "hora"].includes(campo.nombre)
+    campo => !["eventos", "local", "visitante", "rama", "lugar", "dia", "hora", "categoria"].includes(campo.nombre)
   );
+  /* console.log(datos.categoria) */ 
+  //const blockedCategory = (camposProgramacion.find(item => item.key === "categoria") || {}).bloqueado = true
   const [genero, setGenero] = useState(datos.rama || "M");
 
   const [equipoA, setEquipoA] = useState(
@@ -35,7 +38,9 @@ const ModalEditProgramacion = ({
     lugares.find(l => l.nombre === datos.lugar) || null
   );
 
-
+  const [categoria, setCategoria] = useState(
+    categorias.find(l => l.nombre === datos.categoria) || null
+  );
 
   const handleGuardar = (formData) => {
     onSubmit({
@@ -118,7 +123,6 @@ const ModalEditProgramacion = ({
         />
 
       </div>
-
       <RadioSelection
         options={[
           { label: "M", value: "M" },
@@ -127,6 +131,18 @@ const ModalEditProgramacion = ({
         initialValue={genero}
         onChange={setGenero}
       />
+
+      <SelectSearch
+        label="Categoria"
+        options={categorias}
+        value={categoria}
+        onChange={setCategoria}
+        getOptionValue={l => l.id}
+        getOptionLabel={l => l.nombre_categoria}
+        placeholder={datos.categoria}
+        className="mb-4"
+      />
+
       <SelectSearch
         label="Lugar"
         options={lugares}
