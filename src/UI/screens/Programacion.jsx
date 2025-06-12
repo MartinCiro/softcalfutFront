@@ -22,22 +22,22 @@ const ProgramacionList = () => {
   const { data: lugares } = useFetchData(LugarService.lugarEncuentro);
   const { data: categorias } = useFetchData(CategoriaService.categorias);
   const { modalStates, programacionStates, flags, errorGuardar, handlers } = useProgramacionLogic(cargarProgramacion);
-
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
 
   const handleEditEvento = (eventoEditado) => {
+    console.log(eventoEditado);
     // Buscar competencia y evento original
     const competencia = programacion.find(c =>
       c.eventos.some(e =>
-        `${c.categoria}-${e.local}-${e.visitante}` === eventoEditado.id
+        e.id === eventoEditado.id
       )
     );
 
     if (!competencia) return;
 
     const eventoOriginal = competencia.eventos.find(e =>
-      `${competencia.categoria}-${e.local}-${e.visitante}` === eventoEditado.id
+      e.id === eventoEditado.id
     );
 
     const eventoCompleto = {
@@ -47,15 +47,11 @@ const ProgramacionList = () => {
       categoria: eventoEditado.categoria
     };
 
-    console.log(eventoCompleto);
-
     // Setear evento en estado y abrir modal
     programacionStates.setProgramacionSeleccionado(eventoCompleto);
     flags.setModoEdicion(true);
     modalStates.setModalShow(true);
   };
-
-
 
   return (
 

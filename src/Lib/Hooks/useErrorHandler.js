@@ -8,12 +8,20 @@ const useErrorHandler = () => {
     const handlers = [
       {
         condition: () => err.response,
-        message: () =>
-          err.response.data?.result ||
-          err.response.data?.mensaje ||
-          err.response.data?.message ||
-          err.error ||
-          "Error en la solicitud. Verifique los datos enviados.",
+        message: () => {
+          const result = err.response.data?.result;
+          const mensaje =
+            err.response.data?.mensaje || err.response.data?.message || err.error;
+
+          if (Array.isArray(result)) {
+            // Es una lista de errores por campo
+            return result
+              .map((e) => `${e.campo}: ${e.mensaje}`)
+              .join("\n");
+          }
+
+          return result || mensaje || "Error en la solicitud. Verifique los datos enviados.";
+        },
       },
       {
         condition: () => err.request,

@@ -39,9 +39,9 @@ const ModalEditProgramacion = ({
   );
 
   const [categoria, setCategoria] = useState(
-    categorias.find(l => l.nombre === datos.categoria) || null
+    categorias.find(l => l.nombre_categoria === datos.categoria) || null
   );
-
+  console.log(categoria);
   const handleGuardar = (formData) => {
     onSubmit({
       ...formData,

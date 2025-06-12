@@ -23,9 +23,7 @@ const CalendarioSemanal = ({ data, config = {}, onEditEvento }) => {
                     )
                 )
                 .map(evento => ({
-                    ...evento,
-                    competencia: competencia.categoria,
-                    id: `${competencia.categoria}-${evento.local}-${evento.visitante}`
+                    ...evento
                 }))
         );
     }, [data]);
