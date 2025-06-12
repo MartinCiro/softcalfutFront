@@ -113,8 +113,6 @@ button {
     cursor: pointer;
     position: relative;
     outline: none;
-
-
     /* Estado no marcado */
     &:before {
       content: '';
@@ -143,6 +141,36 @@ button {
       }
     }
   }
+
+  input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--color-claro);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-oscuro);
+    cursor: pointer;
+    position: relative;
+
+    &:checked {
+      background-color: var(--color-secundario);
+      border-color: var(--color-secundario);
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 8px;
+        height: 8px;
+        background: var(--color-claro);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
+    }
+  }
+
 
   .form-control,
   textarea,
