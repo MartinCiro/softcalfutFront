@@ -2,46 +2,34 @@ import React, { useState } from "react";
 
 import SelectSearch from "@componentsUseable/SelectSearch";
 import RadioSelection from "@componentsUseable/RadioSelection";
-import ModalEditForm from "@componentsUseable/FormModal/EditModalFormulario";
+import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
 import { camposProgramacion } from "@constants/programacionConfig";
 
-const ModalEditProgramacion = ({
+const ModalCreateProgramacion = ({
   show,
   onClose,
-  titulo = "Editar Programación",
+  titulo = "Crear Programación",
   equipos = [],
   lugares = [],
   categorias = [],
   torneos = [],
-  datos = {},
   onSubmit,
   loading,
 }) => {
   const camposFiltrados = camposProgramacion.filter(
     campo => !["eventos", "local", "visitante", "rama", "lugar", "dia", "hora", "categoria"].includes(campo.nombre)
   );
-  //const blockedCategory = (camposProgramacion.find(item => item.key === "categoria") || {}).bloqueado = true
-  const [genero, setGenero] = useState(datos.rama || "M");
 
-  const [local, setLocal] = useState(
-    equipos.find(e => e.nom_equipo === datos.local) || null
-  );
+  const [genero, setGenero] = useState("M");
+  const [local, setLocal] = useState(null);
+  const [visitante, setVisitante] = useState(null);
+  const [lugar, setLugar] = useState(null);
+  const [categoria, setCategoria] = useState(null);
+  const [torneo, setTorneo] = useState(null);
 
-  const [visitante, setVisitante] = useState(
-    equipos.find(e => e.nom_equipo === datos.visitante) || null
-  );
-
-  const [lugar, setLugar] = useState(
-    lugares.find(l => l.nombre === datos.lugar) || null
-  );
-
-  const [categoria, setCategoria] = useState(
-    categorias.find(l => l.nombre_categoria === datos.categoria) || null
-  );
-
-  const [torneo, setTorneo] = useState(
-    torneos.find(t => t.nombre_torneo === datos.torneo) || null
-  );
+  const [hora, setHora] = useState("12");
+  const [minuto, setMinuto] = useState("00");
+  const [ampm, setAmPm] = useState("a.m.");
 
   const handleGuardar = (formData) => {
     onSubmit({
@@ -57,7 +45,6 @@ const ModalEditProgramacion = ({
     onClose();
   };
 
-  // Generación de opciones de hora (1-12), minutos (00-59) y AM/PM
   const hoursOptions = Array.from({ length: 12 }, (_, i) => {
     const hour = i + 1;
     return {
@@ -78,26 +65,12 @@ const ModalEditProgramacion = ({
     { label: "p.m.", value: "p.m." }
   ];
 
-  // Estado inicial basado en la fecha
-  const initialHours = Number(datos.hora.split(":")[0]);
-  const initialMinutes = Number(datos.hora.split(":")[1].split(" ")[0]);
-  const initialAmPm = datos.hora.includes("p.m.") ? "p.m." : "a.m.";
-
-  const [hora, setHora] = useState(initialHours);
-
-  const [minuto, setMinuto] = useState(
-    String(initialMinutes).padStart(2, "0")
-  );
-
-  const [ampm, setAmPm] = useState(initialAmPm);
-
   return (
-    <ModalEditForm
+    <CreateModalFormulario
       show={show}
       onClose={onClose}
       titulo={titulo}
       campos={camposFiltrados}
-      datos={datos}
       onSubmit={handleGuardar}
       loading={loading}
     >
@@ -107,7 +80,7 @@ const ModalEditProgramacion = ({
           options={hoursOptions}
           onChange={(opt) => setHora(opt.value)}
           value={hoursOptions.find(opt => opt.value === hora)}
-          placeholder={hora}
+          placeholder="Hora"
         />
 
         <SelectSearch
@@ -115,7 +88,7 @@ const ModalEditProgramacion = ({
           options={minutesOptions}
           value={minutesOptions.find(opt => opt.value === minuto)}
           onChange={(opt) => setMinuto(opt.value)}
-          placeholder={initialMinutes}
+          placeholder="Minuto"
         />
 
         <SelectSearch
@@ -123,10 +96,10 @@ const ModalEditProgramacion = ({
           options={ampmOptions}
           value={ampmOptions.find(opt => opt.label === ampm)}
           onChange={(opt) => setAmPm(opt.label)}
-          placeholder={ampm}
+          placeholder="AM/PM"
         />
-
       </div>
+
       <RadioSelection
         options={[
           { label: "M", value: "M" },
@@ -143,7 +116,7 @@ const ModalEditProgramacion = ({
         onChange={setCategoria}
         getOptionValue={c => c.id}
         getOptionLabel={c => c.nombre_categoria}
-        placeholder={datos.categoria}
+        placeholder="Seleccionar categoría"
         className="mb-4"
       />
 
@@ -154,9 +127,10 @@ const ModalEditProgramacion = ({
         onChange={setLugar}
         getOptionValue={l => l.id}
         getOptionLabel={l => l.nombre}
-        placeholder={datos.lugar}
+        placeholder="Seleccionar lugar"
         className="mb-4"
       />
+
       <SelectSearch
         label="Local"
         options={equipos}
@@ -164,7 +138,7 @@ const ModalEditProgramacion = ({
         onChange={setLocal}
         getOptionValue={e => e.id}
         getOptionLabel={e => e.nom_equipo}
-        placeholder={datos.local}
+        placeholder="Equipo local"
         className="mb-4"
       />
 
@@ -176,7 +150,7 @@ const ModalEditProgramacion = ({
         getOptionValue={v => v.id}
         getOptionLabel={v => v.nom_equipo}
         className="mb-4"
-        placeholder={datos.visitante}
+        placeholder="Equipo visitante"
       />
 
       <SelectSearch
@@ -187,10 +161,10 @@ const ModalEditProgramacion = ({
         getOptionValue={e => e.id}
         getOptionLabel={e => e.nombre_torneo}
         className="mb-4"
-        placeholder={datos.visitante}
+        placeholder="Seleccionar torneo"
       />
-    </ModalEditForm>
+    </CreateModalFormulario>
   );
 };
 
-export default ModalEditProgramacion;
+export default ModalCreateProgramacion;

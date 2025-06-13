@@ -10,7 +10,7 @@ import LoadingSpinner from "@componentsUseable/Loading"; // Components
 import ErrorMessage from "@componentsUseable/ErrorMessage";
 import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
 import ModalEditProgramacion from "@componentsUseable/Programacion/ModalEditEquipo";
-import ModalCreateGenerico from "@componentsUseable/FormModal/CreateModalFormulario";
+import ModalCreateProgramacion from "@componentsUseable/Programacion/ModalCreateProgramacion";
 import Calendar from "@componentsUseable/Programacion/Calendar";
 
 import { useProgramacionLogic } from "@hooks/programacion/useProgramacionLogic";
@@ -96,11 +96,6 @@ const ProgramacionList = () => {
           titulo={"Editar Programacion"}
           show={modalStates.modalShow}
           onClose={() => modalStates.setModalShow(false)}
-          datos={programacionStates.programacionSeleccionado}
-          lugares={lugares}
-          equipos={equipos}
-          categorias={categorias}
-          torneos={torneos}
           onSubmit={(nuevosProgramacion) => {
             const datosForm = {
               ...programacionStates.programacionSeleccionado,
@@ -109,6 +104,13 @@ const ProgramacionList = () => {
             handlers.guardarOActualizarProgramacion(datosForm);
             if (!errorGuardar.message || errorGuardar.variant === "success") modalStates.setModalShow(false);
           }}
+          datos={programacionStates.programacionSeleccionado}
+
+          equipos={equipos}
+          lugares={lugares}
+          categorias={categorias}
+          torneos={torneos}
+          
         />
       )}
 
@@ -124,16 +126,19 @@ const ProgramacionList = () => {
       )}
 
       {modalStates.modalCrearShow && (
-        <ModalCreateGenerico
+        <ModalCreateProgramacion
           show={modalStates.modalCrearShow}
           onClose={() => modalStates.setModalCrearShow(false)}
-          campos={camposProgramacion}
           onSubmit={(programacion) => {
             handlers.guardarOActualizarProgramacion(programacion);
             if (!errorGuardar.message || errorGuardar.variant === "success") modalStates.setModalCrearShow(false);
           }}
           programacionDisponibles={programacion}
           guardando={flags.guardando}
+          equipos={equipos}
+          lugares={lugares}
+          categorias={categorias}
+          torneos={torneos}
         />
       )}
     </Container>

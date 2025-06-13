@@ -65,7 +65,8 @@ export const camposProgramacion = [
   typedField("rama", "Genero", 'event'),
   typedField("eventos", "Eventos", 'parent', {
     render: (eventos) => eventos ? eventos.length : 0
-  })
+  }),
+  typedField("competencia", "Competencia", 'event'),
 ];
 
 // Columnas de programación (filtradas)
