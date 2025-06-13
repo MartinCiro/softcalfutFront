@@ -12,6 +12,7 @@ const ModalEditProgramacion = ({
   equipos = [],
   lugares = [],
   categorias = [],
+  torneos = [],
   datos = {},
   onSubmit,
   loading,
@@ -26,11 +27,11 @@ const ModalEditProgramacion = ({
   //const blockedCategory = (camposProgramacion.find(item => item.key === "categoria") || {}).bloqueado = true
   const [genero, setGenero] = useState(datos.rama || "M");
 
-  const [equipoA, setEquipoA] = useState(
+  const [local, setLocal] = useState(
     equipos.find(e => e.nom_equipo === datos.local) || null
   );
 
-  const [equipoB, setEquipoB] = useState(
+  const [visitante, setVisitante] = useState(
     equipos.find(e => e.nom_equipo === datos.visitante) || null
   );
 
@@ -41,14 +42,21 @@ const ModalEditProgramacion = ({
   const [categoria, setCategoria] = useState(
     categorias.find(l => l.nombre_categoria === datos.categoria) || null
   );
-  console.log(categoria);
+
+  const [torneo, setTorneo] = useState(
+    torneos.find(t => t.nombre_torneo === datos.torneo) || null
+  );
+
   const handleGuardar = (formData) => {
     onSubmit({
       ...formData,
       lugar: lugar?.id,
-      equipo_a: equipoA?.id,
-      equipo_b: equipoB?.id,
+      equipoLocal: local?.id,
+      equipoVisitante: visitante?.id,
       rama: genero,
+      categoria: categoria?.id,
+      hora: `${hora}:${minuto} ${ampm}`,
+      torneo: torneo?.id
     });
     onClose();
   };
@@ -137,8 +145,8 @@ const ModalEditProgramacion = ({
         options={categorias}
         value={categoria}
         onChange={setCategoria}
-        getOptionValue={l => l.id}
-        getOptionLabel={l => l.nombre_categoria}
+        getOptionValue={c => c.id}
+        getOptionLabel={c => c.nombre_categoria}
         placeholder={datos.categoria}
         className="mb-4"
       />
@@ -156,8 +164,8 @@ const ModalEditProgramacion = ({
       <SelectSearch
         label="Local"
         options={equipos}
-        value={equipoA}
-        onChange={setEquipoA}
+        value={local}
+        onChange={setLocal}
         getOptionValue={e => e.id}
         getOptionLabel={e => e.nom_equipo}
         placeholder={datos.local}
@@ -167,15 +175,24 @@ const ModalEditProgramacion = ({
       <SelectSearch
         label="Visitante"
         options={equipos}
-        value={equipoB}
-        onChange={setEquipoB}
-        getOptionValue={e => e.id}
-        getOptionLabel={e => e.nom_equipo}
+        value={visitante}
+        onChange={setVisitante}
+        getOptionValue={v => v.id}
+        getOptionLabel={v => v.nom_equipo}
         className="mb-4"
         placeholder={datos.visitante}
       />
 
-
+      <SelectSearch
+        label="Torneo"
+        options={torneos}
+        value={torneo}
+        onChange={setTorneo}
+        getOptionValue={e => e.id}
+        getOptionLabel={e => e.nombre_torneo}
+        className="mb-4"
+        placeholder={datos.visitante}
+      />
     </ModalEditForm>
   );
 };

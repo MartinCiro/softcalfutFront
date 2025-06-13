@@ -4,6 +4,7 @@ import ProgramacionService from "@services/ProgramacionService"; // Services
 import EquipoService from "@services/EquipoService";
 import LugarService from "@services/LugarEncuentroService";
 import CategoriaService from "@services/CategoriaService";
+import TorneoService from "@services/TorneoService";
 import useFetchData from "@hooks/useFetchData"; // Hooks
 import LoadingSpinner from "@componentsUseable/Loading"; // Components
 import ErrorMessage from "@componentsUseable/ErrorMessage";
@@ -21,12 +22,12 @@ const ProgramacionList = () => {
   const { data: equipos } = useFetchData(EquipoService.equipos);
   const { data: lugares } = useFetchData(LugarService.lugarEncuentro);
   const { data: categorias } = useFetchData(CategoriaService.categorias);
+  const { data: torneos } = useFetchData(TorneoService.torneos);
   const { modalStates, programacionStates, flags, errorGuardar, handlers } = useProgramacionLogic(cargarProgramacion);
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
 
   const handleEditEvento = (eventoEditado) => {
-    console.log(eventoEditado);
     // Buscar competencia y evento original
     const competencia = programacion.find(c =>
       c.eventos.some(e =>
@@ -99,6 +100,7 @@ const ProgramacionList = () => {
           lugares={lugares}
           equipos={equipos}
           categorias={categorias}
+          torneos={torneos}
           onSubmit={(nuevosProgramacion) => {
             const datosForm = {
               ...programacionStates.programacionSeleccionado,

@@ -28,7 +28,6 @@ const ProgramacionService = {
   },
 
   upProgramacion: async (data) => {
-    console.log(data);
     try {
       const response = await getByEndpoint(ProgramacionService.endpoint, data, "put");
       return response;
