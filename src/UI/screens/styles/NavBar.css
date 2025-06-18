@@ -7,12 +7,15 @@
     &:hover {
       color: var(--color-primario);
     }
+
     &:active {
       color: var(--color-primario);
     }
+
     &:focus {
       color: var(--color-primario);
     }
+
     &:focus:not(.active) {
       color: var(--color-primario);
     }
@@ -29,12 +32,12 @@
       background-color: var(--color-claro);
     }
 
-    
+
     &.navbar-toggler:not(.collapsed) .navbar-toggler-icon::before {
       content: "\f00d";
       transform: rotate(180deg);
     }
-    
+
     .navbar-toggler-icon {
       display: flex;
       align-items: center;
@@ -49,7 +52,21 @@
         color: var(--color-oscuro);
         transition: transform 0.3s ease;
       }
+    }
+  }
 
+  .dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+  }
+
+  .dropdown-item {
+    background-color: var(--color-claro) !important;
+    color: var(--color-oscuro) !important;
+
+    &:hover {
+      background-color: var(--color-secundario) !important;
+      color: var(--color-claro) !important;
     }
   }
 }

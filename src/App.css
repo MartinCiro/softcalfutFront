@@ -195,6 +195,21 @@ button {
   }
 }
 
+.center-layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: '2rem'; 
+  max-width: '800px'; 
+  margin: '0 auto';
+  p{
+    text-align: center;
+    margin: '6rem'; 
+    max-width: '800px';
+  }
+}
+
 .modal-footer {
   background-color: var(--color-oscuro) !important;
   border-top: 3px solid var(--color-primario) !important;

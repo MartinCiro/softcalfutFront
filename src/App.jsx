@@ -4,6 +4,12 @@ import '@src/App.css';
 
 // Componentes de autenticación
 import Login from '@screens/Login';
+import Historia from '@screens/Historia';
+import MisionVision from '@screens/MisionVision';
+import SobreLiga from '@screens/SobreLiga';
+import Futbol from '@screens/Futbol';
+import FutbolSala from '@screens/FutbolSala';
+
 import ProtectedRoute from '@routes/common/ProtectedRoute';
 
 // Componentes de layout
@@ -18,21 +24,30 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Ruta pública para login */}
+        {/* Ruta pública sin layout (ej. login) */}
         <Route path="/login" element={<Login />} />
-        
-        {/* Rutas protegidas */}
-        <Route element={<ProtectedRoute />}>
-          <Route element={<Layout />}>
+
+        {/* Rutas públicas con layout */}
+        <Route element={<Layout />}>
+          <Route path="/lcf/historia" element={<Historia />} />
+          <Route path="/lcf/mision-vision" element={<MisionVision />} />
+          <Route path="/lcf/sobre" element={<SobreLiga />} />
+          {/* <Route path="/lcf/organigrama" element={<Organigrama />} /> */}
+          <Route path="/torneos/futbol" element={<Futbol />} />
+          <Route path="/torneos/futbol-sala" element={<FutbolSala />} />
+
+          {/* Rutas protegidas dentro del mismo layout */}
+          <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
             {/* Más rutas protegidas aquí */}
           </Route>
         </Route>
-        
-        {/* Redirigir cualquier ruta desconocida a login o dashboard según auth */}
+
+        {/* Catch-all */}
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </Router>
+
   );
 }
 

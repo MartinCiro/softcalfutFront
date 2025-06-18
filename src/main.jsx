@@ -8,6 +8,7 @@ import AuthService from '@services/AuthService'
 // Importar estilos de Bootstrap y MDBootstrap
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'mdb-react-ui-kit/dist/css/mdb.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 // Configurar interceptores globales para axios
 axios.interceptors.request.use(
