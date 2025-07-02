@@ -12,10 +12,10 @@ const AuthService = {
   login: async (correo, password) => {
     try {
       const data = await getByEndpoint(`auth/login`, {
-        documento:   correo,
-        enpass: password,
+        documento: correo,
+        enpass:    password,
       }, "post");
-
+      console.log('Token:', data.accessToken);
       const { token, usuario } = extractResponseData(data);
 
       if (!token) throw new Error("No se recibió un token de acceso.");

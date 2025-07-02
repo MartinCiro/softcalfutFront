@@ -43,27 +43,33 @@ export const getByEndpoint = async (endpoint, body = null, method = "get") => {
     const lowerMethod = method.toLowerCase();
     const isBodyMethod = ["post", "put", "patch"].includes(lowerMethod);
 
-    const config = {
+    const requestConfig = {  // Cambiado de 'config' a 'requestConfig' para evitar conflicto
       method: lowerMethod,
       url: `${API_URL}/${endpoint}/`,
+      withCredentials: true,  // Cambiado de 'credentials' a 'withCredentials' (Axios)
       headers: {
         ...AuthService.getAuthHeader(),
         ...(isBodyMethod && { "Content-Type": "application/json" }),
       },
       timeout: 90000,
-      ...(isBodyMethod && body ? { data: body } : {}),
+      ...(isBodyMethod && body && { data: JSON.stringify(body) }),  // Asegura stringify
     };
+    console.log(API_URL, endpoint, body);
+    const response = await axios(requestConfig);
 
-    const response = await axios(config);
-
-    if (response.data && response.data.result) {
+    if (response.data?.result !== undefined) {  // Mejor verificación
       return response.data.result;
-    } else {
-      throw new Error("No se pudo obtener la información solicitada.");
     }
+    throw new Error(response.data?.message || "Respuesta inesperada del servidor");
+    
   } catch (error) {
-    console.error("Error al obtener datos para el endpoint:", endpoint, "\nError:", error);
-    throw error;
+    if (error.response) {
+      // Manejo específico por código de estado
+      //if (error.response.status === 401) AuthService.handleUnauthorized();
+      throw new Error(error.response.data?.message || `Error ${error.response.status}`);
+    }
+    console.error(`Error en ${method.toUpperCase()} ${endpoint}:`, error.message);
+    throw new Error("Error de conexión con el servidor");
   }
 };
 
