@@ -20,18 +20,17 @@ const NavBar = () => {
             <NavDropdown title={<span><MDBIcon fas icon="building" className="me-1" /> LCF</span>} id="dropdown-lcf">
               <NavDropdown.Item as={NavLink} to="/lcf/historia">Historia</NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/lcf/mision-vision">Misión y Visión</NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/lcf/sobre">Sobre la Liga</NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/lcf/organigrama">Organigrama</NavDropdown.Item>
             </NavDropdown>
 
             <NavDropdown title={<span><MDBIcon fas icon="trophy" className="me-1" /> Torneos</span>} id="dropdown-torneos">
               <NavDropdown.Item as={NavLink} to="/torneos/futbol">Fútbol</NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Fútbol Sala</NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/torneos/programacion">Programacion</NavDropdown.Item>
             </NavDropdown>
 
             <NavDropdown title={<span><MDBIcon fas icon="book" className="me-1" /> Escuela LCF</span>} id="dropdown-escuela">
               <NavDropdown.Item as={NavLink} to="/escuela/formacion">Escuela de Formación</NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/escuela/matriculas">Matrículas</NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/escuela/acerca">Acerca de la Escuela</NavDropdown.Item>
             </NavDropdown>
 

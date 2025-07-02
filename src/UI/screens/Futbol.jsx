@@ -8,7 +8,7 @@ const Futbol = () => {
       <section>
         <h2>Torneo Municipal</h2>
         <p>
-          Durante el año 2023 la liga organizará y desarrollará en la ciudad de Manizales dos (2) torneos, uno por cada semestre, en las siguientes categorías:
+          Durante el año 2025 la liga organizará y desarrollará en la ciudad de Manizales dos (2) torneos, uno por cada semestre, en las siguientes categorías:
         </p>
         <ul>
           <li>Categorías masculinas: 2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003, Sporman, sabatino.</li>

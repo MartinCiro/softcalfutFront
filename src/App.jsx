@@ -19,6 +19,7 @@ import Layout from '@layouts/Layout';
 import Dashboard from '@screens/Dashboard';
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import ProgramacionList from '@screens/Programacion';
 
 function App() {
   return (
@@ -31,10 +32,10 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/lcf/historia" element={<Historia />} />
           <Route path="/lcf/mision-vision" element={<MisionVision />} />
-          <Route path="/lcf/sobre" element={<SobreLiga />} />
           {/* <Route path="/lcf/organigrama" element={<Organigrama />} /> */}
           <Route path="/torneos/futbol" element={<Futbol />} />
           <Route path="/torneos/futbol-sala" element={<FutbolSala />} />
+          <Route path="/torneos/programacion" element={<ProgramacionList />} />
 
           {/* Rutas protegidas dentro del mismo layout */}
           <Route element={<ProtectedRoute />}>
