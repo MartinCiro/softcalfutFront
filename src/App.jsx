@@ -6,7 +6,6 @@ import '@src/App.css';
 import Login from '@screens/Login';
 import Historia from '@screens/Historia';
 import MisionVision from '@screens/MisionVision';
-import SobreLiga from '@screens/SobreLiga';
 import Futbol from '@screens/Futbol';
 import FutbolSala from '@screens/FutbolSala';
 
@@ -20,35 +19,35 @@ import Dashboard from '@screens/Dashboard';
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ProgramacionList from '@screens/Programacion';
+import PrincipalList from '@screens/Principal';
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Ruta pública sin layout (ej. login) */}
+        {/* Rutas públicas sin layout */}
         <Route path="/login" element={<Login />} />
-
+        
         {/* Rutas públicas con layout */}
         <Route element={<Layout />}>
           <Route path="/lcf/historia" element={<Historia />} />
           <Route path="/lcf/mision-vision" element={<MisionVision />} />
-          {/* <Route path="/lcf/organigrama" element={<Organigrama />} /> */}
           <Route path="/torneos/futbol" element={<Futbol />} />
           <Route path="/torneos/futbol-sala" element={<FutbolSala />} />
           <Route path="/torneos/programacion" element={<ProgramacionList />} />
-
-          {/* Rutas protegidas dentro del mismo layout */}
+          <Route path="/" element={<PrincipalList />} />
+          
+          {/* Rutas protegidas - requieren autenticación */}
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
             {/* Más rutas protegidas aquí */}
           </Route>
         </Route>
 
-        {/* Catch-all */}
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        {/* Redirección por defecto - ajusta según necesites */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
-
   );
 }
 

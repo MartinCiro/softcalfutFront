@@ -14,7 +14,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 axios.interceptors.request.use(
   config => {
     // Añadir token de autenticación a todas las solicitudes si existe
-    const token = localStorage.getItem('accessToken');
+    const token = sessionStorage.getItem('accessToken');
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
@@ -25,16 +25,16 @@ axios.interceptors.request.use(
 
 // Interceptor para manejar respuestas y errores
 axios.interceptors.response.use(
-  response => {
-    return response;
-  },
+  response => response,
   async error => {
     const originalRequest = error.config;
-    
+
+    const publicRoutes = ['/login', '/lcf/historia', '/lcf/mision-vision', '/torneos/futbol', '/torneos/futbol-sala', '/torneos/programacion'];
+    const isPublicRoute = publicRoutes.some(route => window.location.pathname.includes(route));
+    if (isPublicRoute) return Promise.reject(error);
+
     // Si el error es 401 (Unauthorized) y no es una solicitud de refresh token
-    if (error.response && error.response.status === 401 && 
-        !originalRequest._retry && 
-        !originalRequest.url?.includes('refresh')) {
+    if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url?.includes('refresh')) {
       
       originalRequest._retry = true;
       
