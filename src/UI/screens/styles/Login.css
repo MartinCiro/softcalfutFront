@@ -1,153 +1,105 @@
-/* Estilos para el componente Login utilizando la paleta de colores de Inteligencia de Datos */
-
-/* Colores principales */
-:root {
-  --primary-blue: #243E6E;
-  --primary-red: #FF5043;
-  --dark-blue: #0D1828;
-  --gray: #BEC2C6;
-  --light-gray: #EFF1F4;
-}
-
 .login-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--light-gray);
-  background-image: linear-gradient(135deg, var(--light-gray) 0%, #ffffff 100%);
-}
+  background-color: var(--color-claro);
+  background-image: linear-gradient(135deg, var(--color-claro) 0%, var(--color-claro) 100%);
 
-/* Estilos para el formulario de login */
-.login-card {
-  border: none !important;
-  border-radius: 15px !important;
-  box-shadow: 0 10px 25px rgba(13, 24, 40, 0.1) !important;
-}
+  /* Estilos específicos para los inputs de MDB */
+  .form-outline .form-control {
+    padding: 12px 15px !important;
+    height: auto !important;
+    font-size: 1rem !important;
+    opacity: 1 !important;
+    transition: all 0.3s ease !important;
 
-/* Estilos para los inputs */
-.login-input {
-  background-color: #ffffff !important;
-  border: 2px solid var(--primary-blue) !important;
-  color: #000000 !important;
-  border-radius: 8px !important;
-  padding: 12px 15px !important;
-  margin-bottom: 15px !important;
-  font-size: 1rem !important;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
-  height: auto !important;
-}
+    &:hover {
+      border-color: var(--color-secundario) !important;
+      box-shadow: 0 0 0 2px rgba(var(--color-secundario), 0.15) !important;
+    }
 
-/* Estilos específicos para los inputs de MDB */
-.form-outline .form-control {
-  background-color: #ffffff !important;
-  border: 2px solid var(--primary-blue) !important;
-  color: #000000 !important;
-  border-radius: 8px !important;
-  padding: 12px 15px !important;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
-  height: auto !important;
-  font-size: 1rem !important;
-  opacity: 1 !important;
-}
+    &:focus,
+    &:active {
+      box-shadow: 0 0 0 2px rgba(var(--color-secundario), 0.15) !important;
+      outline: none !important;
+    }
 
-.form-outline .form-label {
-  color: var(--dark-blue) !important;
-  font-weight: 500 !important;
-  background-color: #ffffff !important;
-  padding: 0 5px !important;
-  margin-left: 8px !important;
-  z-index: 1 !important;
-  opacity: 1 !important;
-}
+    &::placeholder {
+      color: var(--color-oscuro) !important;
+      opacity: 1 !important;
+    }
 
-/* Asegurar que el texto sea visible durante la escritura */
-.form-outline input.form-control {
-  color: #000000 !important;
-  -webkit-text-fill-color: #000000 !important;
-}
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus {
+      -webkit-box-shadow: 0 0 0 30px var(--color-claro) inset !important;
+      -webkit-text-fill-color: var(--color-oscuro) !important;
+    }
+  }
 
-/* Asegurar que el texto sea visible cuando el input está activo */
-.form-outline input.form-control:focus,
-.form-outline input.form-control:active,
-.form-outline input.form-control.active {
-  color: #000000 !important;
-  -webkit-text-fill-color: #000000 !important;
-}
+  .login-button {
+    background-color: var(--color-primario) !important;
+    border-color: var(--color-secundario) !important;
+    color: var(--color-oscuro) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 9px -4px var(--color-primario) !important;
+    transition: all 0.2s ease-in-out !important;
 
-.form-outline .form-control:focus {
-  border-color: var(--primary-blue) !important;
-  box-shadow: 0 0 0 0.25rem rgba(36, 62, 110, 0.3) !important;
-  outline: none !important;
-}
+    &:hover {
+      transform: translateY(-2px);
+      color: var(--color-claro) !important;
+      box-shadow: 0 6px 12px -4px var(--color-secundario) !important;
+    }
+  }
+  .btn-link{
+    color: var(--color-oscuro) !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out !important;
 
-.login-input:focus {
-  border-color: var(--primary-blue) !important;
-  box-shadow: 0 0 0 0.25rem rgba(36, 62, 110, 0.3) !important;
-  outline: none !important;
-}
+    &:hover {
+      transform: translateY(-2px);
+      color: var(--color-secundario) !important;
+    }
+  }
 
-/* Estilos para el botón de login */
-.login-button {
-  background-color: var(--primary-blue) !important;
-  border-color: var(--primary-blue) !important;
-  border-radius: 8px !important;
-  box-shadow: 0 4px 9px -4px rgba(36, 62, 110, 0.5) !important;
-  transition: all 0.2s ease-in-out !important;
-}
+  label {
+    &::after {
+      content: "*";
+      color: red;
+    }
+    &::before {
+      content: "*";
+      color: red;
+    }
+    &:hover {
+      transform: translateY(-2px);
+      color: var(--color-secundario) !important;
+    }
+  }
 
-.login-button:hover {
-  background-color: #1c325a !important;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px -4px rgba(36, 62, 110, 0.6) !important;
-}
+  .login-link {
+    color: var(--color-secundario) !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out !important;
 
-/* Estilos para los enlaces */
-.login-link {
-  color: var(--primary-blue) !important;
-  text-decoration: none !important;
-  transition: color 0.2s ease-in-out !important;
-}
+    &:hover {
+      transform: translateY(-2px);
+      color: var(--color-secundario) !important;
+    }
+  }
 
-.login-link:hover {
-  color: var(--dark-blue) !important;
-  text-decoration: underline !important;
-}
-
-/* Estilos para los mensajes de error */
-.login-error {
-  background-color: var(--primary-red) !important;
-  color: white !important;
-  border-radius: 8px !important;
-  border: none !important;
-  padding: 12px 15px !important;
 }
 
 /* Animación para el formulario */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 
-.login-animation {
-  animation: fadeIn 0.5s ease-out forwards;
-}
-
-/* Estilos para la imagen de fondo */
-.login-background-image {
-  max-width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: drop-shadow(0 10px 15px rgba(36, 62, 110, 0.2));
-  transition: transform 0.3s ease;
-  display: block;
-}
-
-.login-card {
-  height: 100%;
-  box-shadow: 0 10px 25px rgba(13, 24, 40, 0.15) !important;
-}
-
-.login-background-image:hover {
-  transform: scale(1.02);
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
