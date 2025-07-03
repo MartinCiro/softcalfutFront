@@ -93,10 +93,6 @@ const Dashboard = () => {
 
         {/* Contenido derecho */}
         <div className="col-md-9 p-4">
-          <h2 className="section-title mb-4">
-            <MDBIcon fas icon="tachometer-alt" className="me-2" />
-            {selectedComponent}
-          </h2>
           <div className="content-wrapper">
             <SelectedComponent />
           </div>
