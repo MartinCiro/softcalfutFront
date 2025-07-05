@@ -54,6 +54,7 @@ Hacia: la rama destino -> dev
 Este proyecto está bajo la licencia [MIT](https://opensource.org/licenses/MIT).
 
 ## Estructura de carpetas
+```
 /src
 ├── /Utils                    # Funciones auxiliares reutilizables
 │   ├── helpers.js            # Funciones de apoyo generales
@@ -68,3 +69,4 @@ Este proyecto está bajo la licencia [MIT](https://opensource.org/licenses/MIT).
 │   ├── /screen-components    # Componentes que se usan en una pantalla específica
 │   ├── /useable-components   # Componentes reutilizables (Button, Modal, Card)
 │   ├── /screens              # Vistas o páginas principales (Login, Dashboard, etc.)
+```
