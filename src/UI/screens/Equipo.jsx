@@ -21,13 +21,17 @@ import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 
 import { useEquiposLogic } from "@hooks/equipo/useEquiposLogic";
 import { columnsEquipo, camposEquipo } from "@constants/equiposConfig";
+import useHasPermission from "@hooks/useHasPermission";
 import "@styles/Permiso.css"; // Styles
 
 const EquiposList = () => {
   const { data: equipos, loading, error, reload: cargarEquipos } = useFetchData(EquipoService.equipos);
   const { data: categorias } = useFetchData(CategoriaService.categorias);
   const { data: usuarios } = useFetchData(UsuarioService.usuarios);
-  const { modalStates, equipoStates, flags, errorGuardar, handlers } = useEquiposLogic(cargarEquipos);
+  const canCreate = useHasPermission('equipos:Crea');
+  const canEdit = useHasPermission('equipos:Actualiza');
+  const canView = useHasPermission('equipos:Lee');
+  const { modalStates, equipoStates, flags, errorGuardar, handlers } = useEquiposLogic(cargarEquipos, { canCreate, canEdit, canView });
   const { query, setQuery, filtered } = useSearch(equipos, "nom_equipo");
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
 
@@ -35,28 +39,31 @@ const EquiposList = () => {
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
+  if (!canView) return <div>No tienes permisos para ver equipos</div>;
 
   return (
-
     <Container className="py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold mb-0">Equipos</h2>
+
         <div className="d-flex align-items-center gap-2">
-          <Button
-            variant="success"
-            onClick={() => {
-              flags.setModoEdicion(false);
-              equipoStates.setEquipoSeleccionado(null);
-              modalStates.setModalCrearShow(true);
-            }}
-            className="rounded-circle d-flex justify-content-center align-items-center btn_add"
-            style={{ width: "45px", height: "45px" }}
-            title="Crear Equipo"
-          >
-            <MDBIcon fas icon="plus" />
-          </Button>
-          <SearchInput value={query} onChange={setQuery} />
-        </div>
+              {canCreate && (
+                <Button
+                  variant="success"
+                  onClick={handlers.handleCrear}
+                  className="rounded-circle d-flex justify-content-center align-items-center btn_add"
+                  style={{ width: "45px", height: "45px" }}
+                  title="Crear Equipo"
+                >
+                <MDBIcon fas icon="plus" />
+                </Button>
+              )}
+              {
+                canView && (
+                  <SearchInput value={query} onChange={setQuery} />
+                )
+              }
+          </div>
       </div>
 
       {errorGuardar.message && (
@@ -69,6 +76,8 @@ const EquiposList = () => {
         data={paginatedData}
         columns={columnsEquipo}
         onEdit={handlers.handleEditar}
+        showEdit={canEdit}
+        showView={canView}
         onView={handlers.handleVer}
         sinDatos={"No se encontraron equipos"}
       />

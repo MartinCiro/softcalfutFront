@@ -2,7 +2,10 @@ import { useState } from "react";
 import useErrorHandler from "@hooks/useErrorHandler";
 import EquipoService from "@services/EquipoService";
 
-export const useEquiposLogic = (cargarEquipos) => {
+export const useEquiposLogic = (cargarEquipos, permissions = {}) => {
+  // Desestructuramos los permisos (con valores por defecto por si no se proporcionan)
+  const { canCreate = true, canEdit = true, canView = true } = permissions;
+  
   const [modalVer, setModalVer] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [modalShow, setModalShow] = useState(false);
@@ -15,17 +18,28 @@ export const useEquiposLogic = (cargarEquipos) => {
   const { handleError } = useErrorHandler();
 
   const handleEditar = (equipo) => {
+    if (!canEdit) return false;
     setModoEdicion(true);
     setEquipoSeleccionado(equipo);
     setModalShow(true);
   };
 
   const handleVer = (equipo) => {
+    if (!canView) return false;
     setEquipoVer(equipo);
     setModalVer(true);
   };
 
+  const handleCrear = () => {
+    if (!canCreate) return false;
+    setModoEdicion(false);
+    setEquipoSeleccionado(null);
+    setModalCrearShow(true);
+  };
+
   const guardarOActualizarEquipo = async (datosForm) => {
+    if (!(modoEdicion ? canEdit : canCreate)) return; 
+    
     const esEdicion = modoEdicion;
     const datosTransformados = {
       ...datosForm,
@@ -65,7 +79,7 @@ export const useEquiposLogic = (cargarEquipos) => {
       setModalCrearShow,
     },
     equipoStates: {
-      equipoSeleccionado: equipoSeleccionado,
+      equipoSeleccionado,
       equipoVer,
       setEquipoSeleccionado,
       setEquipoVer,
@@ -79,7 +93,8 @@ export const useEquiposLogic = (cargarEquipos) => {
     handlers: {
       handleEditar,
       handleVer,
+      handleCrear, 
       guardarOActualizarEquipo,
-    },
+    }
   };
 };
