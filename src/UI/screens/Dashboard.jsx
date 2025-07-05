@@ -11,6 +11,7 @@ import ProgramacionList from '@screens/Programacion';
 import LugarEncuentroList from '@screens/LugarEncuentro';
 import { MDBIcon } from 'mdb-react-ui-kit';
 import '@styles/Dashboard.css';
+import useHasPermission from '@hooks/useHasPermission';
 
 // Map de nombre -> componente
 const componentMap = {
@@ -24,6 +25,19 @@ const componentMap = {
   Usuarios: UsuariosList,
   Programación: ProgramacionList,
   'Lugar de Encuentro': LugarEncuentroList,
+};
+
+const modulePermissions = {
+  'Anuncios': 'anuncios:Lee',
+  'Roles': 'roles:Lee',
+  'Estado': 'estados:Lee',
+  'Permisos': 'permisos:Lee',
+  'Categoría': 'categoria:Lee',
+  'Torneos': 'torneos:Lee',
+  'Equipos': 'equipos:Lee',
+  'Usuarios': 'usuarios:Lee',
+  'Programación': 'programaciones:Lee',
+  'Lugar de Encuentro': 'lugarEncuentro:Lee'
 };
 
 // Agrupaciones del menú
@@ -48,8 +62,34 @@ const menuGroups = [
 
 const Dashboard = () => {
   const [selectedComponent, setSelectedComponent] = useState('Anuncios');
-
   const SelectedComponent = componentMap[selectedComponent];
+
+  const filteredMenuGroups = menuGroups.map(group => ({
+    ...group,
+    items: group.items.filter(item => {
+      const permissionBase = modulePermissions[item];
+      return useHasPermission(permissionBase);
+    })
+  })).filter(group => group.items.length > 0);
+
+  React.useEffect(() => {
+    const isSelectedAllowed = filteredMenuGroups.some(group =>
+      group.items.includes(selectedComponent)
+    );
+    if (!isSelectedAllowed && filteredMenuGroups.length > 0) {
+      setSelectedComponent(filteredMenuGroups[0].items[0]);
+    }
+  }, [filteredMenuGroups, selectedComponent]);
+
+  // Si no hay ningún módulo permitido
+  if (filteredMenuGroups.length === 0) {
+    return (
+      <div className="container-fluid p-5 text-center">
+        <h4>No tienes permisos para acceder a ningún módulo</h4>
+        <p>Contacta al administrador del sistema</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container-fluid">
@@ -61,7 +101,7 @@ const Dashboard = () => {
             Módulos
           </h5>
 
-          {menuGroups.map((group, idx) => (
+          {filteredMenuGroups.map((group, idx) => (
             <div className="mb-3" key={idx}>
               <div className="dropdown">
                 <button
@@ -76,9 +116,8 @@ const Dashboard = () => {
                   {group.items.map((item) => (
                     <li key={item}>
                       <button
-                        className={`dropdown-item ${
-                          selectedComponent === item ? 'active' : ''
-                        }`}
+                        className={`dropdown-item ${selectedComponent === item ? 'active' : ''
+                          }`}
                         onClick={() => setSelectedComponent(item)}
                       >
                         {item}

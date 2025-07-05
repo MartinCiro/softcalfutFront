@@ -7,7 +7,7 @@ import { columnasEventos, camposModal } from "@constants/programacionConfig";
 
 const isSameDate = (a, b) => a.toISOString().split("T")[0] === b.toISOString().split("T")[0];
 
-const CalendarioSemanal = ({ data, config = {}, onEditEvento }) => {
+const CalendarioSemanal = ({ data, config = {}, onEditEvento, canEdit }) => {
     const [showModal, setShowModal] = useState(false);
     const [eventosDia, setEventosDia] = useState([]);
     const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
@@ -75,7 +75,7 @@ const CalendarioSemanal = ({ data, config = {}, onEditEvento }) => {
                     title="Eventos programados"
                     sinDatos="No hay eventos programados para este día"
                     showView={false}
-                    showEdit={true}
+                    showEdit={canEdit}
                     showDelete={false}
                     onEdit={handleEditEvento}
                     
