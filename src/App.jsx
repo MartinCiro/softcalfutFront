@@ -8,6 +8,7 @@ import Historia from '@screens/Historia';
 import MisionVision from '@screens/MisionVision';
 import Futbol from '@screens/Futbol';
 import FutbolSala from '@screens/FutbolSala';
+import ClubRedirect from '@componentsUseable/ClubRedirect';
 
 import ProtectedRoute from '@routes/common/ProtectedRoute';
 
@@ -36,6 +37,7 @@ function App() {
           <Route path="/torneos/futbol-sala" element={<FutbolSala />} />
           <Route path="/torneos/programacion" element={<ProgramacionList />} />
           <Route path="/" element={<PrincipalList />} />
+          <Route path="/club" element={<ClubRedirect />} />
           
           {/* Rutas protegidas - requieren autenticación */}
           <Route element={<ProtectedRoute />}>
