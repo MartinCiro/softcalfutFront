@@ -174,13 +174,15 @@ const AnunciosList = () => {
         />
       )}
 
-      <ModalConfirmacion
+      {canEdit && (
+        <ModalConfirmacion
         show={confirmModal.show}
         mensaje={confirmModal.mensaje}
         onConfirm={confirmModal.onConfirm}
         onClose={confirmModal.close}
       />
-
+      )}
+      
       {canCreate && modalCrearShow && (
         <CreateModalFormulario
           show={modalCrearShow}

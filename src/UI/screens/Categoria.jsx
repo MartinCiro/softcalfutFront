@@ -18,6 +18,7 @@ import ModalEditForm from "@componentsUseable/FormModal/EditModalFormulario";
 import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Permiso.css"; // Styles
+import useHasPermission from "@hooks/useHasPermission";
 
 const CategoriasList = () => {
   const { data: categorias, loading, error, reload: cargarCategorias } = useFetchData(CategoriaService.categorias);
