@@ -18,6 +18,7 @@ import PermisoEditor from "@componentsUseable/Permisos/PermisoEditor";
 import PermisoCreador from "@componentsUseable/Permisos/PermisoCreador";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Permiso.css"; // Styles
+import useHasPermission from "@hooks/useHasPermission";
 
 const PermisosList = () => {
   const { data: permisos, loading, error, reload: cargarPermisos } = useFetchData(PermisoService.permisos);
@@ -78,9 +79,21 @@ const PermisosList = () => {
       setModoEdicion(false);
     }
   };
+  const canCreate = useHasPermission('permisos:Crea');
+  const canEdit = useHasPermission('permisos:Actualiza');
+  const canView = useHasPermission('permisos:Lee');
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
+  if (!canView) {
+    return (
+      <Container className="py-4">
+        <div className="alert alert-danger">
+          No tienes permisos para ver los permisos
+        </div>
+      </Container>
+    );
+  }
 
   return (
 
@@ -88,6 +101,7 @@ const PermisosList = () => {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold mb-0">Permisos</h2>
         <div className="d-flex align-items-center gap-2">
+          {canCreate && (
           <Button
             variant="success"
             onClick={() => {
@@ -101,7 +115,8 @@ const PermisosList = () => {
           >
             <MDBIcon fas icon="plus" />
           </Button>
-          <SearchInput value={query} onChange={setQuery} />
+          )}
+          {canView && (<SearchInput value={query} onChange={setQuery} />)}
         </div>
       </div>
 
@@ -116,10 +131,12 @@ const PermisosList = () => {
         columns={columnsPermiso}
         onEdit={handleEditar}
         onView={handleVer}
+        showEdit={canEdit}
+        showView={canView}
       />
 
       {/* Modal para editar */}
-      {modalShow && permisoSeleccionado && (
+      {canEdit && modalShow && permisoSeleccionado && (
         <PermisoEditor
           show={modalShow}
           onClose={() => setModalShow(false)}
@@ -137,7 +154,7 @@ const PermisosList = () => {
       )}
 
       {/* Modal para ver */}
-      {modalVer && (
+      {canView && modalVer && (
         <PermisoVer
           show={modalVer}
           onClose={() => setModalVer(false)}
@@ -146,14 +163,16 @@ const PermisosList = () => {
         />
       )}
 
+      {canEdit && (
       <ModalConfirmacion
         show={confirmModal.show}
         mensaje={confirmModal.mensaje}
         onConfirm={confirmModal.onConfirm}
         onClose={confirmModal.close}
       />
+      )}
 
-      {modalCrearShow && (
+      {canCreate && modalCrearShow && (
         <PermisoCreador
           show={modalCrearShow}
           onClose={() => setModalCrearShow(false)}
@@ -164,7 +183,7 @@ const PermisosList = () => {
         />
       )}
 
-      {shouldShowPaginator && (
+      {canView && shouldShowPaginator && (
         <Paginator
           currentPage={currentPage}
           maxPage={maxPage}
