@@ -5,6 +5,7 @@ import EquipoService from "@services/EquipoService"; // Services
 import UsuarioService from "@services/UsuarioService";
 import CategoriaService from "@services/CategoriaService";
 import useSearch from "@hooks/useSearch"; // Hooks
+import useHasPermission from "@hooks/useHasPermission";
 import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
 import useModalConfirm from "@hooks/useModalConfirm";
@@ -21,7 +22,6 @@ import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 
 import { useEquiposLogic } from "@hooks/equipo/useEquiposLogic";
 import { columnsEquipo, camposEquipo } from "@constants/equiposConfig";
-import useHasPermission from "@hooks/useHasPermission";
 import "@styles/Permiso.css"; // Styles
 
 const EquiposList = () => {

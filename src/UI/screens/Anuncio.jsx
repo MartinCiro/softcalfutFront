@@ -4,6 +4,7 @@ import { MDBIcon } from "mdb-react-ui-kit";
 import { Link } from "react-router-dom";
 import AnuncioService from "@services/AnuncioService"; // Services
 import useSearch from "@hooks/useSearch"; // Hooks
+import useHasPermission from "@hooks/useHasPermission";
 import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
 import useErrorHandler from "@hooks/useErrorHandler";
@@ -37,6 +38,10 @@ const AnunciosList = () => {
   const anunciosFiltrados = filtrarPorEstado(filtered);
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(anunciosFiltrados, 6);
+  const canCreate = useHasPermission('equipos:Crea');
+  const canEdit = useHasPermission('equipos:Actualiza');
+  const canView = useHasPermission('equipos:Lee');
+
   const clavesAnuncio = {
     id: "id",
     title: "titulo",
@@ -97,6 +102,7 @@ const AnunciosList = () => {
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
+  if (!canView) return <div>No tienes permisos para ver equipos</div>;
 
   return (
 
@@ -104,7 +110,9 @@ const AnunciosList = () => {
       {/* <h2 className="mb-4 text-center fw-bold">Anuncios</h2> */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold mb-0">Anuncios</h2>
+
         <div className="d-flex align-items-center gap-2">
+          {canCreate && (
           <Button
             variant="success"
             onClick={() => setModalCrearShow(true)}
@@ -114,8 +122,13 @@ const AnunciosList = () => {
           >
             <MDBIcon fas icon="plus" />
           </Button>
-          <FilterDropdown estadoActual={estadoFiltro} onChange={toggleEstado} />
-          <SearchInput value={query} onChange={setQuery} />
+          )}
+          {canView && (
+            <>
+              <FilterDropdown estadoActual={estadoFiltro} onChange={toggleEstado} />
+              <SearchInput value={query} onChange={setQuery} />
+            </>
+          )}
         </div>
       </div>
 
@@ -130,13 +143,16 @@ const AnunciosList = () => {
           data={paginatedData}
           keys={clavesAnuncio}
           onToggle={handleToggleActivo}
-          onView={handleVer}
-          onEdit={handleEditar}
+          onView={canView ? handleVer : null}
+          onEdit={canEdit ? handleEditar : null}
+          showView={canView}
+          showEdit={canEdit}
+          showDelete={canEdit}
         />
       </Row>
 
       {/* Modal para editar */}
-      {modalShow && (
+      {canEdit && modalShow && (
         <ModalEditForm
           show={modalShow}
           onClose={() => setModalShow(false)}
@@ -149,7 +165,7 @@ const AnunciosList = () => {
       )}
 
       {/* Modal para ver */}
-      {modalVer && (
+      {canView && modalVer && (
         <ModalVerGenerico
           show={modalVer}
           onClose={() => setModalVer(false)}
@@ -165,7 +181,7 @@ const AnunciosList = () => {
         onClose={confirmModal.close}
       />
 
-      {modalCrearShow && (
+      {canCreate && modalCrearShow && (
         <CreateModalFormulario
           show={modalCrearShow}
           onClose={() => setModalCrearShow(false)}
