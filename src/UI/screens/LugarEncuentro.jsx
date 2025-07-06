@@ -19,6 +19,7 @@ import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import { useLugarEncuentroLogic } from "@hooks/lugarEncuentro/useLugarEncuentroLogic";
 import { columnsLugarEncuentro, camposLugarEncuentro } from "@constants/lugarEncuentroConfig";
 import "@styles/Permiso.css"; // Styles
+import useHasPermission from "@hooks/useHasPermission";
 
 const LugarEncuentroList = () => {
   const { data: lugarEncuentro, loading, error, reload: cargarLugarEncuentro } = useFetchData(LugarEncuentroService.lugarEncuentro);
@@ -27,30 +28,46 @@ const LugarEncuentroList = () => {
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
 
   const confirmModal = useModalConfirm();
+  const canCreate = useHasPermission('lugarEncuentro:Crea');
+  const canEdit = useHasPermission('lugarEncuentro:Actualiza');
+  const canView = useHasPermission('lugarEncuentro:Lee');
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
-
+  if (!canView) {
+    return (
+      <Container className="py-4">
+        <div className="alert alert-danger">
+          No tienes permisos para ver los lugares de encuentro.
+        </div>
+      </Container>
+    );
+  }
   return (
 
     <Container className="py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold mb-0">Lugar de encuentro</h2>
         <div className="d-flex align-items-center gap-2">
-          <Button
-            variant="success"
-            onClick={() => {
-              flags.setModoEdicion(false);
-              lugarEncuentroStates.setLugarEncuentroSeleccionado(null);
-              modalStates.setModalCrearShow(true);
-            }}
-            className="rounded-circle d-flex justify-content-center align-items-center btn_add"
-            style={{ width: "45px", height: "45px" }}
-            title="Crear LugarEncuentro"
-          >
-            <MDBIcon fas icon="plus" />
-          </Button>
-          <SearchInput value={query} onChange={setQuery} />
+          {canCreate && (  
+            <Button
+              variant="success"
+              onClick={() => {
+                flags.setModoEdicion(false);
+                lugarEncuentroStates.setLugarEncuentroSeleccionado(null);
+                modalStates.setModalCrearShow(true);
+              }}
+              className="rounded-circle d-flex justify-content-center align-items-center btn_add"
+              style={{ width: "45px", height: "45px" }}
+              title="Crear LugarEncuentro"
+            >
+              <MDBIcon fas icon="plus" />
+            </Button>
+          )}
+          {canView && (
+            <SearchInput value={query} onChange={setQuery} />
+          )
+          }
         </div>
       </div>
 
@@ -66,10 +83,12 @@ const LugarEncuentroList = () => {
         onEdit={handlers.handleEditar}
         onView={handlers.handleVer}
         sinDatos={"No se han encontrado lugares de encuentro"}
+        showEdit={canEdit}
+        showView={canView}
       />
 
       {/* Modal para editar */}
-      {modalStates.modalShow && lugarEncuentroStates.lugarEncuentroSeleccionado && (
+      {canEdit && modalStates.modalShow && lugarEncuentroStates.lugarEncuentroSeleccionado && (
         <ModalEditGenerico
           titulo={"Editar LugarEncuentro"}
           show={modalStates.modalShow}
@@ -88,7 +107,7 @@ const LugarEncuentroList = () => {
       )}
 
       {/* Modal para ver */}
-      {modalStates.modalVer && (
+      {canView && modalStates.modalVer && (
         <ModalVerGenerico
           show={modalStates.modalVer}
           onClose={() => modalStates.setModalVer(false)}
@@ -98,14 +117,16 @@ const LugarEncuentroList = () => {
         />
       )}
 
+      {canEdit && (
       <ModalConfirmacion
         show={confirmModal.show}
         mensaje={confirmModal.mensaje}
         onConfirm={confirmModal.onConfirm}
         onClose={confirmModal.close}
       />
+      )}
 
-      {modalStates.modalCrearShow && (
+      {canCreate && modalStates.modalCrearShow && (
         <ModalCreateGenerico
           show={modalStates.modalCrearShow}
           onClose={() => modalStates.setModalCrearShow(false)}
@@ -119,7 +140,7 @@ const LugarEncuentroList = () => {
         />
       )}
 
-      {shouldShowPaginator && (
+      {canView && shouldShowPaginator && (
         <Paginator
           currentPage={currentPage}
           maxPage={maxPage}
