@@ -102,7 +102,7 @@ const AnunciosList = () => {
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
-  if (!canView) return <div>No tienes permisos para ver equipos</div>;
+  if (!canView) return <div>No tienes permisos para ver los anuncios</div>;
 
   return (
 
