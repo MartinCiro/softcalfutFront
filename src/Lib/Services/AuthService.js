@@ -8,6 +8,7 @@ import {
   clearSession
 } from "@utils/helpers";
 
+
 const AuthService = {
   login: async (correo, password) => {
     try {
@@ -32,7 +33,10 @@ const AuthService = {
     }
   },
 
-  logout: () => clearSession(),
+  logout: (navigate) => {
+    clearSession();
+    navigate('/');
+  },
 
   getCurrentUser: () => {
     const userData = sessionStorage.getItem("userData");

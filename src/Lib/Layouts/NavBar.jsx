@@ -1,49 +1,114 @@
 import React from 'react';
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 import { MDBIcon } from 'mdb-react-ui-kit';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import '@styles/NavBar.css';
+import AuthService from '@services/AuthService';
 
 const NavBar = () => {
+  const navigate = useNavigate();
+  const [authenticated, setAuthenticated] = React.useState(AuthService.isAuthenticated());
+  const [userData, setUserData] = React.useState(null);
+  const [showLogoutModal, setShowLogoutModal] = React.useState(false);
+
+  // Cargar datos del usuario al montar el componente
+  React.useEffect(() => {
+    const loadUserData = () => {
+      try {
+        const currentUser = AuthService.getCurrentUser();
+        if (currentUser) {
+          setUserData(currentUser);
+        }
+      } catch (error) {
+        console.error("Error al cargar datos del usuario:", error);
+      }
+    };
+
+    loadUserData();
+  }, []);
+
+  // Verificar autenticación periódicamente
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      const isAuth = AuthService.isAuthenticated();
+      setAuthenticated(isAuth);
+      if (!isAuth) setUserData(null);
+    }, 30000); // Verifica cada 30 segundos
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
+
+  const handleConfirmLogout = () => {
+    AuthService.logout(navigate);
+    setAuthenticated(false);
+    setUserData(null);
+    setShowLogoutModal(false);
+  };
+
+  const handleCloseLogoutModal = () => {
+    setShowLogoutModal(false);
+  };
   return (
-    <Navbar expand="lg" className="navbar-custom" data-bs-theme="dark" collapseOnSelect>
-      <Container>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mx-auto d-flex gap-4 align-items-center">
+    <>
+      <Navbar expand="lg" className="navbar-custom" data-bs-theme="dark" collapseOnSelect>
+        <Container>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mx-auto d-flex gap-4 align-items-center">
 
-            <NavLink to="/" className="nav-link">
-              <MDBIcon fas icon="home" className="me-1" />
-              Inicio
-            </NavLink>
+              <NavLink to="/" className="nav-link">
+                <MDBIcon fas icon="home" className="me-1" />
+                Inicio
+              </NavLink>
 
-            <NavDropdown title={<span><MDBIcon fas icon="building" className="me-1" /> LCF</span>} id="dropdown-lcf">
-              <NavDropdown.Item as={NavLink} to="/lcf/historia">Historia</NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/lcf/mision-vision">Misión y Visión</NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/lcf/organigrama">Organigrama</NavDropdown.Item>
-            </NavDropdown>
+              <NavDropdown title={<span><MDBIcon fas icon="building" className="me-1" /> LCF</span>} id="dropdown-lcf">
+                <NavDropdown.Item as={NavLink} to="/lcf/historia">Historia</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/lcf/mision-vision">Misión y Visión</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/lcf/organigrama">Organigrama</NavDropdown.Item>
+              </NavDropdown>
 
-            <NavDropdown title={<span><MDBIcon fas icon="trophy" className="me-1" /> Torneos</span>} id="dropdown-torneos">
-              <NavDropdown.Item as={NavLink} to="/torneos/futbol">Fútbol</NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Fútbol Sala</NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/torneos/programacion">Programacion</NavDropdown.Item>
-            </NavDropdown>
+              <NavDropdown title={<span><MDBIcon fas icon="trophy" className="me-1" /> Torneos</span>} id="dropdown-torneos">
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol">Fútbol</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Fútbol Sala</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/programacion">Programacion</NavDropdown.Item>
+              </NavDropdown>
 
-            <NavDropdown title={<span><MDBIcon fas icon="book" className="me-1" /> Escuela LCF</span>} id="dropdown-escuela">
-              <NavDropdown.Item as={NavLink} to="/escuela/formacion">Escuela de Formación</NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/escuela/acerca">Acerca de la Escuela</NavDropdown.Item>
-            </NavDropdown>
+              <NavDropdown title={<span><MDBIcon fas icon="book" className="me-1" /> Escuela LCF</span>} id="dropdown-escuela">
+                <NavDropdown.Item as={NavLink} to="/escuela/formacion">Escuela de Formación</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/escuela/acerca">Acerca de la Escuela</NavDropdown.Item>
+              </NavDropdown>
 
-            <NavLink to="/club" className="nav-link">
-              <MDBIcon fas icon="futbol" className="me-1" />
-              Mi Club
-            </NavLink>
+              <NavLink to="/club" className="nav-link">
+                <MDBIcon fas icon="futbol" className="me-1" />
+                Mi Club
+              </NavLink>
 
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+              
+              {authenticated && (
+                <Nav.Link onClick={handleLogoutClick} className="nav-link">{/* 
+                  {userData?.usuario?.nombre || 'Usuario'} */}
+                  <MDBIcon fas icon="sign-out-alt" className="me-1" title="Cerrar sesión" />
+                </Nav.Link>
+              )}
+
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
+      <ModalConfirmacion
+        show={showLogoutModal}
+        mensaje="¿Estás seguro de que deseas cerrar sesión?"
+        onConfirm={handleConfirmLogout}
+        onClose={handleCloseLogoutModal}
+      />
+    </>
   );
 };
 
-export default NavBar;
+export default React.memo(NavBar);
