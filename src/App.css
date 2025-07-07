@@ -26,17 +26,22 @@ button {
 }
 
 main {
+  flex: 1 0 auto;
   background-color: var(--color-claro);
-  flex: 1;
   overflow-y: auto;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
+html {
+  height: 100%;
 }
 
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Usa viewport height en lugar de 100% */
+  margin: 0;
+  padding: 0;
+}
 
 .modal-header {
   background-color: var(--color-oscuro);

@@ -58,12 +58,12 @@ const CardGeneric = ({
             {item[keys.content] || "Sin descripción"}
           </Card.Text>
           
-          <div className="d-flex justify-content-between px-5 pb-3">
+          <div className="button-container d-flex justify-content-between px-5 pb-3">
             {/* Botón Eliminar/Desactivar */}
             {showDelete && (
               <Link
                 to="#"
-                className={`nav-link ${
+                className={`nav-link toggle ${
                   item[keys.status] === "Activo" ? "text-danger" : "text-success"
                 } ${disableDelete ? 'disabled' : ''}`}
                 onClick={!disableDelete ? () => onToggle?.(item) : undefined}
@@ -86,7 +86,7 @@ const CardGeneric = ({
             {showView && (
               <Link 
                 to="#" 
-                className={`nav-link text-white ${disableView ? 'disabled' : ''}`}
+                className={`view nav-link text-white ${disableView ? 'disabled' : ''}`}
                 onClick={!disableView ? () => onView?.(item) : undefined}
                 style={disableView ? { cursor: 'not-allowed', opacity: 0.5 } : {}}
                 title={disableView ? "Visualización no disponible" : "Ver detalles"}

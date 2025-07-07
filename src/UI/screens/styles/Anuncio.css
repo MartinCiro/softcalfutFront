@@ -1,12 +1,15 @@
 .card-custom {
   background-color: var(--color-secundario) !important;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
   .clamp-tittle {
     color: var(--color-claro);
-    white-space: nowrap;     
-    overflow: hidden;        
-    text-overflow: ellipsis; 
-    max-width: 100%;         
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
   }
 
   .clamp-text {
@@ -16,6 +19,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     color: var(--color-claro);
+    margin-bottom: 1rem;
   }
 
   .clamp-image {
@@ -23,22 +27,63 @@
     transition: transform 0.3s ease, border 0.3s ease;
     border: 2px solid transparent;
     border-radius: 5px;
+
+    &:hover {
+      transform: scale(1.05);
+      border-color: var(--color-primario);
+    }
   }
 
-  .clamp-image:hover {
-    transform: scale(1.05);
-    border-color: var(--color-primario);
-  }
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 1rem;
 
-  .edit {
-    color: var(--color-primario);
-  }
+    .button-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      margin-top: auto;
+      padding-top: 1rem;
 
-  .edit:hover {
-    color: var(--color-claro);
-  }
+      .view,
+      .toggle,
+      .edit {
 
-  .edit:focus:not(.active) {
-    color: var(--color-primario);
+        &:hover {
+          transform: scale(1.1);
+          transition: all 0.3s ease;
+        }
+      }
+
+      .view,
+      .toggle {
+        color: var(--color-claro);
+
+        &:hover {
+          color: var(--color-primario) !important;
+        }
+      }
+
+      .edit {
+        color: var(--color-primario) !important;
+
+        &:hover {
+          color: var(--color-claro) !important;
+        }
+
+        &:focus:not(.active) {
+          color: var(--color-primario) !important;
+        }
+      }
+
+      .toggle:hover {
+        color: var(--color-claro) !important;
+      }
+    }
   }
 }
