@@ -28,6 +28,7 @@ const AuthService = {
   logout: (navigate) => {
     clearSession();
     if (navigate) navigate('/');
+    window.location.reload();
   },
 
   getCurrentUser: () => {

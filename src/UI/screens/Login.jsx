@@ -12,6 +12,7 @@ import {
 import '@styles/Login.css';
 import AuthService from '@services/AuthService';
 import useFormSubmitter from '@hooks/useFormSubmitter';
+import { useAuth } from '@hooks/AuthContext';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +22,7 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const { submitForm, error } = useFormSubmitter();
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,7 +31,7 @@ const Login = () => {
       [name]: value
     });
   };
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     submitForm(

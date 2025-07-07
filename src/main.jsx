@@ -4,6 +4,7 @@ import '@src/index.css'
 import App from '@src/App.jsx'
 import axios from 'axios'
 import AuthService from '@services/AuthService'
+import { AuthProvider } from '@hooks/AuthContext';
 
 // Importar estilos de Bootstrap y MDBootstrap
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -59,7 +60,9 @@ axios.interceptors.response.use(
 );
 
 createRoot(document.getElementById('root')).render(
+  <AuthProvider>
   <StrictMode>
     <App />
-  </StrictMode>,
+  </StrictMode>
+  </AuthProvider>,
 )

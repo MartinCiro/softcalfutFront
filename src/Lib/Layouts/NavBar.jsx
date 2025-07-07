@@ -1,87 +1,61 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 import { MDBIcon } from 'mdb-react-ui-kit';
 import { NavLink, useNavigate } from 'react-router-dom';
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import '@styles/NavBar.css';
+import { useAuth } from '@hooks/AuthContext';
 import AuthService from '@services/AuthService';
 
 const NavBar = () => {
   const navigate = useNavigate();
-  const [authenticated, setAuthenticated] = React.useState(AuthService.isAuthenticated());
-  const [userData, setUserData] = React.useState(null);
+  const { user, isAuthenticated, logout } = useAuth();
   const [showLogoutModal, setShowLogoutModal] = React.useState(false);
 
-  // Cargar datos del usuario al montar el componente
-  React.useEffect(() => {
-    const loadUserData = () => {
-      try {
-        const currentUser = AuthService.getCurrentUser();
-        if (currentUser) setUserData(currentUser);
-      } catch (error) {
-        console.error("Error al cargar datos del usuario:", error);
-      }
-    };
+  const handleLogoutClick = useCallback(() => setShowLogoutModal(true), []);
 
-    loadUserData();
-  }, []);
-
-  // Verificar autenticación periódicamente
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      const isAuth = AuthService.isAuthenticated();
-      setAuthenticated(isAuth);
-      if (!isAuth) setUserData(null);
-    }, 30000); // Verifica cada 30 segundos
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleLogoutClick = () => setShowLogoutModal(true);
-
-  const handleConfirmLogout = () => {
+  const handleConfirmLogout = useCallback(() => {
     AuthService.logout(navigate);
-    setAuthenticated(false);
-    setUserData(null);
     setShowLogoutModal(false);
-  };
+  }, [logout, navigate]);
 
-  const handleCloseLogoutModal = () => setShowLogoutModal(false);
+  const handleCloseLogoutModal = useCallback(() => setShowLogoutModal(false), []);
 
   return (
     <>
       <Navbar expand="lg" className="navbar-custom" data-bs-theme="dark" collapseOnSelect>
         <Container>
-          {authenticated && (
+          {isAuthenticated && (
             <div className="d-none d-lg-flex align-items-center me-4 user-name-lg">
               <span className="text-light">
-                {userData?.usuario?.nombre || 'Usuario'}
+                {user?.usuario?.nombre || 'Usuario'}
               </span>
             </div>
           )}
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <div className="d-flex d-lg-none align-items-center mobile-elements">
-          {/* Nombre del usuario para pantallas móviles (centrado) */}
-          {authenticated && (
+            {/* Nombre del usuario para pantallas móviles (centrado) */}
+            {isAuthenticated && (
               <div className="user-name-sm">
                 <span className="text-light">
-                  {userData?.usuario?.nombre || 'Usuario'}
+                  {user?.usuario?.nombre || 'Usuario'}
                 </span>
               </div>
             )}
 
-          {authenticated && (
+            {isAuthenticated && (
               <div className="logout-button-mobile">
                 <Nav.Link 
                   onClick={handleLogoutClick} 
                   className="nav-link logout-button"
                 >
                   <MDBIcon fas icon="sign-out-alt" title="Cerrar sesión" />
-                </Nav.Link  >
+                </Nav.Link>
               </div>
             )}
-            </div>
+          </div>
+          
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mx-auto d-flex gap-4 align-items-center">
               <NavLink to="/" className="nav-link">
@@ -114,7 +88,7 @@ const NavBar = () => {
           </Navbar.Collapse>
           
           {/* Botón de logout fuera del Navbar.Collapse */}
-          {authenticated && (
+          {isAuthenticated && (
             <div className="logout-button-lg ms-auto d-none d-lg-flex">
               <Nav.Link 
                 onClick={handleLogoutClick} 
