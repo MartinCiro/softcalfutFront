@@ -20,34 +20,29 @@ const NavBar = () => {
   }, [logout, navigate]);
 
   const handleCloseLogoutModal = useCallback(() => setShowLogoutModal(false), []);
+  const displayName = isAuthenticated ? (user?.usuario?.nombre || 'Usuario') : 'LCF';
 
   return (
     <>
       <Navbar expand="lg" className="navbar-custom" data-bs-theme="dark" collapseOnSelect>
         <Container>
-          {isAuthenticated && (
-            <div className="d-none d-lg-flex align-items-center me-4 user-name-lg">
-              <span className="text-light">
-                {user?.usuario?.nombre || 'Usuario'}
-              </span>
-            </div>
-          )}
+          <div className="d-none d-lg-flex align-items-center me-4 user-name-lg">
+            <span className="text-light">{displayName}</span>
+          </div>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <div className="d-flex d-lg-none align-items-center mobile-elements">
+          <div className="d-flex align-items-center mobile-elements">
             {/* Nombre del usuario para pantallas móviles (centrado) */}
-            {isAuthenticated && (
-              <div className="user-name-sm">
-                <span className="text-light">
-                  {user?.usuario?.nombre || 'Usuario'}
-                </span>
-              </div>
-            )}
+
+            <div className="user-name-sm">
+              <span className="text-light">{displayName}</span>
+            </div>
+
 
             {isAuthenticated && (
               <div className="logout-button-mobile">
-                <Nav.Link 
-                  onClick={handleLogoutClick} 
+                <Nav.Link
+                  onClick={handleLogoutClick}
                   className="nav-link logout-button"
                 >
                   <MDBIcon fas icon="sign-out-alt" title="Cerrar sesión" />
@@ -55,7 +50,7 @@ const NavBar = () => {
               </div>
             )}
           </div>
-          
+
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mx-auto d-flex gap-4 align-items-center">
               <NavLink to="/" className="nav-link">
@@ -86,12 +81,12 @@ const NavBar = () => {
               </NavLink>
             </Nav>
           </Navbar.Collapse>
-          
+
           {/* Botón de logout fuera del Navbar.Collapse */}
           {isAuthenticated && (
             <div className="logout-button-lg ms-auto d-none d-lg-flex">
-              <Nav.Link 
-                onClick={handleLogoutClick} 
+              <Nav.Link
+                onClick={handleLogoutClick}
                 className="nav-link"
               >
                 <MDBIcon fas icon="sign-out-alt" title="Cerrar sesión" />

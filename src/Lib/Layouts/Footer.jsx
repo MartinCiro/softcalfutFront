@@ -14,8 +14,8 @@ const Footer = () => {
         </div>
         <div className="text-md-end small">
           <div>Todos los derechos reservados</div>
-          <div>Calle 49B #74-31</div>
-          <div>Medellín, Antioquia - Colombia</div>
+          <div>Estadio Palogrande - Puerta 22 Norte</div>
+          <div>Manizales, Caldas - Colombia</div>
         </div>
       </Container>
     </footer>
