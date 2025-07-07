@@ -27,7 +27,6 @@ const ProgramacionList = () => {
   const { data: torneos } = useFetchData(TorneoService.torneos);
   const canCreate = useHasPermission('programaciones:Crea');
   const canEdit = useHasPermission('programaciones:Actualiza');
-  const canView = useHasPermission('programaciones:Lee');
   
   const { modalStates, programacionStates, flags, errorGuardar, handlers } = useProgramacionLogic(cargarProgramacion);
   if (loading) return <LoadingSpinner />;
@@ -51,15 +50,6 @@ const ProgramacionList = () => {
     flags.setModoEdicion(true);
     modalStates.setModalShow(true);
   };
-  if (!canView) {
-    return (
-      <Container className="py-4">
-        <div className="alert alert-danger">
-          No tienes permisos para ver la programación
-        </div>
-      </Container>
-    );
-  }
 
   return (
     <Container className="py-4">
@@ -118,7 +108,7 @@ const ProgramacionList = () => {
       )}
 
       {/* Modal para ver */}
-      {canView && modalStates.modalVer && (
+      {modalStates.modalVer && (
         <ModalVerGenerico
           show={modalStates.modalVer}
           onClose={() => modalStates.setModalVer(false)}
