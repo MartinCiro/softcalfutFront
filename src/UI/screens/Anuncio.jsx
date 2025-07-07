@@ -38,9 +38,8 @@ const AnunciosList = () => {
   const anunciosFiltrados = filtrarPorEstado(filtered);
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(anunciosFiltrados, 6);
-  const canCreate = useHasPermission('equipos:Crea');
-  const canEdit = useHasPermission('equipos:Actualiza');
-  const canView = useHasPermission('equipos:Lee');
+  const canCreate = useHasPermission('anuncios:Crea');
+  const canEdit = useHasPermission('anuncios:Actualiza');
 
   const clavesAnuncio = {
     id: "id",
@@ -102,7 +101,6 @@ const AnunciosList = () => {
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
-  if (!canView) return <div>No tienes permisos para ver los anuncios</div>;
 
   return (
 
@@ -113,22 +111,20 @@ const AnunciosList = () => {
 
         <div className="d-flex align-items-center gap-2">
           {canCreate && (
-          <Button
-            variant="success"
-            onClick={() => setModalCrearShow(true)}
-            className="rounded-circle d-flex justify-content-center align-items-center btn_add"
-            style={{ width: "45px", height: "45px" }}
-            title="Crear Anuncio"
-          >
-            <MDBIcon fas icon="plus" />
-          </Button>
+            <Button
+              variant="success"
+              onClick={() => setModalCrearShow(true)}
+              className="rounded-circle d-flex justify-content-center align-items-center btn_add"
+              style={{ width: "45px", height: "45px" }}
+              title="Crear Anuncio"
+            >
+              <MDBIcon fas icon="plus" />
+            </Button>
           )}
-          {canView && (
-            <>
-              <FilterDropdown estadoActual={estadoFiltro} onChange={toggleEstado} />
-              <SearchInput value={query} onChange={setQuery} />
-            </>
-          )}
+
+          <FilterDropdown estadoActual={estadoFiltro} onChange={toggleEstado} />
+          <SearchInput value={query} onChange={setQuery} />
+
         </div>
       </div>
 
@@ -143,9 +139,8 @@ const AnunciosList = () => {
           data={paginatedData}
           keys={clavesAnuncio}
           onToggle={handleToggleActivo}
-          onView={canView ? handleVer : null}
+          onView={handleVer}
           onEdit={canEdit ? handleEditar : null}
-          showView={canView}
           showEdit={canEdit}
           showDelete={canEdit}
         />
@@ -165,7 +160,7 @@ const AnunciosList = () => {
       )}
 
       {/* Modal para ver */}
-      {canView && modalVer && (
+      {modalVer && (
         <ModalVerGenerico
           show={modalVer}
           onClose={() => setModalVer(false)}
@@ -176,13 +171,13 @@ const AnunciosList = () => {
 
       {canEdit && (
         <ModalConfirmacion
-        show={confirmModal.show}
-        mensaje={confirmModal.mensaje}
-        onConfirm={confirmModal.onConfirm}
-        onClose={confirmModal.close}
-      />
+          show={confirmModal.show}
+          mensaje={confirmModal.mensaje}
+          onConfirm={confirmModal.onConfirm}
+          onClose={confirmModal.close}
+        />
       )}
-      
+
       {canCreate && modalCrearShow && (
         <CreateModalFormulario
           show={modalCrearShow}
