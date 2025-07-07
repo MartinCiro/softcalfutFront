@@ -22,7 +22,6 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const { submitForm, error } = useFormSubmitter();
-  const { login } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,9 +39,7 @@ const Login = () => {
     );
   };
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+  const toggleShowPassword = () => setShowPassword(!showPassword);
 
   return (
     <div className="login-container">
