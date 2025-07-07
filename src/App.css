@@ -25,6 +25,17 @@ button {
   }
 }
 
+main {
+  background-color: var(--color-claro);
+  flex: 1;
+  overflow-y: auto;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
 
 
 .modal-header {

@@ -7,7 +7,7 @@ const Layout = () => {
   return (
     <>
       <NavBar />
-      <main style={{ minHeight: '80vh' }}>
+      <main className="main-content">
         <Outlet />
       </main>
       <Footer />

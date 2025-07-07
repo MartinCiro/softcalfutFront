@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   MDBContainer,
   MDBInput,
-  MDBCheckbox,
   MDBBtn,
   MDBCard,
   MDBCardBody,

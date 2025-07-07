@@ -26,11 +26,10 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Rutas públicas sin layout */}
-        <Route path="/login" element={<Login />} />
         
         {/* Rutas públicas con layout */}
         <Route element={<Layout />}>
+          <Route path="/login" element={<Login />} />
           <Route path="/lcf/historia" element={<Historia />} />
           <Route path="/lcf/mision-vision" element={<MisionVision />} />
           <Route path="/torneos/futbol" element={<Futbol />} />

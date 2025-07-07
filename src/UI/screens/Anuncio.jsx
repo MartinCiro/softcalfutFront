@@ -122,7 +122,8 @@ const AnunciosList = () => {
             </Button>
           )}
 
-          <FilterDropdown estadoActual={estadoFiltro} onChange={toggleEstado} />
+          {canEdit && (<FilterDropdown estadoActual={estadoFiltro} onChange={toggleEstado} />)}
+
           <SearchInput value={query} onChange={setQuery} />
 
         </div>

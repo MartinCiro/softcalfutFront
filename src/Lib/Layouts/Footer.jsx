@@ -10,14 +10,12 @@ const Footer = () => {
         <div className="mb-3 mb-md-0">
           <NavLink to="/terminos" className="footer-link me-3 d-block d-md-inline">Términos y condiciones</NavLink>
           <NavLink to="/contacto" className="footer-link d-block d-md-inline">Contáctenos</NavLink>
+          <div>© 2025 LIGA CALDENSE DE FUTBOL</div>
         </div>
         <div className="text-md-end small">
-          <div>© 2025 LIGA CALDENSE DE FUTBOL</div>
           <div>Todos los derechos reservados</div>
-          <div>secretaria@laf.com.co</div>
           <div>Calle 49B #74-31</div>
           <div>Medellín, Antioquia - Colombia</div>
-          <div>Design/Hosting: FénixPuntoNet - fenixpuntonet.com</div>
         </div>
       </Container>
     </footer>
