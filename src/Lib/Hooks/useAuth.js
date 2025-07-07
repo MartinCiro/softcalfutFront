@@ -1,46 +1,45 @@
-// src/hooks/useAuth.js
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import AuthService from '@services/AuthService';
 
-// Este es un hook personalizado para manejar la autenticación
 export default function useAuth() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [authState, setAuthState] = useState({
+    isAuthenticated: false,
+    loading: true,
+    user: null
+  });
 
-  // Verificar autenticación al cargar (puedes usar localStorage, cookies, contexto, etc.)
   useEffect(() => {
-    const checkAuth = () => {
-      // Aquí verificas si el usuario está autenticado
-      // Ejemplo básico con localStorage:
-      const token = localStorage.getItem('authToken');
-      const userIsAuthenticated = !!token; // Convierte a booleano
-      
-      setIsAuthenticated(userIsAuthenticated);
-      setLoading(false);
+    const checkAuth = async () => {
+      try {
+        const isAuth = AuthService.isAuthenticated();
+        const user = AuthService.getCurrentUser();
+        
+        setAuthState({
+          isAuthenticated: isAuth,
+          loading: false,
+          user: isAuth ? user : null
+        });
+      } catch (error) {
+        console.error("Error verifying auth:", error);
+        setAuthState({
+          isAuthenticated: false,
+          loading: false,
+          user: null
+        });
+      }
     };
 
     checkAuth();
+
+    // Opcional: Configurar intervalo para verificación periódica
+    const interval = setInterval(checkAuth, 30000); // 30 segundos
+    return () => clearInterval(interval);
   }, []);
 
-  // Función para iniciar sesión
-  const login = (token) => {
-    localStorage.setItem('authToken', token);
-    setIsAuthenticated(true);
-    navigate('/dashboard'); // Redirige al dashboard después de login
-  };
-
-  // Función para cerrar sesión
-  const logout = () => {
-    localStorage.removeItem('authToken');
-    setIsAuthenticated(false);
-    navigate('/login'); // Redirige al login después de logout
-  };
-
   return {
-    isAuthenticated,
-    loading,
-    login,
-    logout
+    ...authState,
+    // Métodos adicionales que podrías necesitar
+    login: AuthService.login,
+    logout: AuthService.logout
   };
 }
