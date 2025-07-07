@@ -19,7 +19,7 @@ const Futbol = () => {
       <section>
         <h2>Torneo Interclubes</h2>
         <p>
-          Se proyecta para el año 2023 organizar el torneo departamental interclubes de fútbol que involucre a todos los municipios de Caldas, buscando la participación de un número importante de deportistas en categorías infantil, juvenil y mayores, ramas masculina y femenina libre.
+          Se proyecta para el año 2025 organizar el torneo departamental interclubes de fútbol que involucre a todos los municipios de Caldas, buscando la participación de un número importante de deportistas en categorías infantil, juvenil y mayores, ramas masculina y femenina libre.
         </p>
         <p>
           Así mismo, la liga está empeñada en organizar a partir del mes de abril el torneo nacional interclubes 2006-2008 con el aval de Difutbol y con la participación de clubes de los departamentos más cercanos.
