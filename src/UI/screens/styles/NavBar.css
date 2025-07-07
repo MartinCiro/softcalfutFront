@@ -69,4 +69,68 @@
       color: var(--color-claro) !important;
     }
   }
+
+  /* Estilos para el nombre del usuario en pantallas grandes */
+  .user-name-lg {
+    font-weight: 500;
+    font-size: 1.1rem;
+    margin-right: 1rem;
+    order: 0;
+  }
+
+  /* Contenedor para elementos móviles */
+  .mobile-elements {
+    flex-grow: 1;
+    justify-content: center;
+    position: relative;
+    order: 2;
+
+    @include media-breakpoint-up(lg) {
+      display: none !important;
+    }
+  }
+
+  /* Nombre de usuario en móviles */
+  .user-name-sm {
+    font-weight: 500;
+    font-size: 1.1rem;
+    text-align: center;
+    flex-grow: 1;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Botón de logout */
+  .logout-button-mobile, .logout-button-lg  {
+    position: absolute;
+    right: 0;
+
+    .nav-link {
+      padding: 0.5rem;
+    }
+  }
+
+  .logout-button-lg {
+    margin-right: 1rem;
+  }
+
+  /* Ajustes para el navbar-toggler */
+  .navbar-toggler {
+    order: 1;
+    margin-left: auto;
+    z-index: 1;
+  }
+
+  /* Ajustes para el menú colapsado */
+  .navbar-collapse {
+    order: 3;
+
+    &.show {
+      ~.mobile-elements {
+        display: none !important;
+      }
+    }
+  }
 }

@@ -17,9 +17,7 @@ const NavBar = () => {
     const loadUserData = () => {
       try {
         const currentUser = AuthService.getCurrentUser();
-        if (currentUser) {
-          setUserData(currentUser);
-        }
+        if (currentUser) setUserData(currentUser);
       } catch (error) {
         console.error("Error al cargar datos del usuario:", error);
       }
@@ -39,9 +37,7 @@ const NavBar = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleLogoutClick = () => {
-    setShowLogoutModal(true);
-  };
+  const handleLogoutClick = () => setShowLogoutModal(true);
 
   const handleConfirmLogout = () => {
     AuthService.logout(navigate);
@@ -50,17 +46,44 @@ const NavBar = () => {
     setShowLogoutModal(false);
   };
 
-  const handleCloseLogoutModal = () => {
-    setShowLogoutModal(false);
-  };
+  const handleCloseLogoutModal = () => setShowLogoutModal(false);
+
   return (
     <>
       <Navbar expand="lg" className="navbar-custom" data-bs-theme="dark" collapseOnSelect>
         <Container>
+          {authenticated && (
+            <div className="d-none d-lg-flex align-items-center me-4 user-name-lg">
+              <span className="text-light">
+                {userData?.usuario?.nombre || 'Usuario'}
+              </span>
+            </div>
+          )}
+
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <div className="d-flex d-lg-none align-items-center mobile-elements">
+          {/* Nombre del usuario para pantallas móviles (centrado) */}
+          {authenticated && (
+              <div className="user-name-sm">
+                <span className="text-light">
+                  {userData?.usuario?.nombre || 'Usuario'}
+                </span>
+              </div>
+            )}
+
+          {authenticated && (
+              <div className="logout-button-mobile">
+                <Nav.Link 
+                  onClick={handleLogoutClick} 
+                  className="nav-link logout-button"
+                >
+                  <MDBIcon fas icon="sign-out-alt" title="Cerrar sesión" />
+                </Nav.Link  >
+              </div>
+            )}
+            </div>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mx-auto d-flex gap-4 align-items-center">
-
               <NavLink to="/" className="nav-link">
                 <MDBIcon fas icon="home" className="me-1" />
                 Inicio
@@ -87,17 +110,20 @@ const NavBar = () => {
                 <MDBIcon fas icon="futbol" className="me-1" />
                 Mi Club
               </NavLink>
-
-              
-              {authenticated && (
-                <Nav.Link onClick={handleLogoutClick} className="nav-link">{/* 
-                  {userData?.usuario?.nombre || 'Usuario'} */}
-                  <MDBIcon fas icon="sign-out-alt" className="me-1" title="Cerrar sesión" />
-                </Nav.Link>
-              )}
-
             </Nav>
           </Navbar.Collapse>
+          
+          {/* Botón de logout fuera del Navbar.Collapse */}
+          {authenticated && (
+            <div className="logout-button-lg ms-auto d-none d-lg-flex">
+              <Nav.Link 
+                onClick={handleLogoutClick} 
+                className="nav-link"
+              >
+                <MDBIcon fas icon="sign-out-alt" title="Cerrar sesión" />
+              </Nav.Link>
+            </div>
+          )}
         </Container>
       </Navbar>
 
