@@ -8,7 +8,7 @@ import "@styles/Anuncio.css"; // Styles
 const PrincipalList = () => {
   const { data: anuncios } = useFetchData(AnuncioService.anuncios);
   return (
-    <Container className="py-4">
+    <Container className="py-4 border">
         <CarruselCards
           data={anuncios}
           keys={{
