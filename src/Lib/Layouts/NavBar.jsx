@@ -32,19 +32,13 @@ const NavBar = () => {
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <div className="d-flex align-items-center mobile-elements">
-            {/* Nombre del usuario para pantallas móviles (centrado) */}
-
-            <div className="user-name-sm">
+            <div className="d-lg-none user-name-sm">
               <span className="text-light">{displayName}</span>
             </div>
 
-
             {isAuthenticated && (
-              <div className="logout-button-mobile">
-                <Nav.Link
-                  onClick={handleLogoutClick}
-                  className="nav-link logout-button"
-                >
+              <div className="d-lg-none logout-button-mobile">
+                <Nav.Link onClick={handleLogoutClick} className="nav-link logout-button">
                   <MDBIcon fas icon="sign-out-alt" title="Cerrar sesión" />
                 </Nav.Link>
               </div>
