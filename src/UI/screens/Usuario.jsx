@@ -104,6 +104,7 @@ const UsuariosList = () => {
   const canCreate = useHasPermission('usuarios:Crea');
   const canEdit = useHasPermission('usuarios:Actualiza');
   const canView = useHasPermission('usuarios:Lee');
+  
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;

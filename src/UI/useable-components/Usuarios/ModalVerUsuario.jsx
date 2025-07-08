@@ -1,7 +1,9 @@
-import React from "react";
-import { Badge } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button } from "react-bootstrap";
 import { MDBIcon } from "mdb-react-ui-kit";
 import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
+import ModalVerRol from "@componentsUseable/Roles/ModalVerRol";
+import useHasPermission from "@hooks/useHasPermission";
 
 const ModalVerUsuario = ({ 
   show, 
@@ -9,53 +11,46 @@ const ModalVerUsuario = ({
   usuario,
   campos
 }) => {
-  //limpiar fecha de usuarios
+  const [showPermisos, setShowPermisos] = useState(false);
+  
   usuario.fecha_nacimiento = usuario.fecha_nacimiento.split("T")[0].split("-").reverse().join("/");
   
+  const handleVerPermisos = () => setShowPermisos(true);
+
+  const handleClosePermisos = () => setShowPermisos(false);
+  const canViewPermiso = useHasPermission('permisos:Lee');
   return (
-    <ModalVerGenerico 
-      show={show}
-      onClose={onClose}
-      titulo="Permisos del Usuario"
-      campos={campos}
-      datos={usuario}
-    >
-      <div className="mt-4">
-        <h5 className="mb-3">
-          <MDBIcon icon="user-shield" className="me-2" />
-          Permisos asignados al rol {usuario?.rol || ''}
-        </h5>
-        
-        {Object.keys(usuario.permisos).length > 0 ? (
-          <div className="permisos-container">
-            {Object.entries(usuario.permisos).map(([categoria, permisos]) => (
-              <div key={categoria} className="mb-4">
-                <h6 className="text-uppercase text-muted mb-2">
-                  {categoria.replace(/([A-Z])/g, ' $1').trim()}
-                </h6>
-                <div className="d-flex flex-wrap gap-2">
-                  {permisos.map(permiso => (
-                    <Badge 
-                      key={permiso} 
-                      bg="success" 
-                      className="d-flex align-items-center"
-                      style={{ fontSize: '0.9rem' }}
-                    >
-                      <MDBIcon icon="check-circle" className="me-1" />
-                      {permiso.split(':')[1]}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="alert alert-info">
-            Este rol no tiene permisos asignados
-          </div>
-        )}
-      </div>
-    </ModalVerGenerico>
+    <>
+      <ModalVerGenerico 
+        show={show}
+        onClose={onClose}
+        titulo="Información del Usuario"
+        campos={campos}
+        datos={usuario}
+        accionesAdicionales={
+          usuario.rol && (
+            <Button 
+              variant="primary" 
+              onClick={handleVerPermisos}
+              className="ms-2"
+            >
+              <MDBIcon icon="key" className="me-2" />
+              Ver permisos
+            </Button>
+          )
+        }
+      />
+      
+      {/* Modal para mostrar los permisos del rol */}
+      {canViewPermiso && usuario.rol && (
+        <ModalVerRol
+          show={showPermisos}
+          onClose={handleClosePermisos}
+          titulo={`Permisos del rol ${usuario.rol}`}
+          datos={usuario}
+        />
+      )}
+    </>
   );
 };
 

@@ -38,9 +38,7 @@ const ModalEditForm = ({
     let finalValue = value;
 
     // Si es un campo de fecha, convertimos a formato ISO
-    if (type === "date" && value) {
-      finalValue = new Date(value).toISOString();
-    }
+    if (type === "date" && value) finalValue = new Date(value).toISOString();
 
     if (onChange) onChange(name, finalValue);
     setFormState((prev) => ({ ...prev, [name]: finalValue }));

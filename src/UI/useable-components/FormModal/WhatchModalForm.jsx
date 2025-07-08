@@ -13,7 +13,8 @@ const ModalVerGenerico = ({
   columnas = {
     izquierda: [],
     derecha: []
-  }
+  },
+  accionesAdicionales = null 
 }) => {
   if (!datos && !children) return null;
 
@@ -108,6 +109,11 @@ const ModalVerGenerico = ({
       </Modal.Body>
       
       <Modal.Footer>
+        {accionesAdicionales && (
+          <div className="me-auto">
+            {accionesAdicionales}
+          </div>
+        )}
         <Button variant="secondary" onClick={onClose}>
           Cerrar
         </Button>
