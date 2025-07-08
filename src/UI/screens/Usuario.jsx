@@ -15,7 +15,7 @@ import SearchInput from "@componentsUseable/SearchInput";
 import ErrorMessage from "@componentsUseable/ErrorMessage";
 import TableGeneric from "@componentsUseable/TableGeneric";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
-import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
+import ViewModalUsuario from "@componentsUseable/Usuarios/ModalVerUsuario";
 import EditModalUsuario from "@componentsUseable/Usuarios/ModalEditUsuario";
 import CreateModalUsuario from "@componentsUseable/Usuarios/ModalCreateUsuario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
@@ -183,11 +183,11 @@ const UsuariosList = () => {
 
       {/* Modal para ver */}
       {canView && modalVer && (
-        <ModalVerGenerico
+        <ViewModalUsuario
           show={modalVer}
           onClose={() => setModalVer(false)}
           campos={camposUsuario}
-          datos={usuarioVer}
+          usuario={usuarioVer}
         />
       )}
 
