@@ -16,8 +16,8 @@ import ErrorMessage from "@componentsUseable/ErrorMessage";
 import TableGeneric from "@componentsUseable/TableGeneric";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
 import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
-import ModalEditForm from "@componentsUseable/FormModal/EditModalFormulario";
-import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
+import EditModalUsuario from "@componentsUseable/Usuarios/ModalEditUsuario";
+import CreateModalUsuario from "@componentsUseable/Usuarios/ModalCreateUsuario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Permiso.css"; // Styles
 import useHasPermission from "@hooks/useHasPermission";
@@ -26,9 +26,7 @@ const UsuariosList = () => {
   const { data: usuarios, loading, error, reload: cargarUsuarios } = useFetchData(UsuarioService.usuarios);
   const { data: roles } = useFetchData(RolService.roles);
   const { data: estados } = useFetchData(EstadoService.estados);
-  console.log(estados);
-  console.log(roles);
-
+  
   const { handleError } = useErrorHandler();
   const [modalVer, setModalVer] = useState(false);
   const [guardando, setGuardando] = useState(false);
@@ -58,7 +56,8 @@ const UsuariosList = () => {
   ];
   const confirmModal = useModalConfirm();
   const camposUsuario = [
-    { nombre: "nombres", label: "Nombre", tipo: "text" },
+    { nombre: "nombres", label: "Nombres", tipo: "text" },
+    { nombre: "apellido", label: "Apellidos", tipo: "text" },
     { nombre: "nom_user", label: "Nombre de usuario", tipo: "text" },
     { nombre: "fecha_nacimiento", label: "Fecha de nacimiento", tipo: "date" },
     { nombre: "documento", label: "Documento", tipo: "text" },
@@ -163,7 +162,7 @@ const UsuariosList = () => {
 
       {/* Modal para editar */}
       {canEdit && modalShow && usuarioSeleccionado && (
-        <ModalEditForm
+        <EditModalUsuario
           titulo={"Editar Usuario"}
           show={modalShow}
           onClose={() => setModalShow(false)}
@@ -177,6 +176,8 @@ const UsuariosList = () => {
             guardarOActualizarUsuario(datosForm);
             setModalShow(false);
           }}
+          roles={roles}
+          estados={estados}
         />
       )}
 
@@ -200,13 +201,13 @@ const UsuariosList = () => {
       )}
 
       {canCreate && modalCrearShow && (
-        <CreateModalFormulario
+        <CreateModalUsuario
           show={modalCrearShow}
           onClose={() => setModalCrearShow(false)}
           campos={camposUsuario}
           onSubmit={guardarOActualizarUsuario}
-          usuariosDisponibles={usuarios}
-          guardando={guardando}
+          roles={roles}
+          estados={estados}
         />
       )}
 
