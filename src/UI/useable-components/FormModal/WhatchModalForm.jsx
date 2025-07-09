@@ -21,7 +21,7 @@ const ModalVerGenerico = ({
   const renderCampo = (campo) => {
     const valor = campo.render ? campo.render(datos[campo.nombre], datos) : datos[campo.nombre];
 
-    if (campo.tipo === "img" && valor) {
+    if ((campo.tipo === "img" || campo.tipo === "file") && valor) {
       return (
         <div key={campo.nombre} className="mb-4 text-center">
           <img

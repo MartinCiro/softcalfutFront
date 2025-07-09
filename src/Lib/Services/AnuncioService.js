@@ -28,18 +28,60 @@ const AnuncioService = {
   },
 
   upAnuncio: async (id, data) => {
-    try {
-      id = String(id);
-      const estado = data.estado === "Activo" ? true : false;
-      const dataFilter = { ...data, id, nombre: data.titulo, estado };
-      const response = await getByEndpoint("anuncios", dataFilter, "put");
-      return response;
-    } catch (error) {
-      console.error("Error al actualizar anuncio:", error);
-      error.friendlyMessage = getFriendlyErrorMessage(error);
-      throw error;
+  try {
+    const isFormData = data instanceof FormData;
+    let dataToSend;
+
+    if (isFormData) {
+      // Manejo de FormData
+      data.append('id', String(id));
+      
+      // Convertir estado a booleano string
+      if (data.has('estado')) {
+        const estado = data.get('estado') === "Activo" ? 'true' : 'false';
+        data.set('estado', estado);
+      }
+      
+      // Solo incluir imagenUrl si existe
+      if (!data.has('imagenUrl')) {
+        data.delete('imagenUrl'); // Eliminar si está vacío
+      }
+      if (data.has('titulo')) {
+        data.set('nombre', data.get('titulo'));
+      }
+      
+      dataToSend = data;
+    } else {
+      // Manejo de objeto normal
+      dataToSend = new FormData();
+      dataToSend.append('id', String(id));
+      dataToSend.append('nombre', data.titulo || '');
+      dataToSend.append('contenido', data.contenido || '');
+      dataToSend.append('estado', data.estado === "Activo" ? 'true' : 'false');
+      
+      if (data.imagenUrl instanceof File) {
+        dataToSend.append('imagenUrl', data.imagenUrl);
+      }
     }
-  },
+
+    // Debug: Verificar datos
+    /* console.log('Datos a enviar:');
+    dataToSend.forEach((value, key) => console.log(key, value)); */
+
+    const response = await getByEndpoint(
+      "anuncios", 
+      dataToSend, 
+      "put", 
+      true 
+    );
+    sessionStorage.removeItem("anuncios");
+    return response;
+  } catch (error) {
+    console.error("Error al actualizar anuncio:", error);
+    error.friendlyMessage = getFriendlyErrorMessage(error);
+    throw error;
+  }
+},
 
   crAnuncio: async (data) => {
     try {
@@ -52,7 +94,6 @@ const AnuncioService = {
       } else {
         dataToSend = { ...data, nombre: data.titulo };
       }
-      console.log(dataToSend);
       const response = await getByEndpoint(
         "anuncios",
         dataToSend,
