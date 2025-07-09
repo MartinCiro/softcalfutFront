@@ -4,7 +4,7 @@ import { MDBIcon } from "mdb-react-ui-kit";
 
 const CardGeneric = ({
   data = [],
-  keys = {}, 
+  keys = {},
   onToggle,
   onView,
   onEdit,
@@ -26,8 +26,8 @@ const CardGeneric = ({
       <Card className="h-100 shadow-sm position-relative card-custom">
         {showCreate && (
           <div className="position-absolute top-0 end-0 m-2">
-            <Link 
-              to="#" 
+            <Link
+              to="#"
               className={`btn btn-sm btn-primary ${disableCreate ? 'disabled' : ''}`}
               onClick={!disableCreate ? () => onCreate?.(item) : undefined}
               style={disableCreate ? { cursor: 'not-allowed', opacity: 0.5 } : {}}
@@ -37,14 +37,22 @@ const CardGeneric = ({
             </Link>
           </div>
         )}
-        
+
         <div className="position-relative clamp-image">
-          <Card.Img
-            variant="top"
-            src={item[keys.image]}
-            alt={item[keys.title]}
-            style={{ height: "200px", objectFit: "cover" }}
-          />
+          <div
+            onClick={!disableView ? () => onView?.(item) : undefined}
+            style={{
+              cursor: disableView ? 'not-allowed' : 'pointer',
+              opacity: disableView ? 0.5 : 1
+            }}
+          >
+            <Card.Img
+              variant="top"
+              src={item[keys.image]}
+              alt={item[keys.title]}
+              style={{ height: "200px", objectFit: "cover" }}
+            />
+          </div>
           <div
             className="clamp-tittle position-absolute bottom-0 w-100 text-center text-white bg-dark bg-opacity-75 py-2"
             style={{ fontWeight: "bold" }}
@@ -52,25 +60,24 @@ const CardGeneric = ({
             {item[keys.title] || "Sin título"}
           </div>
         </div>
-        
+
         <Card.Body>
           <Card.Text className="clamp-text">
             {item[keys.content] || "Sin descripción"}
           </Card.Text>
-          
+
           <div className="button-container d-flex justify-content-between px-5 pb-3">
             {/* Botón Eliminar/Desactivar */}
             {showDelete && (
               <Link
                 to="#"
-                className={`nav-link toggle ${
-                  item[keys.status] === "Activo" ? "text-danger" : "text-success"
-                } ${disableDelete ? 'disabled' : ''}`}
+                className={`nav-link toggle ${item[keys.status] === "Activo" ? "text-danger" : "text-success"
+                  } ${disableDelete ? 'disabled' : ''}`}
                 onClick={!disableDelete ? () => onToggle?.(item) : undefined}
                 style={disableDelete ? { cursor: 'not-allowed', opacity: 0.5 } : {}}
                 title={
-                  disableDelete ? 
-                    "Eliminación no disponible" : 
+                  disableDelete ?
+                    "Eliminación no disponible" :
                     (item[keys.status] === "Activo" ? "Desactivar" : "Activar")
                 }
               >
@@ -84,8 +91,8 @@ const CardGeneric = ({
 
             {/* Botón Ver */}
             {showView && (
-              <Link 
-                to="#" 
+              <Link
+                to="#"
                 className={`view nav-link text-white ${disableView ? 'disabled' : ''}`}
                 onClick={!disableView ? () => onView?.(item) : undefined}
                 style={disableView ? { cursor: 'not-allowed', opacity: 0.5 } : {}}
@@ -97,8 +104,8 @@ const CardGeneric = ({
 
             {/* Botón Editar */}
             {showEdit && (
-              <Link 
-                to="#" 
+              <Link
+                to="#"
                 className={`nav-link edit ${disableEdit ? 'disabled' : ''}`}
                 onClick={!disableEdit ? () => onEdit?.(item) : undefined}
                 style={disableEdit ? { cursor: 'not-allowed', opacity: 0.5 } : {}}
