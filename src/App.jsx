@@ -9,6 +9,7 @@ import MisionVision from '@screens/MisionVision';
 import Futbol from '@screens/Futbol';
 import FutbolSala from '@screens/FutbolSala';
 import ClubRedirect from '@componentsUseable/ClubRedirect';
+import ToggleWhatsapp from "@componentsUseable/ToggleWhatsapp";
 
 import ProtectedRoute from '@routes/common/ProtectedRoute';
 
@@ -25,6 +26,11 @@ import PrincipalList from '@screens/Principal';
 function App() {
   return (
     <Router>
+      <ToggleWhatsapp 
+            phone="+57 321 8048070" 
+            message="Hola, quiero información sobre LCF" 
+            position="left"
+          />
       <Routes>
         
         {/* Rutas públicas con layout */}
@@ -43,6 +49,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             {/* Más rutas protegidas aquí */}
           </Route>
+          
         </Route>
 
         {/* Redirección por defecto - ajusta según necesites */}

@@ -12,9 +12,11 @@ import {
 import '@styles/Login.css';
 import AuthService from '@services/AuthService';
 import useFormSubmitter from '@hooks/useFormSubmitter';
-import { useAuth } from '@hooks/AuthContext';
+import useWhatsAppRedirect from "@hooks/useWhatsAppRedirect";
 
 const Login = () => {
+  const wsp = useWhatsAppRedirect();
+  const url = wsp("+573136547420", "Hola, he perdido mi contraseña de LCF");
   const [formData, setFormData] = useState({
     correo: '',
     password: '',
@@ -30,7 +32,7 @@ const Login = () => {
       [name]: value
     });
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     submitForm(
@@ -49,65 +51,68 @@ const Login = () => {
             <MDBCard className="login-card p-0 overflow-hidden">
               <MDBRow className="g-0">
                 {/* Formulario a la izquierda (45%) */}
-                  <MDBCardBody className="p-5">
-                    <h2 className="fw-bold mb-5 login-title text-center">Iniciar Sesión</h2>
-                    {error && (
-                      <div className="alert login-error" role="alert">
-                        {error}
-                      </div>
-                    )}
+                <MDBCardBody className="p-5">
+                  <h2 className="fw-bold mb-5 login-title text-center">Iniciar Sesión</h2>
+                  {error && (
+                    <div className="alert login-error" role="alert">
+                      {error}
+                    </div>
+                  )}
 
-                    <form onSubmit={handleSubmit}>
+                  <form onSubmit={handleSubmit}>
+                    <MDBInput
+                      wrapperClass='mb-4'
+                      label='Documento de identidad'
+                      id='correo'
+                      name='correo'
+                      type='text'
+                      value={formData.correo}
+                      onChange={handleChange}
+                      required
+                      className='login-input'
+                    />
+
+                    <div className="position-relative">
                       <MDBInput
                         wrapperClass='mb-4'
-                        label='Documento de identidad'
-                        id='correo'
-                        name='correo'
-                        type='text'
-                        value={formData.correo}
+                        label='Contraseña'
+                        id='password'
+                        name='password'
+                        type={showPassword ? 'text' : 'password'}
+                        value={formData.password}
                         onChange={handleChange}
                         required
                         className='login-input'
                       />
+                      <button
+                        type="button"
+                        className="btn btn-link position-absolute"
+                        style={{ right: '10px', top: '10px', zIndex: 10 }}
+                        onClick={toggleShowPassword}
+                      >
+                        <MDBIcon icon={showPassword ? 'eye-slash' : 'eye'} />
+                      </button>
+                    </div>
 
-                      <div className="position-relative">
-                        <MDBInput
-                          wrapperClass='mb-4'
-                          label='Contraseña'
-                          id='password'
-                          name='password'
-                          type={showPassword ? 'text' : 'password'}
-                          value={formData.password}
-                          onChange={handleChange}
-                          required
-                          className='login-input'
-                        />
-                        <button
-                          type="button"
-                          className="btn btn-link position-absolute"
-                          style={{ right: '10px', top: '10px', zIndex: 10 }}
-                          onClick={toggleShowPassword}
-                        >
-                          <MDBIcon icon={showPassword ? 'eye-slash' : 'eye'} />
-                        </button>
-                      </div>
+                    <div className="d-flex justify-content-between mx-1 mb-4">
+                      <a onClick={(e) => {
+                        e.preventDefault();
+                        window.open(url, '_blank', 'noopener,noreferrer');
+                      }} className="login-link">¿Olvidó su contraseña?</a>
+                    </div>
 
-                      <div className="d-flex justify-content-between mx-1 mb-4">
-                        <a href="#!" className="login-link">¿Olvidó su contraseña?</a>
-                      </div>
+                    <MDBBtn type="submit" className="mb-4 w-100 py-3 login-button">
+                      Iniciar sesión
+                    </MDBBtn>
 
-                      <MDBBtn type="submit" className="mb-4 w-100 py-3 login-button">
-                        Iniciar sesión
-                      </MDBBtn>
+                    <div className="text-center">
+                      <p style={{ color: '#0D1828', fontSize: '0.9rem' }}>
+                        Softcaltut ©{new Date().getFullYear()}
+                      </p>
+                    </div>
+                  </form>
+                </MDBCardBody>
 
-                      <div className="text-center">
-                        <p style={{ color: '#0D1828', fontSize: '0.9rem' }}>
-                          Softcaltut ©{new Date().getFullYear()} 
-                        </p>
-                      </div>
-                    </form>
-                  </MDBCardBody>
-                
               </MDBRow>
             </MDBCard>
           </MDBCol>
