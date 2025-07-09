@@ -167,6 +167,7 @@ const AnunciosList = () => {
           onClose={() => setModalVer(false)}
           campos={camposAnuncio}
           datos={anuncioVer}
+          titulo={anuncioVer.titulo}
         />
       )}
 

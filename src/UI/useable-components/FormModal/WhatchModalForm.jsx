@@ -21,18 +21,13 @@ const ModalVerGenerico = ({
   const renderCampo = (campo) => {
     const valor = campo.render ? campo.render(datos[campo.nombre], datos) : datos[campo.nombre];
 
-    if (campo.tipo === "imagen" && valor) {
+    if (campo.tipo === "img" && valor) {
       return (
         <div key={campo.nombre} className="mb-4 text-center">
           <img
             src={valor}
             alt={campo.label || campo.nombre}
-            className="img-fluid rounded shadow"
-            style={{
-              maxHeight: "300px",
-              objectFit: "cover",
-              border: "2px solid #141414"
-            }}
+            className="img-fluid rounded shadow mx-auto d-block"
           />
         </div>
       );
@@ -72,6 +67,14 @@ const ModalVerGenerico = ({
             {campos
               .filter(campo => nombresDerecha.includes(campo.nombre))
               .map(renderCampo)}
+          </div>
+        </div>
+      );
+    } else if (campos.length > 0) {
+      return (
+        <div className="row">
+          <div className="col-12">
+            {campos.map(renderCampo)}
           </div>
         </div>
       );

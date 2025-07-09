@@ -4,3 +4,12 @@
     text-align: center;
   }
 }
+
+.modal-ver-generico {
+  img {
+    max-height: 300px;
+    object-fit: cover;
+    border: 2px solid var(--color-oscuro);
+    border-radius: 5px;
+  }
+}

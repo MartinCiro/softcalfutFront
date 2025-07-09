@@ -98,7 +98,6 @@ const EditModalUsuario = ({
       numero_contacto: formData.num_contacto,
       fecha_nacimiento: formData.fecha_nacimiento,
     };
-    console.log(dataFinal);
     await onSubmit(dataFinal);
   };
 

@@ -106,6 +106,8 @@ const ModalEditForm = ({
                       <img
                         src={value}
                         alt={campo.label || campo.nombre}
+                        className="img-fluid rounded shadow mx-auto d-block"
+                        style={{ maxHeight: "300px", objectFit: "cover", border: "2px solid rgb(20, 20, 20)" }}
                       />
                     ) : (
                       <p className="text-muted">No hay imagen cargada</p>
