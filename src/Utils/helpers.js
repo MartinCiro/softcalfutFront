@@ -34,7 +34,7 @@ export const getStatusConnection = () => {
     );
 };
 
-export const getByEndpoint = async (endpoint, body = null, method = "get") => {
+export const getByEndpoint = async (endpoint, body = null, method = "get", isFormData = false) => {
   const API_URL = config.server;
 
   try {
@@ -48,7 +48,7 @@ export const getByEndpoint = async (endpoint, body = null, method = "get") => {
       url: `${API_URL}/${endpoint}/`,
       headers: {
         ...AuthService.getAuthHeader(),
-        ...(isBodyMethod && { "Content-Type": "application/json" }),
+        ...(isBodyMethod && !isFormData && { "Content-Type": "application/json" })
       },
       timeout: 90000,
       ...(isBodyMethod && body ? { data: body } : {}),
