@@ -66,7 +66,6 @@ Este proyecto está bajo la licencia [MIT](https://opensource.org/licenses/MIT).
 │   ├── /Layouts              # Componentes de layout general (Sidebar, Header)
 │
 ├── /UI                       # Todo lo relacionado con la interfaz visual
-│   ├── /screen-components    # Componentes que se usan en una pantalla específica
 │   ├── /useable-components   # Componentes reutilizables (Button, Modal, Card)
 │   ├── /screens              # Vistas o páginas principales (Login, Dashboard, etc.)
 ```
