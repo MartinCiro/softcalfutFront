@@ -18,6 +18,7 @@ import ModalEditForm from "@componentsUseable/FormModal/EditModalFormulario";
 import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Permiso.css"; // Styles
+import useHasPermission from "@hooks/useHasPermission";
 
 const TorneosList = () => {
   const { data: torneos, loading, error, reload: cargarTorneos } = useFetchData(TorneoService.torneos);
@@ -75,9 +76,22 @@ const TorneosList = () => {
       setModoEdicion(false);
     }
   };
+  const canCreate = useHasPermission('torneos:Crea');
+  const canEdit = useHasPermission('torneos:Actualiza');
+  const canView = useHasPermission('torneos:Lee');
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
+
+  if (!canView) {
+    return (
+      <Container className="py-4">
+        <div className="alert alert-danger">
+          No tienes permisos para ver los torneos
+        </div>
+      </Container>
+    );
+  }
 
   return (
 
@@ -86,20 +100,22 @@ const TorneosList = () => {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold mb-0">Torneos</h2>
         <div className="d-flex align-items-center gap-2">
-          <Button
-            variant="success"
-            onClick={() => {
-              setModoEdicion(false);
-              setTorneoSeleccionado(null);
-              setModalCrearShow(true);
-            }}
-            className="rounded-circle d-flex justify-content-center align-items-center btn_add"
-            style={{ width: "45px", height: "45px" }}
-            title="Crear Torneo"
-          >
-            <MDBIcon fas icon="plus" />
-          </Button>
-          <SearchInput value={query} onChange={setQuery} />
+          {canCreate && (
+            <Button
+              variant="success"
+              onClick={() => {
+                setModoEdicion(false);
+                setTorneoSeleccionado(null);
+                setModalCrearShow(true);
+              }}
+              className="rounded-circle d-flex justify-content-center align-items-center btn_add"
+              style={{ width: "45px", height: "45px" }}
+              title="Crear Torneo"
+            >
+              <MDBIcon fas icon="plus" />
+            </Button>
+          )}
+          {canView && (<SearchInput value={query} onChange={setQuery} />)}
         </div>
       </div>
 
@@ -114,10 +130,12 @@ const TorneosList = () => {
         columns={columnsTorneo}
         onEdit={handleEditar}
         onView={handleVer}
+        showEdit={canEdit}
+        showView={canView}
       />
 
       {/* Modal para editar */}
-      {modalShow && torneoSeleccionado && (
+      {canEdit && modalShow && torneoSeleccionado && (
         <ModalEditForm
           titulo={"Editar Torneo"}
           show={modalShow}
@@ -136,7 +154,7 @@ const TorneosList = () => {
       )}
 
       {/* Modal para ver */}
-      {modalVer && (
+      {canView && modalVer && (
         <ModalVerGenerico
           show={modalVer}
           onClose={() => setModalVer(false)}
@@ -145,14 +163,16 @@ const TorneosList = () => {
         />
       )}
 
-      <ModalConfirmacion
-        show={confirmModal.show}
-        mensaje={confirmModal.mensaje}
-        onConfirm={confirmModal.onConfirm}
-        onClose={confirmModal.close}
-      />
+      {canEdit && (
+        <ModalConfirmacion
+          show={confirmModal.show}
+          mensaje={confirmModal.mensaje}
+          onConfirm={confirmModal.onConfirm}
+          onClose={confirmModal.close}
+        />
+      )}
 
-      {modalCrearShow && (
+      {canCreate && modalCrearShow && (
         <CreateModalFormulario
           show={modalCrearShow}
           onClose={() => setModalCrearShow(false)}
@@ -163,7 +183,7 @@ const TorneosList = () => {
         />
       )}
 
-      {shouldShowPaginator && (
+      {canView && shouldShowPaginator && (
         <Paginator
           currentPage={currentPage}
           maxPage={maxPage}

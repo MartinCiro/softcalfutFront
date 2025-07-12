@@ -20,6 +20,7 @@ import ModalCreateRol from "@componentsUseable/Roles/ModalCreateRol";
 
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Permiso.css";
+import useHasPermission from "@hooks/useHasPermission";
 
 const RolesList = () => {
   const { data: roles, loading, error, reload: cargarRoles } = useFetchData(RolService.roles);
@@ -82,10 +83,22 @@ const RolesList = () => {
     }
   };
 
+  const canCreate = useHasPermission('roles:Crea');
+  const canEdit = useHasPermission('roles:Actualiza');
+  const canView = useHasPermission('roles:Lee');
 
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
+  if (!canView) {
+    return (
+      <Container className="py-4">
+        <div className="alert alert-danger">
+          No tienes permisos para ver los roles
+        </div>
+      </Container>
+    );
+  }
 
   return (
 
@@ -94,6 +107,7 @@ const RolesList = () => {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold mb-0">Roles</h2>
         <div className="d-flex align-items-center gap-2">
+          {canCreate && (
           <Button
             variant="success"
             onClick={() => setModalCrearShow(true)}
@@ -103,7 +117,8 @@ const RolesList = () => {
           >
             <MDBIcon fas icon="plus" />
           </Button>
-          <SearchInput value={query} onChange={setQuery} />
+          )}
+          {canView && (<SearchInput value={query} onChange={setQuery} />)}
         </div>
       </div>
 
@@ -122,11 +137,13 @@ const RolesList = () => {
         ]}
         onView={handleVer}
         onEdit={handleEditar}
+        showEdit={canEdit}
+        showView={canView}
       />
 
 
       {/* Modal para editar */}
-      {modalShow && (
+      {canEdit && modalShow && (
         <ModalEditarRol
           show={modalShow}
           onClose={() => setModalShow(false)}
@@ -141,7 +158,7 @@ const RolesList = () => {
       )}
 
       {/* Modal para crear */}
-      {modalCrearShow && (
+      {canCreate && modalCrearShow && (
         <ModalCreateRol
           show={modalCrearShow}
           onClose={() => setModalCrearShow(false)}
@@ -157,7 +174,7 @@ const RolesList = () => {
       )}
 
       {/* Modal para ver */}
-      {modalVer && (
+      {canView && modalVer && (
         <ModalVerRol
           show={modalVer}
           onClose={() => setModalVer(false)}
@@ -165,7 +182,7 @@ const RolesList = () => {
           datos={rolVer}
         />
       )}
-      {shouldShowPaginator && (
+      {canView && shouldShowPaginator && (
         <Paginator
           currentPage={currentPage}
           maxPage={maxPage}
@@ -173,12 +190,14 @@ const RolesList = () => {
           prevPage={prevPage}
         />
       )}
+      {canEdit && (
       <ModalConfirmacion
         show={confirmModal.show}
         mensaje={confirmModal.mensaje}
         onConfirm={confirmModal.onConfirm}
         onClose={confirmModal.close}
       />
+      )}
       <ScrollTopButton />
     </Container>
   );

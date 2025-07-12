@@ -9,7 +9,10 @@ const useFormSubmitter = () => {
     resetError();
     try {
       await callbackFn();  // Ejecuta la función que pase (por ejemplo: AuthService.login)
-      if (redirectPath) navigate(redirectPath); 
+      if (redirectPath) {
+        navigate(redirectPath); 
+        window.location.reload();
+      }
     } catch (err) {
       handleError(err);
     }

@@ -15,19 +15,18 @@ import SearchInput from "@componentsUseable/SearchInput";
 import ErrorMessage from "@componentsUseable/ErrorMessage";
 import TableGeneric from "@componentsUseable/TableGeneric";
 import ScrollTopButton from "@componentsUseable/Toggle/ScrollTopButton";
-import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
-import ModalEditForm from "@componentsUseable/FormModal/EditModalFormulario";
-import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
+import ViewModalUsuario from "@componentsUseable/Usuarios/ModalVerUsuario";
+import EditModalUsuario from "@componentsUseable/Usuarios/ModalEditUsuario";
+import CreateModalUsuario from "@componentsUseable/Usuarios/ModalCreateUsuario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Permiso.css"; // Styles
+import useHasPermission from "@hooks/useHasPermission";
 
 const UsuariosList = () => {
   const { data: usuarios, loading, error, reload: cargarUsuarios } = useFetchData(UsuarioService.usuarios);
   const { data: roles } = useFetchData(RolService.roles);
   const { data: estados } = useFetchData(EstadoService.estados);
-  console.log(estados);
-  console.log(roles);
-
+  
   const { handleError } = useErrorHandler();
   const [modalVer, setModalVer] = useState(false);
   const [guardando, setGuardando] = useState(false);
@@ -57,7 +56,8 @@ const UsuariosList = () => {
   ];
   const confirmModal = useModalConfirm();
   const camposUsuario = [
-    { nombre: "nombres", label: "Nombre", tipo: "text" },
+    { nombre: "nombres", label: "Nombres", tipo: "text" },
+    { nombre: "apellido", label: "Apellidos", tipo: "text" },
     { nombre: "nom_user", label: "Nombre de usuario", tipo: "text" },
     { nombre: "fecha_nacimiento", label: "Fecha de nacimiento", tipo: "date" },
     { nombre: "documento", label: "Documento", tipo: "text" },
@@ -101,9 +101,24 @@ const UsuariosList = () => {
       setModoEdicion(false);
     }
   };
+  const canCreate = useHasPermission('usuarios:Crea');
+  const canEdit = useHasPermission('usuarios:Actualiza');
+  const canView = useHasPermission('usuarios:Lee');
+  
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
+
+  if (!canView) {
+    return (
+      <Container className="py-4">
+        <div className="alert alert-danger">
+          No tienes permisos para ver los usuarios
+        </div>
+      </Container>
+    );
+  }
+
 
   return (
 
@@ -112,20 +127,22 @@ const UsuariosList = () => {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold mb-0">Usuarios</h2>
         <div className="d-flex align-items-center gap-2">
-          <Button
-            variant="success"
-            onClick={() => {
-              setModoEdicion(false);
-              setUsuarioSeleccionado(null);
-              setModalCrearShow(true);
-            }}
-            className="rounded-circle d-flex justify-content-center align-items-center btn_add"
-            style={{ width: "45px", height: "45px" }}
-            title="Crear Usuario"
-          >
-            <MDBIcon fas icon="plus" />
-          </Button>
-          <SearchInput value={query} onChange={setQuery} />
+          {canCreate && (
+            <Button
+              variant="success"
+              onClick={() => {
+                setModoEdicion(false);
+                setUsuarioSeleccionado(null);
+                setModalCrearShow(true);
+              }}
+              className="rounded-circle d-flex justify-content-center align-items-center btn_add"
+              style={{ width: "45px", height: "45px" }}
+              title="Crear Usuario"
+            >
+              <MDBIcon fas icon="plus" />
+            </Button>
+          )}
+          {canView && (<SearchInput value={query} onChange={setQuery} />)}
         </div>
       </div>
 
@@ -140,11 +157,13 @@ const UsuariosList = () => {
         columns={columnsUsuario}
         onEdit={handleEditar}
         onView={handleVer}
+        showEdit={canEdit}
+        showView={canView}
       />
 
       {/* Modal para editar */}
-      {modalShow && usuarioSeleccionado && (
-        <ModalEditForm
+      {canEdit && modalShow && usuarioSeleccionado && (
+        <EditModalUsuario
           titulo={"Editar Usuario"}
           show={modalShow}
           onClose={() => setModalShow(false)}
@@ -158,38 +177,42 @@ const UsuariosList = () => {
             guardarOActualizarUsuario(datosForm);
             setModalShow(false);
           }}
+          roles={roles}
+          estados={estados}
         />
       )}
 
       {/* Modal para ver */}
-      {modalVer && (
-        <ModalVerGenerico
+      {canView && modalVer && (
+        <ViewModalUsuario
           show={modalVer}
           onClose={() => setModalVer(false)}
           campos={camposUsuario}
-          datos={usuarioVer}
+          usuario={usuarioVer}
         />
       )}
 
-      <ModalConfirmacion
-        show={confirmModal.show}
-        mensaje={confirmModal.mensaje}
-        onConfirm={confirmModal.onConfirm}
-        onClose={confirmModal.close}
-      />
+      {canEdit && (
+        <ModalConfirmacion
+          show={confirmModal.show}
+          mensaje={confirmModal.mensaje}
+          onConfirm={confirmModal.onConfirm}
+          onClose={confirmModal.close}
+        />
+      )}
 
-      {modalCrearShow && (
-        <CreateModalFormulario
+      {canCreate && modalCrearShow && (
+        <CreateModalUsuario
           show={modalCrearShow}
           onClose={() => setModalCrearShow(false)}
           campos={camposUsuario}
           onSubmit={guardarOActualizarUsuario}
-          usuariosDisponibles={usuarios}
-          guardando={guardando}
+          roles={roles}
+          estados={estados}
         />
       )}
 
-      {shouldShowPaginator && (
+      {canView && shouldShowPaginator && (
         <Paginator
           currentPage={currentPage}
           maxPage={maxPage}

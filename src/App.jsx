@@ -4,6 +4,13 @@ import '@src/App.css';
 
 // Componentes de autenticación
 import Login from '@screens/Login';
+import Historia from '@screens/Historia';
+import MisionVision from '@screens/MisionVision';
+import Futbol from '@screens/Futbol';
+import FutbolSala from '@screens/FutbolSala';
+import ClubRedirect from '@componentsUseable/ClubRedirect';
+import ToggleWhatsapp from "@componentsUseable/ToggleWhatsapp";
+
 import ProtectedRoute from '@routes/common/ProtectedRoute';
 
 // Componentes de layout
@@ -13,24 +20,40 @@ import Layout from '@layouts/Layout';
 import Dashboard from '@screens/Dashboard';
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import ProgramacionList from '@screens/Programacion';
+import PrincipalList from '@screens/Principal';
 
 function App() {
   return (
     <Router>
+      <ToggleWhatsapp 
+            phone="+57 321 8048070" 
+            message="Hola, quiero información sobre LCF" 
+            position="left"
+          />
       <Routes>
-        {/* Ruta pública para login */}
-        <Route path="/login" element={<Login />} />
         
-        {/* Rutas protegidas */}
-        <Route element={<ProtectedRoute />}>
-          <Route element={<Layout />}>
+        {/* Rutas públicas con layout */}
+        <Route element={<Layout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/lcf/historia" element={<Historia />} />
+          <Route path="/lcf/mision-vision" element={<MisionVision />} />
+          <Route path="/torneos/futbol" element={<Futbol />} />
+          <Route path="/torneos/futbol-sala" element={<FutbolSala />} />
+          <Route path="/torneos/programacion" element={<ProgramacionList />} />
+          <Route path="/" element={<PrincipalList />} />
+          <Route path="/club" element={<ClubRedirect />} />
+          
+          {/* Rutas protegidas - requieren autenticación */}
+          <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
             {/* Más rutas protegidas aquí */}
           </Route>
+          
         </Route>
-        
-        {/* Redirigir cualquier ruta desconocida a login o dashboard según auth */}
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+
+        {/* Redirección por defecto - ajusta según necesites */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );

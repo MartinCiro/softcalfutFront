@@ -1,12 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import {
-  saveSession,
-  extractResponseData,
-  getFriendlyErrorMessage,
-  getStatusConnection,
-  getByEndpoint,
-  clearSession
-} from "@utils/helpers";
+import { saveSession, extractResponseData, getFriendlyErrorMessage, getByEndpoint, clearSession, getStatusConnection } from "@utils/helpers";
 
 const AuthService = {
   login: async (correo, password) => {
@@ -32,7 +25,13 @@ const AuthService = {
     }
   },
 
-  logout: () => clearSession(),
+  logout: (navigate) => {
+    clearSession();
+    if (navigate) {
+      window.location.reload();
+      navigate('/')
+    };
+  },
 
   getCurrentUser: () => {
     const userData = sessionStorage.getItem("userData");
@@ -48,7 +47,7 @@ const AuthService = {
     try {
       const decoded = jwtDecode(token);
       const currentTime = Date.now() / 1000;
-      return decoded.exp ? decoded.exp > currentTime : true;
+      return decoded.exp ? decoded.exp > currentTime : false;
     } catch (e) {
       console.warn("Token inválido:", e);
       return false;
