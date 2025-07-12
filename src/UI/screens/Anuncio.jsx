@@ -53,7 +53,7 @@ const AnunciosList = () => {
   const camposAnuncio = [
     { nombre: "titulo", label: "Título", tipo: "text" },
     { nombre: "contenido", label: "Contenido", tipo: "textarea" },
-    { nombre: "imagenUrl", label: "URL de Imagen", tipo: "img" },
+    { nombre: "imagenUrl", label: "Imagen de portada", tipo: "file", accept: "image/*" },
   ];
 
   const handleEditar = (anuncio) => {
@@ -71,6 +71,7 @@ const AnunciosList = () => {
         await AnuncioService.upAnuncio(anuncio.id, { estado: nuevoEstado });
         sessionStorage.removeItem("anuncios");
         await cargarAnuncios();
+        setGuardando(true);
       } catch (err) {
         handleError(err);
       }
@@ -86,15 +87,30 @@ const AnunciosList = () => {
     const esEdicion = !!anuncioSeleccionado?.id;
     try {
       setGuardando(true);
-      esEdicion ? await AnuncioService.upAnuncio(anuncioSeleccionado.id, datosForm) : await AnuncioService.crAnuncio(datosForm);
+      setErrorGuardar({ message: null, variant: "danger" });
+
+      const formData = new FormData();
+      Object.keys(datosForm).forEach(key => {
+        const value = datosForm[key];
+        (key === 'imagenUrl' && value instanceof File)
+          ? formData.append(key, value)
+          : formData.append(key, value ?? '');
+      });
+      esEdicion ? await AnuncioService.upAnuncio(anuncioSeleccionado.id, formData) : await AnuncioService.crAnuncio(formData);
       sessionStorage.removeItem("anuncios");
       await cargarAnuncios();
       setErrorGuardar({ message: esEdicion ? "Anuncio actualizado correctamente" : "Anuncio creado correctamente", variant: "success" });
+      if (esEdicion) {
+        setModalShow(false);
+        setAnuncioSeleccionado(null);
+      } else {
+        setModalCrearShow(false);
+      }
     } catch (err) {
       const mensaje = handleError(err);
       setErrorGuardar({ message: mensaje, variant: "danger" });
     } finally {
-      setTimeout(() => setErrorGuardar({ message: null, variant: "danger" }), 3000);
+      setTimeout(() => setErrorGuardar({ message: null, variant: "danger" }), 6000);
       setGuardando(false);
     }
   };

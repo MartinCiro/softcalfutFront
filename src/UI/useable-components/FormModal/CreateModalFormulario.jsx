@@ -17,6 +17,7 @@ const CreateModalFormulario = ({
   onChange = null,
 }) => {
   const [formState, setFormState] = useState({});
+  const [previewImage, setPreviewImage] = useState(null);
   const [mensajeExito, setMensajeExito] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const { error, handleError, resetError } = useErrorHandler();
@@ -27,11 +28,7 @@ const CreateModalFormulario = ({
     } else {
       // Inicializar con valores por defecto si existen
       const initialState = {};
-      campos.forEach(campo => {
-        if (campo.defaultValue !== undefined) {
-          initialState[campo.nombre] = campo.defaultValue;
-        }
-      });
+      campos.forEach(campo => {if (campo.defaultValue !== undefined)  initialState[campo.nombre] = campo.defaultValue;});
       setFormState(initialState);
     }
   }, [datos, show]);
@@ -46,6 +43,19 @@ const CreateModalFormulario = ({
     const value = date ? date.toISOString() : '';
     setFormState((prev) => ({ ...prev, [name]: value }));
     if (typeof onChange === "function") onChange(name, value);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Crear vista previa
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewImage(reader.result);
+      reader.readAsDataURL(file);
+
+      // Actualizar el estado del formulario con el archivo
+      setFormState(prev => ({ ...prev, [e.target.name]: file }));
+    }
   };
 
   const handleSubmit = async () => {
@@ -76,9 +86,9 @@ const CreateModalFormulario = ({
 
   return (
     <Modal show={show} onHide={handleClose} centered size="lg" className="editModal">
-      <Modal.Header 
+      <Modal.Header
         closeButton
-        style={{ 
+        style={{
           backgroundColor: "#141414",
           color: "#F5F5F5",
           borderBottom: "3px solid #F4D609"
@@ -88,8 +98,8 @@ const CreateModalFormulario = ({
       </Modal.Header>
       <Modal.Body style={{ backgroundColor: "#F5F5F5", padding: "20px" }}>
         {mensajeExito && (
-          <Alert 
-            variant="success" 
+          <Alert
+            variant="success"
             className="text-center"
             style={{ backgroundColor: "#07852E", color: "#F5F5F5" }}
           >
@@ -124,7 +134,7 @@ const CreateModalFormulario = ({
                             src={value}
                             alt={`Vista previa ${campo.label}`}
                             className="img-fluid rounded mb-2"
-                            style={{ 
+                            style={{
                               maxHeight: "150px",
                               border: "2px solid #141414"
                             }}
@@ -136,7 +146,7 @@ const CreateModalFormulario = ({
                           value={value}
                           onChange={handleChange}
                           placeholder={campo.placeholder || "URL de la imagen"}
-                          style={{ 
+                          style={{
                             borderColor: "#141414",
                             backgroundColor: "#FFFFFF"
                           }}
@@ -144,24 +154,37 @@ const CreateModalFormulario = ({
                         />
                       </>
                     ) : campo.tipo === "select" ? (
-                      <Form.Control
-                        as="select"
-                        name={campo.nombre}
-                        value={value}
-                        onChange={handleChange}
-                        style={{ 
-                          borderColor: "#141414",
-                          backgroundColor: "#FFFFFF"
-                        }}
-                        required={campo.requerido}
-                      >
-                        <option value="">Seleccione...</option>
-                        {campo.opciones?.map(opcion => (
-                          <option key={opcion.value} value={opcion.value}>
-                            {opcion.label}
-                          </option>
-                        ))}
-                      </Form.Control>
+                      <>
+                        {value && campo.opciones?.some(opt => opt.value === value) && (
+                          <img
+                            src={value}
+                            alt={`Vista previa ${campo.label}`}
+                            className="img-fluid rounded mb-2"
+                            style={{
+                              maxHeight: "150px",
+                              border: "2px solid #141414"
+                            }}
+                          />
+                        )}
+                        <Form.Control
+                          as="select"
+                          name={campo.nombre}
+                          value={value}
+                          onChange={handleChange}
+                          style={{
+                            borderColor: "#141414",
+                            backgroundColor: "#FFFFFF"
+                          }}
+                          required={campo.requerido}
+                        >
+                          <option value="">Seleccione...</option>
+                          {campo.opciones?.map(opcion => (
+                            <option key={opcion.value} value={opcion.value}>
+                              {opcion.label}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </>
                     ) : campo.tipo === "date" ? (
                       <DatePicker
                         selected={parseDate(value)}
@@ -172,22 +195,47 @@ const CreateModalFormulario = ({
                         placeholderText={campo.placeholder || "Seleccione una fecha"}
                         showYearDropdown
                         dropdownMode="select"
-                        style={{ 
+                        style={{
                           borderColor: "#141414",
                           backgroundColor: "#FFFFFF"
                         }}
                         required={campo.requerido}
                       />
+                    ) : campo.tipo === "file" ? (
+                      <>
+                        {(previewImage || (datos && datos.imagenUrl)) && (
+                          <img
+                            src={previewImage || datos.imagenUrl}
+                            alt={`Vista previa ${campo.label}`}
+                            className="img-fluid rounded mb-2"
+                            style={{
+                              maxHeight: "150px",
+                              border: "2px solid #141414"
+                            }}
+                          />
+                        )}
+                        <Form.Control
+                          type="file"
+                          name={campo.nombre}
+                          onChange={handleFileChange}
+                          accept={campo.accept || "*"}
+                          style={{
+                            borderColor: "#141414",
+                            backgroundColor: "#FFFFFF"
+                          }}
+                          required={campo.requerido}
+                        />
+                      </>
                     ) : (
                       <Form.Control
                         as={isTextarea ? "textarea" : "input"}
                         type={isTextarea ? undefined : campo.tipo}
                         rows={isTextarea ? 3 : undefined}
                         style={{
-                          ...(isTextarea ? { 
-                            minHeight: "100px", 
-                            resize: "vertical", 
-                            overflow: "hidden" 
+                          ...(isTextarea ? {
+                            minHeight: "100px",
+                            resize: "vertical",
+                            overflow: "hidden"
                           } : {}),
                           borderColor: "#141414",
                           backgroundColor: "#FFFFFF"
@@ -209,8 +257,8 @@ const CreateModalFormulario = ({
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button 
-          variant="secondary" 
+        <Button
+          variant="secondary"
           onClick={handleClose}
         >
           Cancelar

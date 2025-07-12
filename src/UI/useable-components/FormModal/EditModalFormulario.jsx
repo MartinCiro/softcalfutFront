@@ -175,6 +175,26 @@ const ModalEditForm = ({
                     disabled={campo.bloqueado}
                     dateFormat="dd/MM/yyyy"
                   />
+                ) : campo.tipo === "file" ? (
+                  <>
+                    {formState[campo.nombre] && typeof formState[campo.nombre] === "string" && (
+                      <img
+                        src={formState[campo.nombre]}
+                        alt="Imagen actual"
+                        className="img-fluid rounded shadow mt-2"
+                        style={{ maxHeight: "200px", objectFit: "cover", border: "1px solid #ccc" }}
+                      />
+                    )}
+                    <Form.Control
+                      type="file"
+                      name={campo.nombre}
+                      accept={campo.accept || "*"}
+                      onChange={(e) => {
+                        const archivo = e.target.files[0];
+                        handleChange({ target: { name: campo.nombre, value: archivo } });
+                      }}
+                    />
+                  </>
                 ) : (
                   <Form.Control
                     as={isTextarea ? "textarea" : "input"}
