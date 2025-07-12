@@ -1,0 +1,33 @@
+.calendar {
+  button {
+    color: var(--color-oscuro);
+
+    &:hover {
+      color: var(--color-primario) !important;
+      transform: scale(1.1);
+      transition: all 0.3s ease;
+      border: 2px solid var(--color-secundario) !important;
+      .text-primary {
+        font-size: 1rem !important;
+        color: var(--color-secundario) !important;
+      }
+    }
+
+   
+    &:active, &:focus {
+      color: var(--color-primario);
+    }
+
+    &:focus:not(.active) {
+      color: var(--color-oscuro);
+      background-color: var(--color-claro);
+    }
+  }
+
+  .btn-primary {
+    background-color: var(--color-primario) !important;
+     &:hover {
+      color: var(--color-oscuro) !important;
+    }
+  }
+}

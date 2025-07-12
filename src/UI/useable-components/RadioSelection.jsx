@@ -1,10 +1,16 @@
 import React from "react";
 import useRadioSelection from "@hooks/useRadioSelection";
 
-const RadioSelection = ({ options, initialValue }) => {
+const RadioSelection = ({ options, initialValue, onChange }) => {
   const { selection, setSelection } = useRadioSelection({ options, initialValue });
+
+  const handleChange = (value) => {
+    setSelection(value);
+    onChange?.(value); 
+  };
+
   return (
-    <div className="radio-selection">
+    <div className="radio-selection mb-2">
       {options.map(({ label, value }) => (
         <label key={value} style={{ marginRight: 15, cursor: "pointer" }}>
           <input
@@ -12,7 +18,7 @@ const RadioSelection = ({ options, initialValue }) => {
             name="radio-selection"
             value={value}
             checked={selection === value}
-            onChange={() => setSelection(value)}
+            onChange={() => handleChange(value)}
             style={{ marginRight: 5 }}
           />
           {label}

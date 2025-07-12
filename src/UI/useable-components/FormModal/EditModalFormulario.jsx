@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import useErrorHandler from "@hooks/useErrorHandler";
 import { useAutoResizeTextarea } from "@hooks/useAutoResizeTextarea";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { parseFecha } from "@utils/helpers";
 
 const ModalEditForm = ({
   show,
@@ -18,6 +21,7 @@ const ModalEditForm = ({
   const [mensajeExito, setMensajeExito] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const { error, handleError, resetError } = useErrorHandler();
+
   useEffect(() => {
     const claves = Object.keys(datos);
     const hayCambio = claves.some(k => formState[k] !== datos[k]);
@@ -28,18 +32,22 @@ const ModalEditForm = ({
     }
   }, [datos, show]);
 
-
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (onChange) onChange(name, value);
-    setFormState((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type } = e.target;
+
+    let finalValue = value;
+
+    // Si es un campo de fecha, convertimos a formato ISO
+    if (type === "date" && value) finalValue = new Date(value).toISOString();
+
+    if (onChange) onChange(name, finalValue);
+    setFormState((prev) => ({ ...prev, [name]: finalValue }));
   };
 
   const handleSubmit = async () => {
     if (!onSubmit) return;
     try {
       setGuardando(true);
-
       const camposBloqueados = campos
         .filter(campo => campo.bloqueado)
         .map(campo => campo.nombre);
@@ -57,15 +65,20 @@ const ModalEditForm = ({
     }
   };
 
-
   return (
-    <Modal show={show} onHide={onClose} centered animation={false}>
-      <Modal.Header closeButton>
+    <Modal show={show} onHide={onClose} centered size="lg" className="editModal">
+      <Modal.Header
+        closeButton
+      >
         <Modal.Title>{titulo}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {mensajeExito && (
-          <Alert variant="success" className="text-center">
+          <Alert
+            variant="success"
+            className="text-center"
+            style={{ backgroundColor: "#07852E", color: "#F5F5F5" }}
+          >
             {mensajeExito}
           </Alert>
         )}
@@ -83,7 +96,9 @@ const ModalEditForm = ({
 
             return (
               <Form.Group key={campo.nombre} className="mb-3">
-                <Form.Label>{campo.label || campo.nombre}</Form.Label>
+                <Form.Label>
+                  {campo.label || campo.nombre}
+                </Form.Label>
 
                 {campo.tipo === "img" ? (
                   <>
@@ -91,7 +106,8 @@ const ModalEditForm = ({
                       <img
                         src={value}
                         alt={campo.label || campo.nombre}
-                        style={{ maxWidth: "100%", maxHeight: "300px", display: "block", marginBottom: "10px" }}
+                        className="img-fluid rounded shadow mx-auto d-block"
+                        style={{ maxHeight: "300px", objectFit: "cover", border: "2px solid rgb(20, 20, 20)" }}
                       />
                     ) : (
                       <p className="text-muted">No hay imagen cargada</p>
@@ -102,6 +118,10 @@ const ModalEditForm = ({
                       value={value}
                       onChange={handleChange}
                       placeholder="URL de la imagen"
+                      style={{
+                        borderColor: "#141414",
+                        backgroundColor: "#F5F5F5"
+                      }}
                     />
                   </>
                 ) : campo.tipo === "multi-select" ? (
@@ -112,7 +132,11 @@ const ModalEditForm = ({
                     value={value}
                     onChange={(e) => {
                       const selected = Array.from(e.target.selectedOptions, opt => opt.value);
-                      setFormState(prev => ({ ...prev, [campo.nombre]: selected }));
+                      handleChange({ target: { name: campo.nombre, value: selected } });
+                    }}
+                    style={{
+                      borderColor: "#141414",
+                      backgroundColor: "#F5F5F5"
                     }}
                   >
                     {campo.opciones?.map(opcion => (
@@ -121,16 +145,68 @@ const ModalEditForm = ({
                       </option>
                     ))}
                   </Form.Control>
+                ) : campo.tipo === "select" ? (
+                  <Form.Control
+                    as="select"
+                    name={campo.nombre}
+                    value={value}
+                    onChange={handleChange}
+                    disabled={campo.bloqueado || false}
+                    className="edit-modal-select-input"
+                  >
+                    {campo.options?.map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Form.Control>
+                ) : campo.tipo === "date" ? (
+                  <DatePicker
+                    selected={value ? parseFecha(value) : null}
+                    onChange={(date) => handleChange({
+                      target: {
+                        name: campo.nombre,
+                        value: date ? date.toISOString() : '',
+                        type: 'date'
+                      }
+                    })}
+                    maxDate={campo.fechaMaxima ? new Date() : undefined}
+                    className="form-control"
+                    disabled={campo.bloqueado}
+                    dateFormat="dd/MM/yyyy"
+                  />
+                ) : campo.tipo === "file" ? (
+                  <>
+                    {formState[campo.nombre] && typeof formState[campo.nombre] === "string" && (
+                      <img
+                        src={formState[campo.nombre]}
+                        alt="Imagen actual"
+                        className="img-fluid rounded shadow mt-2"
+                        style={{ maxHeight: "200px", objectFit: "cover", border: "1px solid #ccc" }}
+                      />
+                    )}
+                    <Form.Control
+                      type="file"
+                      name={campo.nombre}
+                      accept={campo.accept || "*"}
+                      onChange={(e) => {
+                        const archivo = e.target.files[0];
+                        handleChange({ target: { name: campo.nombre, value: archivo } });
+                      }}
+                    />
+                  </>
                 ) : (
                   <Form.Control
                     as={isTextarea ? "textarea" : "input"}
                     type={isTextarea ? undefined : campo.tipo}
                     rows={isTextarea ? 1 : undefined}
-                    style={
-                      isTextarea
-                        ? { minHeight: "70px", resize: "none", overflow: "hidden" }
-                        : {}
-                    }
+                    style={{
+                      ...(isTextarea ? {
+                        minHeight: "70px",
+                        resize: "none",
+                        overflow: "hidden"
+                      } : {})
+                    }}
                     name={campo.nombre}
                     value={value}
                     onChange={handleChange}
@@ -142,8 +218,8 @@ const ModalEditForm = ({
               </Form.Group>
             );
           })}
-
         </Form>
+
         {children && (
           <div className="mt-4">
             {children}
@@ -151,7 +227,10 @@ const ModalEditForm = ({
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
+        <Button
+          variant="secondary"
+          onClick={onClose}
+        >
           Cancelar
         </Button>
         <Button

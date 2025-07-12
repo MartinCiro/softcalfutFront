@@ -4,6 +4,7 @@ import { MDBIcon } from "mdb-react-ui-kit";
 import { Link } from "react-router-dom";
 import AnuncioService from "@services/AnuncioService"; // Services
 import useSearch from "@hooks/useSearch"; // Hooks
+import useHasPermission from "@hooks/useHasPermission";
 import useFetchData from "@hooks/useFetchData";
 import usePagination from "@hooks/usePagination";
 import useErrorHandler from "@hooks/useErrorHandler";
@@ -37,6 +38,9 @@ const AnunciosList = () => {
   const anunciosFiltrados = filtrarPorEstado(filtered);
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(anunciosFiltrados, 6);
+  const canCreate = useHasPermission('anuncios:Crea');
+  const canEdit = useHasPermission('anuncios:Actualiza');
+
   const clavesAnuncio = {
     id: "id",
     title: "titulo",
@@ -49,7 +53,7 @@ const AnunciosList = () => {
   const camposAnuncio = [
     { nombre: "titulo", label: "Título", tipo: "text" },
     { nombre: "contenido", label: "Contenido", tipo: "textarea" },
-    { nombre: "imagenUrl", label: "URL de Imagen", tipo: "img" },
+    { nombre: "imagenUrl", label: "Imagen de portada", tipo: "file", accept: "image/*" },
   ];
 
   const handleEditar = (anuncio) => {
@@ -67,6 +71,7 @@ const AnunciosList = () => {
         await AnuncioService.upAnuncio(anuncio.id, { estado: nuevoEstado });
         sessionStorage.removeItem("anuncios");
         await cargarAnuncios();
+        setGuardando(true);
       } catch (err) {
         handleError(err);
       }
@@ -82,15 +87,30 @@ const AnunciosList = () => {
     const esEdicion = !!anuncioSeleccionado?.id;
     try {
       setGuardando(true);
-      esEdicion ? await AnuncioService.upAnuncio(anuncioSeleccionado.id, datosForm) : await AnuncioService.crAnuncio(datosForm);
+      setErrorGuardar({ message: null, variant: "danger" });
+
+      const formData = new FormData();
+      Object.keys(datosForm).forEach(key => {
+        const value = datosForm[key];
+        (key === 'imagenUrl' && value instanceof File)
+          ? formData.append(key, value)
+          : formData.append(key, value ?? '');
+      });
+      esEdicion ? await AnuncioService.upAnuncio(anuncioSeleccionado.id, formData) : await AnuncioService.crAnuncio(formData);
       sessionStorage.removeItem("anuncios");
       await cargarAnuncios();
       setErrorGuardar({ message: esEdicion ? "Anuncio actualizado correctamente" : "Anuncio creado correctamente", variant: "success" });
+      if (esEdicion) {
+        setModalShow(false);
+        setAnuncioSeleccionado(null);
+      } else {
+        setModalCrearShow(false);
+      }
     } catch (err) {
       const mensaje = handleError(err);
       setErrorGuardar({ message: mensaje, variant: "danger" });
     } finally {
-      setTimeout(() => setErrorGuardar({ message: null, variant: "danger" }), 3000);
+      setTimeout(() => setErrorGuardar({ message: null, variant: "danger" }), 6000);
       setGuardando(false);
     }
   };
@@ -104,18 +124,24 @@ const AnunciosList = () => {
       {/* <h2 className="mb-4 text-center fw-bold">Anuncios</h2> */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold mb-0">Anuncios</h2>
+
         <div className="d-flex align-items-center gap-2">
-          <Button
-            variant="success"
-            onClick={() => setModalCrearShow(true)}
-            className="rounded-circle d-flex justify-content-center align-items-center btn_add"
-            style={{ width: "45px", height: "45px" }}
-            title="Crear Anuncio"
-          >
-            <MDBIcon fas icon="plus" />
-          </Button>
-          <FilterDropdown estadoActual={estadoFiltro} onChange={toggleEstado} />
+          {canCreate && (
+            <Button
+              variant="success"
+              onClick={() => setModalCrearShow(true)}
+              className="rounded-circle d-flex justify-content-center align-items-center btn_add"
+              style={{ width: "45px", height: "45px" }}
+              title="Crear Anuncio"
+            >
+              <MDBIcon fas icon="plus" />
+            </Button>
+          )}
+
+          {canEdit && (<FilterDropdown estadoActual={estadoFiltro} onChange={toggleEstado} />)}
+
           <SearchInput value={query} onChange={setQuery} />
+
         </div>
       </div>
 
@@ -131,12 +157,14 @@ const AnunciosList = () => {
           keys={clavesAnuncio}
           onToggle={handleToggleActivo}
           onView={handleVer}
-          onEdit={handleEditar}
+          onEdit={canEdit ? handleEditar : null}
+          showEdit={canEdit}
+          showDelete={canEdit}
         />
       </Row>
 
       {/* Modal para editar */}
-      {modalShow && (
+      {canEdit && modalShow && (
         <ModalEditForm
           show={modalShow}
           onClose={() => setModalShow(false)}
@@ -155,17 +183,20 @@ const AnunciosList = () => {
           onClose={() => setModalVer(false)}
           campos={camposAnuncio}
           datos={anuncioVer}
+          titulo={anuncioVer.titulo}
         />
       )}
 
-      <ModalConfirmacion
-        show={confirmModal.show}
-        mensaje={confirmModal.mensaje}
-        onConfirm={confirmModal.onConfirm}
-        onClose={confirmModal.close}
-      />
+      {canEdit && (
+        <ModalConfirmacion
+          show={confirmModal.show}
+          mensaje={confirmModal.mensaje}
+          onConfirm={confirmModal.onConfirm}
+          onClose={confirmModal.close}
+        />
+      )}
 
-      {modalCrearShow && (
+      {canCreate && modalCrearShow && (
         <CreateModalFormulario
           show={modalCrearShow}
           onClose={() => setModalCrearShow(false)}

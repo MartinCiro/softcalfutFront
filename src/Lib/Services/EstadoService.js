@@ -19,7 +19,8 @@ const EstadoService = {
       return { result: data };
     } catch (error) {
       console.error("Error al obtener estados:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 
@@ -33,7 +34,8 @@ const EstadoService = {
       return response;
     } catch (error) {
       console.error("Error al actualizar rol:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 
@@ -47,7 +49,8 @@ const EstadoService = {
       return response;
     } catch (error) {
       console.error("Error al actualizar rol:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 };

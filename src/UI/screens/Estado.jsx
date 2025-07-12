@@ -18,6 +18,7 @@ import ModalEditForm from "@componentsUseable/FormModal/EditModalFormulario";
 import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
 import "@styles/Permiso.css"; // Styles
+import useHasPermission from "@hooks/useHasPermission";
 
 const EstadosList = () => {
   const { data: estados, loading, error, reload: cargarEstados } = useFetchData(EstadoService.estados);
@@ -72,9 +73,21 @@ const EstadosList = () => {
       setModoEdicion(false);
     }
   };
+  const canCreate = useHasPermission('estados:Crea');
+  const canEdit = useHasPermission('estados:Actualiza');
+  const canView = useHasPermission('estados:Lee');
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
+  if (!canView) {
+    return (
+      <Container className="py-4">
+        <div className="alert alert-danger">
+          No tienes permisos para ver los estados
+        </div>
+      </Container>
+    );
+  }
 
   return (
 
@@ -82,6 +95,7 @@ const EstadosList = () => {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold mb-0">Estados</h2>
         <div className="d-flex align-items-center gap-2">
+          {canCreate && (
           <Button
             variant="success"
             onClick={() => {
@@ -95,7 +109,8 @@ const EstadosList = () => {
           >
             <MDBIcon fas icon="plus" />
           </Button>
-          <SearchInput value={query} onChange={setQuery} />
+          )}
+          {canView && (<SearchInput value={query} onChange={setQuery} />)}
         </div>
       </div>
 
@@ -110,10 +125,12 @@ const EstadosList = () => {
         columns={columnsEstado}
         onEdit={handleEditar}
         onView={handleVer}
+        showEdit={canEdit}
+        showView={canView}
       />
 
       {/* Modal para editar */}
-      {modalShow && estadoSeleccionado && (
+      {canEdit && modalShow && estadoSeleccionado && (
         <ModalEditForm
           titulo={"Editar Estado"}
           show={modalShow}
@@ -132,7 +149,7 @@ const EstadosList = () => {
       )}
 
       {/* Modal para ver */}
-      {modalVer && (
+      {canView && modalVer && (
         <ModalVerGenerico
           show={modalVer}
           onClose={() => setModalVer(false)}
@@ -141,14 +158,16 @@ const EstadosList = () => {
         />
       )}
 
+      {canEdit && (
       <ModalConfirmacion
         show={confirmModal.show}
         mensaje={confirmModal.mensaje}
         onConfirm={confirmModal.onConfirm}
         onClose={confirmModal.close}
       />
+      )}
 
-      {modalCrearShow && (
+      {canCreate && modalCrearShow && (
         <CreateModalFormulario
           show={modalCrearShow}
           onClose={() => setModalCrearShow(false)}
@@ -159,7 +178,7 @@ const EstadosList = () => {
         />
       )}
 
-      {shouldShowPaginator && (
+      {canView && shouldShowPaginator && (
         <Paginator
           currentPage={currentPage}
           maxPage={maxPage}

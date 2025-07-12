@@ -54,9 +54,11 @@ Hacia: la rama destino -> dev
 Este proyecto está bajo la licencia [MIT](https://opensource.org/licenses/MIT).
 
 ## Estructura de carpetas
+```
 /src
 ├── /Utils                    # Funciones auxiliares reutilizables
 │   ├── helpers.js            # Funciones de apoyo generales
+│   ├──constants/             # Metodos en comun
 │
 ├── /Lib                      # Librerías del proyecto (núcleo funcional)
 │   ├── /Hooks                # Custom hooks reutilizables (useAuth, useFetch, etc.)
@@ -64,6 +66,6 @@ Este proyecto está bajo la licencia [MIT](https://opensource.org/licenses/MIT).
 │   ├── /Layouts              # Componentes de layout general (Sidebar, Header)
 │
 ├── /UI                       # Todo lo relacionado con la interfaz visual
-│   ├── /screen-components    # Componentes que se usan en una pantalla específica
 │   ├── /useable-components   # Componentes reutilizables (Button, Modal, Card)
 │   ├── /screens              # Vistas o páginas principales (Login, Dashboard, etc.)
+```

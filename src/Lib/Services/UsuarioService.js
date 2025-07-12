@@ -19,7 +19,8 @@ const UsuarioService = {
       return { result: data };
     } catch (error) {
       console.error("Error al obtener usuarios:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 
@@ -33,7 +34,8 @@ const UsuarioService = {
       return response;
     } catch (error) {
       console.error("Error al actualizar rol:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 
@@ -47,7 +49,8 @@ const UsuarioService = {
       return response;
     } catch (error) {
       console.error("Error al actualizar rol:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 };

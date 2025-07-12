@@ -19,7 +19,8 @@ const EquipoService = {
       return { result: data };
     } catch (error) {
       console.error("Error al obtener equipos:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 
@@ -28,8 +29,8 @@ const EquipoService = {
       const response = await getByEndpoint(EquipoService.endpoint, data, "put");
       return response;
     } catch (error) {
-      console.error("Error al actualizar rol:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 
@@ -42,8 +43,8 @@ const EquipoService = {
       );
       return response;
     } catch (error) {
-      console.error("Error al actualizar rol:", error);
-      throw new Error(getFriendlyErrorMessage(error));
+      error.friendlyMessage = getFriendlyErrorMessage(error);
+      throw error;
     }
   },
 };

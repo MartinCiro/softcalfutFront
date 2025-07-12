@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import useErrorHandler from "@hooks/useErrorHandler";
 import { useAutoResizeTextarea } from "@hooks/useAutoResizeTextarea";
-import "@styles/Forms.css";
 
 const CreateModalFormulario = ({
   show,
@@ -16,21 +17,45 @@ const CreateModalFormulario = ({
   onChange = null,
 }) => {
   const [formState, setFormState] = useState({});
+  const [previewImage, setPreviewImage] = useState(null);
   const [mensajeExito, setMensajeExito] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const { error, handleError, resetError } = useErrorHandler();
-  const textareaRefs = useRef({});
 
   useEffect(() => {
-    if (datos && Object.keys(datos).length > 0) setFormState(datos);
-  }, [datos]);
+    if (datos && Object.keys(datos).length > 0) {
+      setFormState(datos);
+    } else {
+      // Inicializar con valores por defecto si existen
+      const initialState = {};
+      campos.forEach(campo => {if (campo.defaultValue !== undefined)  initialState[campo.nombre] = campo.defaultValue;});
+      setFormState(initialState);
+    }
+  }, [datos, show]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-
+    const { name, value, type } = e.target;
     setFormState((prev) => ({ ...prev, [name]: value }));
-
     if (typeof onChange === "function") onChange(name, value);
+  };
+
+  const handleDateChange = (date, name) => {
+    const value = date ? date.toISOString() : '';
+    setFormState((prev) => ({ ...prev, [name]: value }));
+    if (typeof onChange === "function") onChange(name, value);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Crear vista previa
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewImage(reader.result);
+      reader.readAsDataURL(file);
+
+      // Actualizar el estado del formulario con el archivo
+      setFormState(prev => ({ ...prev, [e.target.name]: file }));
+    }
   };
 
   const handleSubmit = async () => {
@@ -40,7 +65,6 @@ const CreateModalFormulario = ({
       resetError();
       await onSubmit(formState);
       setMensajeExito("Creado correctamente");
-      setFormState({});
     } catch (err) {
       handleError(err);
     } finally {
@@ -50,19 +74,35 @@ const CreateModalFormulario = ({
 
   const handleClose = () => {
     onClose();
-    setFormState({});
     setMensajeExito(null);
     resetError();
   };
 
+  const parseDate = (dateString) => {
+    if (!dateString) return null;
+    const date = new Date(dateString);
+    return isNaN(date.getTime()) ? null : date;
+  };
+
   return (
-    <Modal show={show} onHide={handleClose} centered animation={false}>
-      <Modal.Header closeButton>
-        <Modal.Title>{titulo}</Modal.Title>
+    <Modal show={show} onHide={handleClose} centered size="lg" className="editModal">
+      <Modal.Header
+        closeButton
+        style={{
+          backgroundColor: "#141414",
+          color: "#F5F5F5",
+          borderBottom: "3px solid #F4D609"
+        }}
+      >
+        <Modal.Title style={{ fontWeight: "bold" }}>{titulo}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body style={{ backgroundColor: "#F5F5F5", padding: "20px" }}>
         {mensajeExito && (
-          <Alert variant="success" className="text-center">
+          <Alert
+            variant="success"
+            className="text-center"
+            style={{ backgroundColor: "#07852E", color: "#F5F5F5" }}
+          >
             {mensajeExito}
           </Alert>
         )}
@@ -73,48 +113,154 @@ const CreateModalFormulario = ({
         )}
 
         <Form>
-          {campos.map((campo) => {
-            const isTextarea = campo.tipo === "textarea";
-            const value = formState[campo.nombre] || "";
-            const textareaRef = isTextarea ? useAutoResizeTextarea(value) : null;
+          <div className="row">
+            {campos.map((campo) => {
+              const isTextarea = campo.tipo === "textarea";
+              const value = formState[campo.nombre] || "";
+              const textareaRef = useAutoResizeTextarea(isTextarea ? value : "");
 
-            return (
-              <Form.Group key={campo.nombre} className="mb-3 create-form">
-                <Form.Label>{campo.label || campo.nombre}</Form.Label>
+              return (
+                <div key={campo.nombre} className={`mb-3 ${campo.columna === 'derecha' ? 'col-md-6' : 'col-md-6'}`}>
+                  <Form.Group>
+                    <Form.Label style={{ color: "#07852E", fontWeight: "bold" }}>
+                      {campo.label || campo.nombre}
+                      {campo.requerido && <span className="text-danger"> *</span>}
+                    </Form.Label>
 
-                {campo.tipo === "img" ? (
-                  <Form.Control
-                    type="text"
-                    name={campo.nombre}
-                    value={formState[campo.nombre] || ""}
-                    onChange={handleChange}
-                    placeholder="URL de la imagen"
-                  />
-                ) : (
-                  <Form.Control
-                    as={isTextarea ? "textarea" : "input"}
-                    type={isTextarea ? undefined : campo.tipo}
-                    rows={isTextarea ? 6 : undefined}
-                    style={
-                      isTextarea
-                        ? { minHeight: "120px", resize: "vertical", overflow: "hidden" }
-                        : {}
-                    }
-                    name={campo.nombre}
-                    value={formState[campo.nombre] || ""}
-                    onChange={handleChange}
-                    placeholder={campo.placeholder || ""}
-                    ref={textareaRef}
-                  />
-                )}
-              </Form.Group>
-            );
-          })}
+                    {campo.tipo === "img" ? (
+                      <>
+                        {value && (
+                          <img
+                            src={value}
+                            alt={`Vista previa ${campo.label}`}
+                            className="img-fluid rounded mb-2"
+                            style={{
+                              maxHeight: "150px",
+                              border: "2px solid #141414"
+                            }}
+                          />
+                        )}
+                        <Form.Control
+                          type="text"
+                          name={campo.nombre}
+                          value={value}
+                          onChange={handleChange}
+                          placeholder={campo.placeholder || "URL de la imagen"}
+                          style={{
+                            borderColor: "#141414",
+                            backgroundColor: "#FFFFFF"
+                          }}
+                          required={campo.requerido}
+                        />
+                      </>
+                    ) : campo.tipo === "select" ? (
+                      <>
+                        {value && campo.opciones?.some(opt => opt.value === value) && (
+                          <img
+                            src={value}
+                            alt={`Vista previa ${campo.label}`}
+                            className="img-fluid rounded mb-2"
+                            style={{
+                              maxHeight: "150px",
+                              border: "2px solid #141414"
+                            }}
+                          />
+                        )}
+                        <Form.Control
+                          as="select"
+                          name={campo.nombre}
+                          value={value}
+                          onChange={handleChange}
+                          style={{
+                            borderColor: "#141414",
+                            backgroundColor: "#FFFFFF"
+                          }}
+                          required={campo.requerido}
+                        >
+                          <option value="">Seleccione...</option>
+                          {campo.opciones?.map(opcion => (
+                            <option key={opcion.value} value={opcion.value}>
+                              {opcion.label}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </>
+                    ) : campo.tipo === "date" ? (
+                      <DatePicker
+                        selected={parseDate(value)}
+                        onChange={(date) => handleDateChange(date, campo.nombre)}
+                        className="form-control"
+                        dateFormat="dd/MM/yyyy"
+                        maxDate={campo.fechaMaxima === 'hoy' ? new Date() : undefined}
+                        placeholderText={campo.placeholder || "Seleccione una fecha"}
+                        showYearDropdown
+                        dropdownMode="select"
+                        style={{
+                          borderColor: "#141414",
+                          backgroundColor: "#FFFFFF"
+                        }}
+                        required={campo.requerido}
+                      />
+                    ) : campo.tipo === "file" ? (
+                      <>
+                        {(previewImage || (datos && datos.imagenUrl)) && (
+                          <img
+                            src={previewImage || datos.imagenUrl}
+                            alt={`Vista previa ${campo.label}`}
+                            className="img-fluid rounded mb-2"
+                            style={{
+                              maxHeight: "150px",
+                              border: "2px solid #141414"
+                            }}
+                          />
+                        )}
+                        <Form.Control
+                          type="file"
+                          name={campo.nombre}
+                          onChange={handleFileChange}
+                          accept={campo.accept || "*"}
+                          style={{
+                            borderColor: "#141414",
+                            backgroundColor: "#FFFFFF"
+                          }}
+                          required={campo.requerido}
+                        />
+                      </>
+                    ) : (
+                      <Form.Control
+                        as={isTextarea ? "textarea" : "input"}
+                        type={isTextarea ? undefined : campo.tipo}
+                        rows={isTextarea ? 3 : undefined}
+                        style={{
+                          ...(isTextarea ? {
+                            minHeight: "100px",
+                            resize: "vertical",
+                            overflow: "hidden"
+                          } : {}),
+                          borderColor: "#141414",
+                          backgroundColor: "#FFFFFF"
+                        }}
+                        name={campo.nombre}
+                        value={value}
+                        onChange={handleChange}
+                        placeholder={campo.placeholder || ""}
+                        ref={textareaRef}
+                        required={campo.requerido}
+                      />
+                    )}
+                  </Form.Group>
+                </div>
+              );
+            })}
+          </div>
+          {children}
         </Form>
-        {children}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button
+          variant="secondary"
+          onClick={handleClose}
+        >
           Cancelar
         </Button>
         <Button

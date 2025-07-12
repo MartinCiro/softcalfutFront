@@ -16,6 +16,7 @@ export const ordenPermisos = [
   "Actualiza",
   "Elimina",
   "Asigna",
+  "Edita",
   "LeeProfile",
 ];
 

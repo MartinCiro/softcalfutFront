@@ -44,7 +44,7 @@ const ProtectedRoute = () => {
 
   if (!authState.isAuthenticated) {
     AuthService.logout();
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   }
 
   return <Outlet />;

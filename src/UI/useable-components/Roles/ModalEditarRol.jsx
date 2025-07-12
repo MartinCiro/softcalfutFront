@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import EmptyMessage from "@componentsUseable/EmptyMessage";
 import PermisosEditor from "@componentsUseable/Permisos/PermisosEditor";
 import ModalEditarGenerico from "@componentsUseable/FormModal/EditModalFormulario";
+import useHasPermission from "@hooks/useHasPermission";
 
 const ModalEditarRol = ({
     show,
@@ -52,6 +53,7 @@ const ModalEditarRol = ({
             permisos: permisosFiltrados,
         });
     };
+    const canAsign = useHasPermission('roles:Asigna:Permisos');
 
     return (
         <ModalEditarGenerico
@@ -66,6 +68,7 @@ const ModalEditarRol = ({
             {permisosEditados.length === 0 ? (
                 <EmptyMessage mensaje="Este rol no tiene permisos asignados." />
             ) : (
+                canAsign &&
                 <PermisosEditor
                     permisosEditados={permisosEditados}
                     setPermisosEditados={setPermisosEditados}
