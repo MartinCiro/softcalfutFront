@@ -51,7 +51,7 @@ axios.interceptors.response.use(
         console.error('Error al refrescar el token:', refreshError);
         // Si falla el refresh, redirigir al login
         AuthService.logout();
-        window.location.href = '/login';
+        window.location.href = '/';
       }
     }
     
