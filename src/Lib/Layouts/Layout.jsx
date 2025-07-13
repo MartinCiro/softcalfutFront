@@ -7,9 +7,9 @@ import { Outlet } from 'react-router-dom';
 const Layout = () => {
   return (
     <AuthProvider>
-      <div className="app-container">
+      <div className="d-flex flex-column min-vh-100">
         <NavBar />
-        <main className="main-content">
+        <main className="flex-grow-1">
           <Outlet />
         </main>
         <Footer />
