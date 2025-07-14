@@ -24,7 +24,7 @@ import useHasPermission from "@hooks/useHasPermission";
 const LugarEncuentroList = () => {
   const { data: lugarEncuentro, loading, error, reload: cargarLugarEncuentro } = useFetchData(LugarEncuentroService.lugarEncuentro);
   const { modalStates, lugarEncuentroStates, flags, errorGuardar, handlers } = useLugarEncuentroLogic(cargarLugarEncuentro);
-  const { query, setQuery, filtered } = useSearch(lugarEncuentro, "nombre");
+  const { query, setQuery, filtered } = useSearch(lugarEncuentro, ["nombre"]);
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
 
   const confirmModal = useModalConfirm();

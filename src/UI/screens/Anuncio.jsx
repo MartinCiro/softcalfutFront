@@ -33,7 +33,7 @@ const AnunciosList = () => {
   const [modalCrearShow, setModalCrearShow] = useState(false);
   const [anuncioSeleccionado, setAnuncioSeleccionado] = useState(null);
   const [anuncioVer, setAnuncioVer] = useState(null);
-  const { query, setQuery, filtered } = useSearch(anuncios, "titulo");
+  const { query, setQuery, filtered } = useSearch(anuncios, ["titulo", "contenido"]);
   const { estadoFiltro, toggleEstado, filtrarPorEstado } = useToggleEstado();
   const anunciosFiltrados = filtrarPorEstado(filtered);
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });

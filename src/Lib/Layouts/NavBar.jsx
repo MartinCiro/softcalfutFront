@@ -53,14 +53,30 @@ const NavBar = () => {
               </NavDropdown>
 
               <NavDropdown title={<span><MDBIcon fas icon="trophy" className="me-1" /> Torneos</span>} id="dropdown-torneos">
-                <NavDropdown.Item as={NavLink} to="/torneos/futbol">Fútbol</NavDropdown.Item>
-                <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Fútbol Sala</NavDropdown.Item>
-                <NavDropdown.Item as={NavLink} to="/torneos/programacion">Programacion</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol">Municipal</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Sport-man</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Festi torneo Baby</NavDropdown.Item>
               </NavDropdown>
 
-              <NavDropdown title={<span><MDBIcon fas icon="book" className="me-1" /> Escuela LCF</span>} id="dropdown-escuela">
+              <NavLink to="/torneos/programacion" className="nav-link">
+                <MDBIcon fas icon="calendar" className="me-1" />
+                Programacion de torneos
+              </NavLink>
+
+              <NavLink to="/nuestros-afiliados" className="nav-link">
+                <MDBIcon fas icon="users" className="me-1" />
+                Nuestros afiliados
+              </NavLink>
+
+              {/* <NavDropdown title={<span><MDBIcon fas icon="book" className="me-1" /> Escuela LCF</span>} id="dropdown-escuela">
                 <NavDropdown.Item as={NavLink} to="/escuela/formacion">Escuela de Formación</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/escuela/acerca">Acerca de la Escuela</NavDropdown.Item>
+              </NavDropdown> */}
+
+              <NavDropdown title={<span><MDBIcon fas icon="book" className="me-1" /> Reglamentacion</span>} id="dropdown-torneos">
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol">Torneos de la liga</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Comisiones</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Estatutos</NavDropdown.Item>
               </NavDropdown>
 
               <NavLink to="/club" className="nav-link">

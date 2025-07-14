@@ -32,7 +32,7 @@ const EquiposList = () => {
   const canEdit = useHasPermission('equipos:Actualiza');
   const canView = useHasPermission('equipos:Lee');
   const { modalStates, equipoStates, flags, errorGuardar, handlers } = useEquiposLogic(cargarEquipos, { canCreate, canEdit, canView });
-  const { query, setQuery, filtered } = useSearch(equipos, "nom_equipo");
+  const { query, setQuery, filtered } = useSearch(equipos, ["nom_equipo"]);
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
 
   const confirmModal = useModalConfirm();

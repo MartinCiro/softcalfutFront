@@ -35,7 +35,7 @@ const UsuariosList = () => {
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [usuarioVer, setUsuarioVer] = useState(null);
   const [modoEdicion, setModoEdicion] = useState(false);
-  const { query, setQuery, filtered } = useSearch(usuarios, "nom_user");
+  const { query, setQuery, filtered } = useSearch(usuarios, ["nom_user"]);
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
   const columnsUsuario = [

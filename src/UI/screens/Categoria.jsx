@@ -31,7 +31,7 @@ const CategoriasList = () => {
   const [categoriaSeleccionado, setCategoriaSeleccionado] = useState(null);
   const [categoriaVer, setCategoriaVer] = useState(null);
   const [modoEdicion, setModoEdicion] = useState(false);
-  const { query, setQuery, filtered } = useSearch(categorias, "nombre_categoria");
+  const { query, setQuery, filtered } = useSearch(categorias, ["nombre_categoria"]);
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
   const columnsCategoria = [

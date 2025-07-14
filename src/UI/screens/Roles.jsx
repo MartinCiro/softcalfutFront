@@ -32,7 +32,7 @@ const RolesList = () => {
   const [modalCrearShow, setModalCrearShow] = useState(false);
   const [rolSeleccionado, setRolSeleccionado] = useState(null);
   const [rolVer, setRolVer] = useState(null);
-  const { query, setQuery, filtered } = useSearch(roles, "nombre");
+  const { query, setQuery, filtered } = useSearch(roles, ["nombre"]);
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
  

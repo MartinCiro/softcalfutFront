@@ -15,7 +15,7 @@ const ModalVerRol = ({ show, onClose, campos = [], titulo = "Ver rol", datos = {
   const sinPermisos = campos.filter(campo => campo.nombre !== "permisos");
   
   // Hook de búsqueda por entidad
-  const { query, setQuery, filtered } = useSearch(dataPermisos, "entidad");
+  const { query, setQuery, filtered } = useSearch(dataPermisos, ["entidad"]);
   const {
     paginatedData,
     currentPage,
