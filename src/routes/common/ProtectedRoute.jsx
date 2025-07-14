@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import AuthService from '@services/AuthService';
 import {jwtDecode} from 'jwt-decode';
+import { useAuth } from '@hooks/AuthContext';
 
 const ProtectedRoute = () => {
   const [authState, setAuthState] = useState({
     isAuthenticated: true,
     isChecking: true
   });
-
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   useEffect(() => {
     const checkAuth = () => {
       try {
@@ -43,7 +45,7 @@ const ProtectedRoute = () => {
   }
 
   if (!authState.isAuthenticated) {
-    AuthService.logout();
+    logout(navigate);
     return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   }
 
