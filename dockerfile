@@ -12,3 +12,5 @@ RUN npm install --legacy-peer-deps && \
 # Exponer puertos de desarrollo y producción
 EXPOSE 3000
 EXPOSE 5173
+
+CMD ["npm", "run", "dev"] 
