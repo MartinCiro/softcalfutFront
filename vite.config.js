@@ -5,6 +5,9 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  preview: {
+    historyApiFallback: true // Para rutas no-root
+  },
   resolve: {
     alias: {
       '@src'       : path.resolve(__dirname, 'src'),  
@@ -19,5 +22,13 @@ export default defineConfig({
       '@constants' : path.resolve(__dirname, 'src/Utils/constants'),
       '@componentsUseable': path.resolve(__dirname, 'src/UI/useable-components'),
     },
+  },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    sourcemap: false
+  },
+  server: {
+    host: true
   }
 })
