@@ -40,3 +40,5 @@ HEALTHCHECK --interval=30s --timeout=5s \
 
 # 5. Comando optimizado para React + Vite
 CMD ["vite", "preview", "--host", "--port", "5173"]
+
+# --- Dockerfile para softcalfut_front ---
