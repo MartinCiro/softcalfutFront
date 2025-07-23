@@ -2,11 +2,22 @@ import { defineConfig } from 'vite'
 import path from 'path';
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   preview: {
-    historyApiFallback: true // Para rutas no-root
+    historyApiFallback: true,
+    host: '0.0.0.0',
+    port: 4173,
+    strictPort: false,
+    cors: true,
+    origin: true,
+    disableHostCheck: true,
+    allowedHosts: ["softcalfut_front", "localhost", "softcalfut.duckdns.org"],
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Authorization"
+    }
   },
   resolve: {
     alias: {
@@ -29,6 +40,22 @@ export default defineConfig({
     sourcemap: false
   },
   server: {
-    host: true
+    host: '0.0.0.0',
+    cors: true,
+    port: 4173,
+    strictPort: false,
+    hmr: {
+      protocol: 'wss',
+      host: 'softcalfut.duckdns.org',
+      port: 443,
+      clientPort: 443
+    },
+    proxy: {
+      '/api': {
+        target: 'http://softcalfut_back:3000',
+        changeOrigin: true,
+        secure: false
+      }
+    }
   }
 })
