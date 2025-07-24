@@ -37,7 +37,15 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    sourcemap: false
+    sourcemap: false,
+    rollupOptions: {
+    output: {
+      manualChunks: (id) => {
+        if (id.includes('node_modules')) return 'vendor';
+      },
+    },
+  },
+  chunkSizeWarningLimit: 1000,
   },
   server: {
     host: '0.0.0.0',
@@ -52,7 +60,7 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: 'http://softcalfut_back:3000',
+        target: 'https://api.softcalfut.duckdns.org/',
         changeOrigin: true,
         secure: false
       }
