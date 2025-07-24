@@ -32,13 +32,13 @@ RUN npm install -g vite && \
 
 # 3. Configuración para React
 ENV NODE_ENV=production
-EXPOSE 4173
+EXPOSE 5173
 
 # 4. Health check para React
 HEALTHCHECK --interval=30s --timeout=5s \
   CMD curl -f http://localhost:5173 || exit 1
 
 # 5. Comando optimizado para React + Vite
-CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0", "--port", "4173"]
+CMD ["npm", "run", "preview", "--", "--host", "softcalfut_front", "--port", "4173"]
 
 # --- Dockerfile para softcalfut_front ---
