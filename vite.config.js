@@ -8,7 +8,7 @@ export default defineConfig({
     historyApiFallback: true,
     host: '0.0.0.0',
     port: 4173,
-    strictPort: false,
+    strictPort: true,
     cors: true,
     origin: true,
     disableHostCheck: true,
