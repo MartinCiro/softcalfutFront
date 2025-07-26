@@ -1,7 +1,7 @@
 {
   "apps": [{
     "name": "vite-preview",
-    "script": "npm",
+    "script": "server.cjs",
     "args": "run preview",
     "instances": 1,
     "autorestart": true,
