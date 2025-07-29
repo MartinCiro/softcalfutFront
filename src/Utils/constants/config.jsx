@@ -1,4 +1,15 @@
+const env = import.meta.env || process.env;
+
+// 3. Configuración condicional
 export default {
-  server: 'https://api.softcalfut.duckdns.org',
-  env: 'production'
+  env: {
+    NODE_ENV: env.env,
+    VITE_API_URL: env.MODE === 'production' 
+      ? env.VITE_API_URL_PROD 
+      : env.VITE_API_URL_DEV || 'http://localhost:3000',
+  },
+  isProduction: env.MODE === 'production',
+  server: env.MODE.env === 'production' 
+    ? env.VITE_API_URL_PROD 
+    : env.VITE_API_URL_DEV || 'http://localhost:3000'
 };
