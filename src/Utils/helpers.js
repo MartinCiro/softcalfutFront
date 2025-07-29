@@ -53,7 +53,6 @@ export const getByEndpoint = async (endpoint, body = null, method = "get", isFor
       timeout: 90000,
       ...(isBodyMethod && body ? { data: body } : {}),
     };
-    console.log(`Requesting ${config.method.toUpperCase()} ${config.url} with body:`, body);
     const response = await axios(config);
 
     if (response.data && response.data.result) {
