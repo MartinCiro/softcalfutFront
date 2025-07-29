@@ -11,11 +11,13 @@ import {
 } from 'mdb-react-ui-kit';
 import '@styles/Login.css';
 import AuthService from '@services/AuthService';
-import useFormSubmitter from '@hooks/useFormSubmitter';
+import { useAuth } from '@hooks/AuthContext';
 import useWhatsAppRedirect from "@hooks/useWhatsAppRedirect";
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const wsp = useWhatsAppRedirect();
+  const navigate = useNavigate();
   const url = wsp("+573136547420", "Hola, he perdido mi contraseña de LCF");
   const [formData, setFormData] = useState({
     correo: '',
@@ -23,7 +25,8 @@ const Login = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const { submitForm, error } = useFormSubmitter();
+  const [error, setError] = useState(null);
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,12 +36,17 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    submitForm(
-      () => AuthService.login(formData.correo, formData.password),
-      '/dashboard'
-    );
+    try {
+      await login(formData.correo, formData.password, navigate);
+    } catch (error) {
+      setError(
+        error.friendlyMessage ||
+        error.message ||
+        'Error al iniciar sesión. Por favor verifica tus credenciales'
+      );
+    }
   };
 
   const toggleShowPassword = () => setShowPassword(!showPassword);

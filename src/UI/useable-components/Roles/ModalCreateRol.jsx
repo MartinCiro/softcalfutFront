@@ -89,7 +89,7 @@ const ModalCreateRol = ({
         },
     ];
 
-    const { query, setQuery, filtered } = useSearch(permisosSeleccionados, "entidad");
+    const { query, setQuery, filtered } = useSearch(permisosSeleccionados, ["entidad"]);
 
     const {
         paginatedData,

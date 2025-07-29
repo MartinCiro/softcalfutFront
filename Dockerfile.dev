@@ -1,0 +1,13 @@
+# --- Fase de construcción ---
+FROM node:20-alpine AS builder
+
+WORKDIR /usr/src/app
+
+# 1. Copia archivos esenciales primero (mejor caché de Docker)
+COPY package.json package-lock.json ./
+
+# 2. Instalación con caché de npm
+RUN npm install
+
+# 3. Copia el código fuente
+COPY . .

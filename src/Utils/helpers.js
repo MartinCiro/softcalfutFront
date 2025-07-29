@@ -35,7 +35,7 @@ export const getStatusConnection = () => {
 };
 
 export const getByEndpoint = async (endpoint, body = null, method = "get", isFormData = false) => {
-  const API_URL = config.server;
+  const API_URL = `http://${config.server}`;
 
   try {
     getStatusConnection();
@@ -53,7 +53,6 @@ export const getByEndpoint = async (endpoint, body = null, method = "get", isFor
       timeout: 90000,
       ...(isBodyMethod && body ? { data: body } : {}),
     };
-
     const response = await axios(config);
 
     if (response.data && response.data.result) {

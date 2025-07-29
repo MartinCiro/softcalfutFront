@@ -9,10 +9,6 @@ import {
 const AnuncioService = {
   anuncios: async () => {
     const cacheKey = "anuncios";
-
-    const cached = loadSessionCache(cacheKey);
-    if (cached) return { result: cached };
-
     try {
       const data = await getByEndpoint("anuncios");
 

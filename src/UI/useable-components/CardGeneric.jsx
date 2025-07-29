@@ -66,7 +66,7 @@ const CardGeneric = ({
             {item[keys.content] || "Sin descripción"}
           </Card.Text>
 
-          <div className="button-container d-flex justify-content-between px-5 pb-3">
+          <div className="button-container d-flex justify-content-center px-5 pb-3 gap-3">
             {/* Botón Eliminar/Desactivar */}
             {showDelete && (
               <Link

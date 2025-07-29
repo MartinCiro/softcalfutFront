@@ -31,7 +31,7 @@ const PermisosList = () => {
   const [permisoSeleccionado, setPermisoSeleccionado] = useState(null);
   const [permisoVer, setPermisoVer] = useState(null);
   const [modoEdicion, setModoEdicion] = useState(false);
-  const { query, setQuery, filtered } = useSearch(permisos, "entidad");
+  const { query, setQuery, filtered } = useSearch(permisos, ["entidad"]);
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
   const columnsPermiso = [

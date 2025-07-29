@@ -31,7 +31,7 @@ const TorneosList = () => {
   const [torneoSeleccionado, setTorneoSeleccionado] = useState(null);
   const [torneoVer, setTorneoVer] = useState(null);
   const [modoEdicion, setModoEdicion] = useState(false);
-  const { query, setQuery, filtered } = useSearch(torneos, "nombre_torneo");
+  const { query, setQuery, filtered } = useSearch(torneos, ["nombre_torneo"]);
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
   const columnsTorneo = [

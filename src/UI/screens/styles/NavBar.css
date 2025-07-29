@@ -29,6 +29,8 @@
 
   .navbar-toggler {
     background-color: var(--color-claro);
+    order: 0 !important;
+    margin-left: auto;
 
     &:focus:not(.active) {
       background-color: var(--color-claro);
@@ -57,6 +59,17 @@
     }
   }
 
+  /* Ajustes para el menú colapsado */
+  .navbar-collapse {
+    order: 3;
+
+    &.show {
+      ~.mobile-elements {
+        display: none !important;
+      }
+    }
+  }
+
   .dropdown:hover .dropdown-menu {
     display: block;
     margin-top: 0;
@@ -77,7 +90,9 @@
     font-weight: 500;
     font-size: 1.1rem;
     margin-right: 1rem;
-    order: 0;
+    position: absolute;
+    left: 0;
+    margin-left: 1rem;
   }
 
   /* Contenedor para elementos móviles */
@@ -102,37 +117,18 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin: 0 1rem;
+    margin-right: 2rem;
   }
 
-  /* Botón de logout */
-  .logout-button-mobile, .logout-button-lg  {
-    position: absolute;
+  .logout-button-container {
     right: 0;
+    margin-right: 1rem;
+    align-items: center;
+    text-align: center;
 
     .nav-link {
-      padding: 0.5rem;
-    }
-  }
-
-  .logout-button-lg {
-    margin-right: 1rem;
-  }
-
-  /* Ajustes para el navbar-toggler */
-  .navbar-toggler {
-    order: 1;
-    margin-left: auto;
-    z-index: 1;
-  }
-
-  /* Ajustes para el menú colapsado */
-  .navbar-collapse {
-    order: 3;
-
-    &.show {
-      ~.mobile-elements {
-        display: none !important;
-      }
+      padding: 0.3rem;
     }
   }
 }

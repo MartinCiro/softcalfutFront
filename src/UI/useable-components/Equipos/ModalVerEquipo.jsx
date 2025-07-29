@@ -13,7 +13,7 @@ const ModalVerEquipo = ({ show, onClose, campos = [], titulo = "Ver equipo", dat
   const jugadores = datos.jugadores || [];
 
   const sinJugadores = campos.filter(campo => campo.nombre !== "jugadores");
-  const { query, setQuery, filtered } = useSearch(jugadores, "nombres");
+  const { query, setQuery, filtered } = useSearch(jugadores, ["nombres"]);
 
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
 

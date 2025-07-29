@@ -2,7 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { saveSession, extractResponseData, getFriendlyErrorMessage, getByEndpoint, clearSession, getStatusConnection } from "@utils/helpers";
 
 const AuthService = {
-  login: async (correo, password) => {
+  login: async (correo, password, navigate) => {
     try {
       const data = await getByEndpoint(`auth/login`, {
         documento:   correo,
@@ -17,6 +17,7 @@ const AuthService = {
         access: token,
         usuario
       });
+      navigate('/dashboard');
       return { token, usuario };
     } catch (error) {
       console.error("Error en login:", error);
@@ -27,10 +28,7 @@ const AuthService = {
 
   logout: (navigate) => {
     clearSession();
-    if (navigate) {
-      window.location.reload();
-      navigate('/')
-    };
+    navigate('/')
   },
 
   getCurrentUser: () => {

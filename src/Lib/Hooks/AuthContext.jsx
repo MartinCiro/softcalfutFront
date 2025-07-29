@@ -4,61 +4,62 @@ import AuthService from '@services/AuthService';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [authState, setAuthState] = useState({
+    user: null,
+    isAuthenticated: false,
+    isLoading: true
+  });
 
-  // Cargar estado inicial al montar
+  // Función para actualizar el estado desde sessionStorage
+  const updateAuthState = () => {
+    const user = AuthService.getCurrentUser();
+    const isAuthenticated = AuthService.isAuthenticated();
+    
+    setAuthState({
+      user,
+      isAuthenticated,
+      isLoading: false
+    });
+  };
+
+  // Sincronizar al montar y cuando cambia sessionStorage
   useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const currentUser = AuthService.getCurrentUser();
-        if (currentUser) {
-          setUser(currentUser);
-          setIsAuthenticated(true);
-        }
-      } catch (error) {
-        console.error("Error loading user:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadUser();
+    updateAuthState();
+    const handleStorageChange = () => updateAuthState();
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (email, password, navigate) => {
     try {
-      const userData = await AuthService.login(email, password);
-      setUser(userData);
-      setIsAuthenticated(true);
+      setAuthState(prev => ({ ...prev, isLoading: true }));
+      const userData = await AuthService.login(email, password, navigate);
+      updateAuthState();
       return userData;
     } catch (error) {
+      updateAuthState(); 
       throw error;
     }
   };
 
-  const logout = () => {
-    AuthService.logout();
-    setUser(null);
-    setIsAuthenticated(false);
-  };
-
-  const value = {
-    user,
-    isAuthenticated,
-    isLoading,
-    login,
-    logout
+  const logout = (navigate) => {
+    AuthService.logout(navigate);
+    updateAuthState();
   };
 
   return (
-    <AuthContext.Provider value={value}>
-      {!isLoading && children}
+    <AuthContext.Provider value={{
+      ...authState,
+      login,
+      logout
+    }}>
+      {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (!context) throw new Error('useAuth debe usarse dentro de un AuthProvider');
+  return context;
 };

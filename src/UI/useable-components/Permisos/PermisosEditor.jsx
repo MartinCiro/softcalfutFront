@@ -28,7 +28,7 @@ const PermisosEditor = ({ permisosEditados, setPermisosEditados, permisosActuale
         );
     };
 
-    const { query, setQuery, filtered } = useSearch(permisosEditados, "entidad");
+    const { query, setQuery, filtered } = useSearch(permisosEditados, ["entidad"]);
     const {
         paginatedData,
         currentPage,

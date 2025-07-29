@@ -31,7 +31,7 @@ const CreateModalEquipo = ({
   const [encargado, setEncargado] = useState(null);
   const [categoria, setCategoria] = useState(null);
 
-  const { query, setQuery, filtered } = useSearch(jugadoresDisponibles, "nombres");
+  const { query, setQuery, filtered } = useSearch(jugadoresDisponibles, ["nombres"]);
   const pagination = usePagination(filtered, 6);
 
   const camposFiltrados = campos.filter(

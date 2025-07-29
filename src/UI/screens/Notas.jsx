@@ -23,7 +23,7 @@ import "@styles/Permiso.css"; // Styles
 const NotasList = () => {
   const { data: notas, loading, error, reload: cargarNotas } = useFetchData(NotaService.notas);
   const { modalStates, notaStates, flags, errorGuardar, handlers } = useNotasLogic(cargarNotas);
-  const { query, setQuery, filtered } = useSearch(notas, "nombre");
+  const { query, setQuery, filtered } = useSearch(notas, ["nombre"]);
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
 
   const confirmModal = useModalConfirm();

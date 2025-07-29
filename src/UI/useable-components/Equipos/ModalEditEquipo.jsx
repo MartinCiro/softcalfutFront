@@ -45,7 +45,7 @@ const ModalEditEquipo = ({
     categorias.find(c => c.nombre_categoria === datos.categoria) || null
   );
 
-  const { query, setQuery, filtered } = useSearch(jugadoresDisponibles, "nombres");
+  const { query, setQuery, filtered } = useSearch(jugadoresDisponibles, ["nombres"]);
   const pagination = usePagination(filtered, 6);
 
   const columnas = [

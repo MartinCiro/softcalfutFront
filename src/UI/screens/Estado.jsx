@@ -31,7 +31,7 @@ const EstadosList = () => {
   const [estadoSeleccionado, setEstadoSeleccionado] = useState(null);
   const [estadoVer, setEstadoVer] = useState(null);
   const [modoEdicion, setModoEdicion] = useState(false);
-  const { query, setQuery, filtered } = useSearch(estados, "nombre");
+  const { query, setQuery, filtered } = useSearch(estados, ["nombre"]);
   const [errorGuardar, setErrorGuardar] = useState({ message: null, variant: "danger" });
   const { paginatedData, currentPage, maxPage, nextPage, prevPage, shouldShowPaginator } = usePagination(filtered, 6);
   const columnsEstado = [

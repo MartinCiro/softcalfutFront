@@ -1,13 +1,15 @@
 import { useMemo, useState } from "react";
 
-const useSearch = (data, campo) => {
+const useSearch = (data, campos) => {
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
-    return data.filter(item =>
-      item[campo]?.toLowerCase().includes(query.toLowerCase())
+    return data.filter((item) =>
+      campos.some((campo) =>
+        item[campo]?.toString().toLowerCase().includes(query.toLowerCase())
+      )
     );
-  }, [data, query]);
+  }, [data, query, campos]);
 
   return { query, setQuery, filtered };
 };
