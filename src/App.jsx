@@ -8,6 +8,7 @@ import Historia from '@screens/Historia';
 import MisionVision from '@screens/MisionVision';
 import Futbol from '@screens/Futbol';
 import FutbolSala from '@screens/FutbolSala';
+import Afiliados from '@screens/Afiliados';
 import ClubRedirect from '@componentsUseable/ClubRedirect';
 import ToggleWhatsapp from "@componentsUseable/ToggleWhatsapp";
 
@@ -43,6 +44,7 @@ function App() {
           <Route path="/torneos/programacion" element={<ProgramacionList />} />
           <Route path="/" element={<PrincipalList />} />
           <Route path="/club" element={<ClubRedirect />} />
+          <Route path="/nuestros-afiliados" element={<Afiliados />} />
           
           {/* Rutas protegidas - requieren autenticación */}
           <Route element={<ProtectedRoute />}>

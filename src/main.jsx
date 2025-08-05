@@ -30,7 +30,7 @@ axios.interceptors.response.use(
   async error => {
     const originalRequest = error.config;
 
-    const publicRoutes = ['/login', '/lcf/historia', '/lcf/mision-vision', '/torneos/futbol', '/torneos/futbol-sala', '/torneos/programacion'];
+    const publicRoutes = ['/login', '/lcf/historia', '/lcf/mision-vision', '/nuestros-afiliados', '/torneos/futbol', '/torneos/futbol-sala', '/torneos/programacion'];
     const isPublicRoute = publicRoutes.some(route => window.location.pathname.includes(route));
     if (isPublicRoute) return Promise.reject(error);
 

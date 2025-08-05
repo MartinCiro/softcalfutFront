@@ -21,6 +21,7 @@ import ModalVerGenerico from "@componentsUseable/FormModal/WhatchModalForm";
 import ModalEditForm from "@componentsUseable/FormModal/EditModalFormulario";
 import CreateModalFormulario from "@componentsUseable/FormModal/CreateModalFormulario";
 import ModalConfirmacion from "@componentsUseable/ModalConfirmacion";
+import AfiliadosScreen from "@screens/Afiliados";
 import "@styles/Anuncio.css"; // Styles
 
 const AnunciosList = () => {
@@ -122,8 +123,11 @@ const AnunciosList = () => {
 
     <Container className="py-4">
       {/* <h2 className="mb-4 text-center fw-bold">Anuncios</h2> */}
+      <Row>
+        <AfiliadosScreen hideDetails={true} />
+      </Row>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold mb-0">Anuncios</h2>
+        <h2 className="fw-bold mb-0">Noticias</h2>
 
         <div className="d-flex align-items-center gap-2">
           {canCreate && (
@@ -150,7 +154,6 @@ const AnunciosList = () => {
           {errorGuardar.message}
         </div>
       )}
-
       <Row>
         <CardGeneric
           data={paginatedData}

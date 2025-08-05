@@ -46,21 +46,35 @@ const NavBar = () => {
                 Inicio
               </NavLink>
 
-              <NavDropdown title={<span><MDBIcon fas icon="building" className="me-1" /> LCF</span>} id="dropdown-lcf">
-                <NavDropdown.Item as={NavLink} to="/lcf/historia">Historia</NavDropdown.Item>
-                <NavDropdown.Item as={NavLink} to="/lcf/mision-vision">Misión y Visión</NavDropdown.Item>
-                <NavDropdown.Item as={NavLink} to="/lcf/organigrama">Organigrama</NavDropdown.Item>
-              </NavDropdown>
-
               <NavDropdown title={<span><MDBIcon fas icon="trophy" className="me-1" /> Torneos</span>} id="dropdown-torneos">
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol">Municipal</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Sport-man</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Femenino</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Futbol Sala</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Festi torneo Baby</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Copa Atardeceres</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">BBB</NavDropdown.Item>
               </NavDropdown>
 
               <NavLink to="/torneos/programacion" className="nav-link">
                 <MDBIcon fas icon="calendar" className="me-1" />
-                Programacion de torneos
+                Programacion
+              </NavLink>
+
+              {/* <NavDropdown title={<span><MDBIcon fas icon="building" className="me-1" /> LCF</span>} id="dropdown-lcf">
+                <NavDropdown.Item as={NavLink} to="/lcf/historia">Historia</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/lcf/mision-vision">Misión y Visión</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/lcf/organigrama">Organigrama</NavDropdown.Item>
+              </NavDropdown> */}
+
+              <NavDropdown title={<span><MDBIcon fas icon="file-invoice" className="me-1" /> Tramites</span>} id="dropdown-tramites">
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol">Municipal</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Sport-man</NavDropdown.Item>
+              </NavDropdown>
+
+              <NavLink to="/nuestros-afiliados" className="nav-link">
+                <MDBIcon fas icon="users" className="me-1" />
+                Nosotros
               </NavLink>
 
               <NavLink to="/nuestros-afiliados" className="nav-link">
@@ -68,21 +82,22 @@ const NavBar = () => {
                 Nuestros afiliados
               </NavLink>
 
-              {/* <NavDropdown title={<span><MDBIcon fas icon="book" className="me-1" /> Escuela LCF</span>} id="dropdown-escuela">
-                <NavDropdown.Item as={NavLink} to="/escuela/formacion">Escuela de Formación</NavDropdown.Item>
-                <NavDropdown.Item as={NavLink} to="/escuela/acerca">Acerca de la Escuela</NavDropdown.Item>
-              </NavDropdown> */}
+              <NavLink to="/nuestros-afiliados" className="nav-link">
+                <MDBIcon fas icon="users" className="me-1" />
+                Contactenos
+              </NavLink>
+              
 
-              <NavDropdown title={<span><MDBIcon fas icon="book" className="me-1" /> Reglamentacion</span>} id="dropdown-torneos">
+              {/* <NavDropdown title={<span><MDBIcon fas icon="book" className="me-1" /> Reglamentacion</span>} id="dropdown-torneos">
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol">Torneos de la liga</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Comisiones</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Estatutos</NavDropdown.Item>
-              </NavDropdown>
+              </NavDropdown> */}
 
-              <NavLink to="/club" className="nav-link">
+              {/* <NavLink to="/club" className="nav-link">
                 <MDBIcon fas icon="futbol" className="me-1" />
                 Mi Club
-              </NavLink>
+              </NavLink> */}
             </Nav>
           </Navbar.Collapse>
 
