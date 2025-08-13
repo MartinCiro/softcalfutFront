@@ -10,9 +10,10 @@ import UsuariosList from '@screens/Usuario';
 import ProgramacionList from '@screens/Programacion';
 import LugarEncuentroList from '@screens/LugarEncuentro';
 import { MDBIcon } from 'mdb-react-ui-kit';
-import '@styles/Dashboard.css';
 import useHasPermission from '@hooks/useHasPermission';
+import Afiliados from '@screens/Afiliados-dash';
 
+import '@styles/Dashboard.css';
 // Map de nombre -> componente
 const componentMap = {
   Anuncios: AnunciosList,
@@ -25,6 +26,7 @@ const componentMap = {
   Usuarios: UsuariosList,
   Programación: ProgramacionList,
   'Lugar de Encuentro': LugarEncuentroList,
+  Afiliados: Afiliados,
 };
 
 const modulePermissions = {
@@ -37,7 +39,8 @@ const modulePermissions = {
   'Equipos': 'equipos:Lee',
   'Usuarios': 'usuarios:Lee',
   'Programación': 'programaciones:Lee',
-  'Lugar de Encuentro': 'lugarEncuentro:Lee'
+  'Lugar de Encuentro': 'lugarEncuentro:Lee',
+  'Afiliados': 'afiliados:Lee',
 };
 
 // Agrupaciones del menú
@@ -56,7 +59,7 @@ const menuGroups = [
   },
   {
     label: 'Gestionar Equipos',
-    items: ['Categoría', 'Torneos', 'Equipos', 'Programación', 'Lugar de Encuentro'],
+    items: ['Categoría', 'Torneos', 'Equipos', 'Programación', 'Afiliados', 'Lugar de Encuentro'],
   },
 ];
 
@@ -73,12 +76,8 @@ const Dashboard = () => {
   })).filter(group => group.items.length > 0);
 
   React.useEffect(() => {
-    const isSelectedAllowed = filteredMenuGroups.some(group =>
-      group.items.includes(selectedComponent)
-    );
-    if (!isSelectedAllowed && filteredMenuGroups.length > 0) {
-      setSelectedComponent(filteredMenuGroups[0].items[0]);
-    }
+    const isSelectedAllowed = filteredMenuGroups.some(group => group.items.includes(selectedComponent));
+    if (!isSelectedAllowed && filteredMenuGroups.length > 0) setSelectedComponent(filteredMenuGroups[0].items[0]);
   }, [filteredMenuGroups, selectedComponent]);
 
   // Si no hay ningún módulo permitido

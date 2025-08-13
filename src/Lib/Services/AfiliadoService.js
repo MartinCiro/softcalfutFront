@@ -10,7 +10,7 @@ const AfiliadoService = {
   afiliados: async () => {
     const cacheKey = AfiliadoService.endpoint;
     const cached = loadSessionCache(cacheKey);
-    if (cached) return { result: cached };
+    //if (cached) return { result: cached };
     
     try {
       const data = await getByEndpoint(AfiliadoService.endpoint);

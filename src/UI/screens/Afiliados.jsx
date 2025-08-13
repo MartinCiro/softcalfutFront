@@ -3,7 +3,7 @@ import RoundCardCarousel from '@componentsUseable/CarruselCircle';
 import AfiliadoService from "@services/AfiliadoService";
 import useFetchData from "@hooks/useFetchData";
 
-const FutbolSala = (hideDetails = false) => {
+const Afiliados = (hideDetails = false) => {
   const { data: afiliadosActuales } = useFetchData(AfiliadoService.afiliados);
 
   return (
@@ -18,4 +18,4 @@ const FutbolSala = (hideDetails = false) => {
   );
 };
 
-export default FutbolSala;
+export default Afiliados;
