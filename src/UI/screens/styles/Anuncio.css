@@ -87,3 +87,21 @@
     }
   }
 }
+
+/* Añadir esto en tu archivo Anuncio.css */
+.sponsor-logo {
+  width: 150px;        /* Ajusta el tamaño del óvalo (ancho) */
+  height: 100px;       /* Ajusta el tamaño del óvalo (alto) */
+  border-radius: 50%;  /* Hace que sea un óvalo */
+  border: 10px solid black;  /* Borde negro alrededor del óvalo */
+  display: flex;
+  justify-content: center;  /* Centra la imagen horizontalmente */
+  align-items: center;      /* Centra la imagen verticalmente */
+  overflow: hidden;    /* Asegura que la imagen no sobresalga del óvalo */
+}
+
+.sponsor-logo img {
+  width: 100%;        /* La imagen ocupará todo el óvalo */
+  height: 100%;       /* La imagen ocupará todo el óvalo */
+  object-fit: contain; /* Asegura que la imagen se ajuste sin deformarse */
+}

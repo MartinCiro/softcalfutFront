@@ -1,0 +1,27 @@
+.sponsors-carousel-container {
+    padding: 1rem;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .sponsor-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .sponsor-image {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    border-radius: 100%;
+    border: 10px solid black;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .sponsor-image:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+  

@@ -21,7 +21,12 @@ const NavBar = () => {
   
   const handleCloseLogoutModal = useCallback(() => setShowLogoutModal(false), []);
   if (isLoading) return null;
-  const displayName = isAuthenticated ? (user?.usuario?.nombre || 'Usuario') : 'LCF';
+  const displayName = isAuthenticated ? (user?.usuario?.nombre || 'Usuario') : (
+    <span className="text-light cursor-pointer" onClick={() => navigate('/login')}>
+      LCF
+    </span>
+  );
+  
 
   return (
     <>
@@ -49,7 +54,7 @@ const NavBar = () => {
               <NavDropdown title={<span><MDBIcon fas icon="trophy" className="me-1" /> Torneos</span>} id="dropdown-torneos">
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol">Municipal</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Sport-man</NavDropdown.Item>
-                <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Femenino</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol">Femenino</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Futbol Sala</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Festi torneo Baby</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Copa Atardeceres</NavDropdown.Item>
@@ -70,6 +75,7 @@ const NavBar = () => {
               <NavDropdown title={<span><MDBIcon fas icon="file-invoice" className="me-1" /> Tramites</span>} id="dropdown-tramites">
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol">Municipal</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Sport-man</NavDropdown.Item>
+                
               </NavDropdown>
 
               <NavLink to="/nuestros-afiliados" className="nav-link">

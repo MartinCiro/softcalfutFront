@@ -45,7 +45,7 @@ export const getByEndpoint = async (endpoint, body = null, method = "get", isFor
 
     const config = {
       method: lowerMethod,
-      url: `${API_URL}/${endpoint}/`,
+      url: `/api/${endpoint}/`,
       headers: {
         ...AuthService.getAuthHeader(),
         ...(isBodyMethod && !isFormData && { "Content-Type": "application/json" })
@@ -53,6 +53,7 @@ export const getByEndpoint = async (endpoint, body = null, method = "get", isFor
       timeout: 90000,
       ...(isBodyMethod && body ? { data: body } : {}),
     };
+    console.log(config.url)
     const response = await axios(config);
 
     if (response.data && response.data.result) {
