@@ -52,13 +52,14 @@ const NavBar = () => {
               </NavLink>
 
               <NavDropdown title={<span><MDBIcon fas icon="trophy" className="me-1" /> Torneos</span>} id="dropdown-torneos">
-                <NavDropdown.Item as={NavLink} to="/torneos/futbol">Municipal</NavDropdown.Item>
-                <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Sport-man</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/torneo-municipal">Municipal</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/torneo-sport-man">Sport-man</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol">Femenino</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Futbol Sala</NavDropdown.Item>
-                <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Festi torneo Baby</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/festi-torneo-baby">Festi torneo Baby</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">Copa Atardeceres</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/torneos/futbol-sala">BBB</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/torneos/futbol">CCC</NavDropdown.Item>
               </NavDropdown>
 
               <NavLink to="/torneos/programacion" className="nav-link">

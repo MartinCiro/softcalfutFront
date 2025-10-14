@@ -6,8 +6,9 @@ import '@src/App.css';
 import Login from '@screens/Login';
 import Historia from '@screens/Historia';
 import MisionVision from '@screens/MisionVision';
-import Futbol from '@screens/Futbol';
-import FutbolSala from '@screens/FutbolSala';
+import TorneoMunicipal from '@screens/TorneoMunicipal';
+import TorneoSportMan from '@screens/TorneoSportMan';
+import FestiTorneoBaby from '@screens/FestiTorneoBaby';
 import Afiliados from '@screens/Afiliados';
 import ClubRedirect from '@componentsUseable/ClubRedirect';
 import ToggleWhatsapp from "@componentsUseable/ToggleWhatsapp";
@@ -39,8 +40,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/lcf/historia" element={<Historia />} />
           <Route path="/lcf/mision-vision" element={<MisionVision />} />
-          <Route path="/torneos/futbol" element={<Futbol />} />
-          <Route path="/torneos/futbol-sala" element={<FutbolSala />} />
+          <Route path="/torneos/torneo-municipal" element={<TorneoMunicipal />} />
+          <Route path="/torneos/torneo-sport-man" element={<TorneoSportMan />} />
+          <Route path="/torneos/festi-torneo-baby" element={<FestiTorneoBaby />} />
           <Route path="/torneos/programacion" element={<ProgramacionList />} />
           <Route path="/" element={<PrincipalList />} />
           <Route path="/club" element={<ClubRedirect />} />
